@@ -105,5 +105,21 @@
 		    android:layout_marginTop="20dp"
 		    android:text="@string/sleep"
 		    android:onClick="sleepPressed" />
+		<TextView
+		    android:id="@+id/startTime"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_below="@+id/sleepButton"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="40dp"
+		    />
+		<TextView
+		    android:id="@+id/endTime"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_below="@+id/startTime"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="20dp"
+		    />
 
     </RelativeLayout>

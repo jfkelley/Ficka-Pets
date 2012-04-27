@@ -9,16 +9,16 @@ public class Condition {
 	
 	private Health health;
 	
-	private static final double UPDATE_INCREMENT = 0.5;  //hours before strength updates by polling health
+	private static final double UPDATE_INCREMENT = 0.5;  //in hours
 	
 	public Condition () {
-		lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
+		lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis () - 3600000;
 		currentStrength = 1;
 		health = new Health ();
 	}
 	
 	/*
-	 * Instead of trying to do more math, I just sample the health every half hour and use that to update the strength.
+	 * Just sample the health every half hour and use that to update the strength.
 	 * For every sample, the tiredness, hunger, and health get updated.
 	 */
 	public void update (boolean isAwake) {
@@ -28,11 +28,11 @@ public class Condition {
 		/* calculate strength and update attributes in half hour increments */
 		for (updateCounter = UPDATE_INCREMENT; updateCounter < hoursSinceUpdate; updateCounter += UPDATE_INCREMENT) {
 			health.update (isAwake, UPDATE_INCREMENT);
-			currentStrength += (health.getHealth () / 100) * UPDATE_INCREMENT;
+			currentStrength += (health.getHealth () / 100.0) * UPDATE_INCREMENT;
 		}
-		double hours = UPDATE_INCREMENT - (updateCounter - hoursSinceUpdate);
-		health.update(isAwake, hours);
-		currentStrength += (health.getHealth () / 100) * hours;
+		double hoursLeft = UPDATE_INCREMENT - (updateCounter - hoursSinceUpdate);
+		health.update(isAwake, hoursLeft);
+		currentStrength += (health.getHealth () / 100.0) * hoursLeft;
 	}
 	
 	public double getBattleEffectiveness (boolean isAwake) {

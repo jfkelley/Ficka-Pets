@@ -19,7 +19,6 @@ public class Health {
 	private static final double extremeTirednessRate = -25;
 	
 	private double currentHealth;
-	private long lastUpdate;
 	
 	
 	public Health () {
@@ -89,7 +88,6 @@ public class Health {
 	/* Updates health, then updates hunger and tiredness.  Important that hunger and tiredness are updated after health since their old values are
 	 * used in those equations */
 	public void update (boolean isAwake, Double hoursSinceUpdate) {
-		if (hoursSinceUpdate == null) hoursSinceUpdate = Health.getHoursSinceUpdate(lastUpdate);
 		currentHealth += hungerEffectOnHealth (hoursSinceUpdate, isAwake);
 		currentHealth += tiredEffectOnHealth (hoursSinceUpdate, isAwake);
 

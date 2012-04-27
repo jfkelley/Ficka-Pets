@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.48" >
+        
+        <TextView
+            android:id="@+id/strengthPermanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="19dp"
+            android:text="@string/strength"
+            android:ems="10" />
+
+        <TextView
+            android:id="@+id/strengthEditable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/strengthPermanent"
+            android:layout_alignBottom="@+id/strengthPermanent"
+            android:layout_toLeftOf="@+id/strengthPermanent"
+            android:layout_alignParentRight="true"
+            android:ems="10" />
+
+        <TextView
+            android:id="@+id/healthPermanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/strengthPermanent"
+            android:layout_below="@+id/strengthPermanent"
+            android:layout_marginTop="23dp"
+            android:ems="10"
+            android:text="@string/health" />
+        
+		<TextView
+		    android:id="@+id/healthEditable"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_toLeftOf="@+id/healthPermanent"
+		    android:layout_alignBaseline="@+id/healthPermanent"
+		    android:layout_alignBottom="@+id/healthPermanent"
+		    android:layout_alignParentRight="true" 
+		    android:ems="10" />
+		
+		<TextView
+            android:id="@+id/hungerPermanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/healthPermanent"
+            android:layout_below="@+id/healthPermanent"
+            android:layout_marginTop="23dp"
+            android:ems="10"
+            android:text="@string/hunger" />
+        
+		<TextView
+		    android:id="@+id/hungerEditable"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_toLeftOf="@id/hungerPermanent"
+		    android:layout_alignBaseline="@id/hungerPermanent"
+		    android:layout_alignBottom="@id/hungerPermanent"
+		    android:layout_alignParentRight="true" 
+		    android:ems="10" />
+		
+		
+		<TextView
+            android:id="@+id/tiredPermanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/hungerPermanent"
+            android:layout_below="@+id/hungerPermanent"
+            android:layout_marginTop="23dp"
+            android:ems="10"
+            android:text="@string/tiredness" /> 
+		<TextView
+		    android:id="@+id/tiredEditable"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_toLeftOf="@+id/tiredPermanent"
+		    android:layout_alignBaseline="@+id/tiredPermanent"
+		    android:layout_alignBottom="@+id/tiredPermanent"
+		    android:layout_alignParentRight="true" 
+		    android:ems="10" />
+		
+		<Button 
+		    android:id="@+id/feedButton"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/tiredPermanent"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="20dp"
+		    android:text="@string/feed"
+		    android:onClick="feedPressed" />
+		
+		<Button 
+		    android:id="@+id/sleepButton"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/feedButton"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="20dp"
+		    android:text="@string/sleep"
+		    android:onClick="sleepPressed" />
+		
+	
+		<TextView
+		    
+		    />
+
+    </RelativeLayout>

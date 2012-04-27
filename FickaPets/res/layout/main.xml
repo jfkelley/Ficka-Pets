@@ -105,10 +105,5 @@
 		    android:layout_marginTop="20dp"
 		    android:text="@string/sleep"
 		    android:onClick="sleepPressed" />
-		
-	
-		<TextView
-		    
-		    />
 
     </RelativeLayout>

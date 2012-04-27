@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, FickaPetsStart!</string>
+    <string name="app_name">FickaPets</string>
+	<string name="strength">strength</string>
+	<string name="health">health</string>
+	<string name="hunger">hunger</string>
+	<string name="tiredness">tiredness</string>
+	<string name="feed">feed</string>
+	<string name="sleep">Put to Sleep</string>
+	<string name="awake">Wake Up</string>
+</resources>

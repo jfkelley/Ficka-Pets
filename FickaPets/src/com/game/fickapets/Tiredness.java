@@ -9,13 +9,16 @@ public class Tiredness {
 	private static final double INCREASE_RATE = (double)95 / 48;
 	private static final double DECREASE_CONSTANT = -0.432;
 	
-	private static final int INITIAL_SLEEP_TIME = 22;    //on 24 hour clock: 10pm.  Only used once when game starts
 	private static final int HOURS_PER_SLEEP = 8;
 	private static final double MIN_TIREDNESS_AFTER_ONE_DAY = INCREASE_RATE * (24 - HOURS_PER_SLEEP);
 	
 	private static double currentTiredness;
 	
-	public Tiredness () {
+	public Tiredness (Attributes atts) {
+		currentTiredness = atts.tiredness;
+	}
+	
+	public static double getInitialTiredness (Double initialSleepTime) {
 		int currentHour;
 		int currentMinute;
 		double hoursUntilSleep;
@@ -23,13 +26,13 @@ public class Tiredness {
 		Calendar cal = Calendar.getInstance(TimeZone.getDefault());
 		currentHour = cal.get(Calendar.HOUR_OF_DAY);
 		currentMinute = cal.get(Calendar.MINUTE);
-		hoursUntilSleep = INITIAL_SLEEP_TIME - currentHour;
-		if (hoursUntilSleep < 0) hoursUntilSleep = 24 - currentHour + INITIAL_SLEEP_TIME;
+		hoursUntilSleep = initialSleepTime - currentHour;
+		if (hoursUntilSleep < 0) hoursUntilSleep = 24 - currentHour + initialSleepTime;
 		
 		hoursUntilSleep -= (double)currentMinute / 60;
 		
 		
-		currentTiredness = MIN_TIREDNESS_AFTER_ONE_DAY - (INCREASE_RATE * hoursUntilSleep);
+		return MIN_TIREDNESS_AFTER_ONE_DAY - (INCREASE_RATE * hoursUntilSleep);
 	}
 	
 	public double getTiredness () {

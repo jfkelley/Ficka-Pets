@@ -8,8 +8,8 @@ public class Hunger {
 	private double currentHunger;
 	
 	
-	public Hunger () {
-		currentHunger = 50;
+	public Hunger (Attributes atts) {
+		currentHunger = atts.hunger;
 	}
 	
 	public void update (boolean isAwake, double hoursSinceUpdate) {

@@ -3,19 +3,19 @@ package com.game.fickapets;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Vibrator;
 import android.widget.TextView;
 
 public class MainThread extends AsyncTask<Pet, String, Void> {
 	FickaPetsStart ficka;
-	Context current;
 	
 	public MainThread (FickaPetsStart ficka) {
 		this.ficka = ficka;
 	}
 
+	/* Runs in the main UI thread.  AsyncTask calls this when doInBackground calls publishProgress.
+	 * Also sends the data passed to publishProgress
+	 */
 	protected void onProgressUpdate(String ... strings) {
     	TextView strength = (TextView) ficka.findViewById(R.id.strengthEditable);
     	strength.setText(strings[0]);
@@ -38,7 +38,10 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
     	now.setText(currentTime);
 
 	}
-	
+	/* 
+	 * This runs in a separate thread. When publishProgress is called, AsyncTask sends the parameter
+	 * to onProgressUpdate.  onProgressUpdate runs in the main UI thread so it can update the UI.
+	 */
 	@Override
 	protected Void doInBackground(Pet ... pets) {
         String[] strings = new String[4];
@@ -59,7 +62,7 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
 	    	try {
 	    		Thread.sleep(5000);
 	    	} catch (Exception ex) {
-	    		System.out.println("it broked.");
+	    		System.out.println("it broke");
 	    	}
 	    }
 	}

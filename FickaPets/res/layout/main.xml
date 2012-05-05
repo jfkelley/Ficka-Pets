@@ -103,13 +103,22 @@
 		    android:layout_below="@+id/feedButton"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="20dp"
-		    android:text="@string/sleep"
 		    android:onClick="sleepPressed" />
+		<Button
+		    android:id="@+id/resetButton"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/sleepButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/reset"
+		    android:layout_marginTop="20dp"
+		    android:onClick="resetPressed" />
+		    
 		<TextView
 		    android:id="@+id/startTime"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/sleepButton"
+		    android:layout_below="@+id/resetButton"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="40dp"
 		    />

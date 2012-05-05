@@ -11,10 +11,10 @@ public class Condition {
 	
 	private static final double UPDATE_INCREMENT = 0.5;  //in hours
 	
-	public Condition () {
-		lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis () - 3600000;
+	public Condition (Attributes atts) {
+		lastUpdate = atts.lastUpdate;
 		currentStrength = 1;
-		health = new Health ();
+		health = new Health (atts);
 	}
 	
 	/*
@@ -51,6 +51,7 @@ public class Condition {
 		
 		atts = health.fillAttributes (atts);
 		atts.strength = currentStrength;
+		atts.lastUpdate = lastUpdate;
 		return atts;
 	}
 	

@@ -8,9 +8,9 @@ public class Pet {
 	
 	private boolean isAwake;
 	
-	public Pet() {
-		condition = new Condition();
-		isAwake = true;
+	public Pet(Attributes atts) {
+		condition = new Condition(atts);
+		isAwake = atts.isAwake;
 	}
 	
 	public void putToSleep () {
@@ -34,6 +34,7 @@ public class Pet {
 	
 	public Attributes getAttributes () {
 		Attributes atts = new Attributes ();
+		atts.isAwake = isAwake;
 		return condition.fillAttributes (atts, isAwake);
 	}
 	

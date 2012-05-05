@@ -5,4 +5,7 @@ public class Attributes {
 	public double hunger;
 	public double health;
 	public double strength;
+	public boolean isAwake;
+	
+	public long lastUpdate;
 }

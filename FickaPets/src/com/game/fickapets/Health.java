@@ -21,10 +21,10 @@ public class Health {
 	private double currentHealth;
 	
 	
-	public Health () {
-		currentHealth = 90;
-		hunger = new Hunger ();
-		tiredness = new Tiredness ();
+	public Health (Attributes atts) {
+		currentHealth = atts.health;
+		hunger = new Hunger (atts);
+		tiredness = new Tiredness (atts);
 	}
 	
 	/*

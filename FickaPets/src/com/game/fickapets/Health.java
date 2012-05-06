@@ -1,9 +1,13 @@
 package com.game.fickapets;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+
+import java.util.Vector;
+
+import android.content.Context;
 
 public class Health {
+	
+	private double currentHealth;
 	
 	private Hunger hunger;
 	private Tiredness tiredness;
@@ -12,15 +16,13 @@ public class Health {
 	private static final double extremeHunger = 95;
 	private static final double extremeHungerRate = -1.5;
 	private static final double hotSpot = 50;				/* where you ideally want to keep your pet for maximum health */
-	private static final double positiveRange = 30;			/* max distance from hotspot before negative impact on health */
+	private static final double positiveRange = 10;			/* max distance from hotspot before negative impact on health */
 	
 	/* values that determine how tiredness effects health */
-	private static final double extremeTiredness = 95;
-	private static final double extremeTirednessRate = -25;
+	private static final double extremeTiredness = 60;
+	private static final double extremeTirednessRate = -2;
 	
-	private double currentHealth;
-	
-	
+
 	public Health (Attributes atts) {
 		currentHealth = atts.health;
 		hunger = new Hunger (atts);
@@ -79,11 +81,7 @@ public class Health {
 		return 0;
 	}
 	
-	/* Returns the hours from lastUpdate to current time */
-	public static double getHoursSinceUpdate (long lastUpdate) {
-		long diff = Calendar.getInstance(TimeZone.getDefault()).getTimeInMillis() - lastUpdate;
-		return diff / (double)1000.0 / 60 / 60;
-	}
+
 	
 	/* Updates health, then updates hunger and tiredness.  Important that hunger and tiredness are updated after health since their old values are
 	 * used in those equations */
@@ -109,6 +107,55 @@ public class Health {
 		atts.hunger = hunger.getHunger ();
 		atts.tiredness = tiredness.getTiredness ();
 		return atts;
+	}
+	
+	private Vector<Complaint> addHungerComplaints(Context context, Vector<Complaint> complaintVec, boolean isAwake) {
+		double hoursUntilNegative = hunger.hoursUntil(hotSpot+positiveRange, isAwake);
+		if (hoursUntilNegative > 0) {
+			Complaint negativeHunger = new Complaint ();
+			negativeHunger.hoursBeforeComplaint = hoursUntilNegative;
+			negativeHunger.complaint = context.getString(R.string.petNeedsFood);
+			complaintVec.add(negativeHunger);
+		}
+		
+		double hoursUntilVeryNegative = hunger.hoursUntil(extremeHunger, isAwake);
+		if (hoursUntilVeryNegative > 0) {
+			Complaint veryHungry = new Complaint ();
+			veryHungry.hoursBeforeComplaint = hoursUntilVeryNegative;
+			veryHungry.complaint = context.getString(R.string.petStarving);
+			complaintVec.add(veryHungry);
+		}
+		return complaintVec;
+	}
+	
+	private Vector<Complaint> addTirednessComplaints(Context context, Vector<Complaint> complaintVec, boolean isAwake) {
+		double generallyTired = 32;
+		
+		double hoursUntilTired = tiredness.hoursUntil(generallyTired, isAwake);
+		if (hoursUntilTired > 0) {
+			Complaint tired = new Complaint();
+			tired.hoursBeforeComplaint = hoursUntilTired;
+			tired.complaint = context.getString(R.string.petTired);
+			complaintVec.add(tired);
+		}
+		
+		double hoursUntilVeryTired = tiredness.hoursUntil(extremeTiredness, isAwake);
+		if (hoursUntilVeryTired > 0) {
+			Complaint veryTired = new Complaint();
+			veryTired = new Complaint();
+			veryTired.hoursBeforeComplaint = hoursUntilVeryTired;
+			veryTired.complaint = context.getString(R.string.petVeryTired);
+			complaintVec.add(veryTired);
+		}
+		return complaintVec;
+	}
+	
+	public Vector<Complaint> addComplaints (Context context, Vector<Complaint> complaintVec, boolean isAwake) {
+		if (complaintVec == null) complaintVec = new Vector<Complaint>();
+		
+		complaintVec = addHungerComplaints(context, complaintVec, isAwake);
+		complaintVec = addTirednessComplaints(context, complaintVec, isAwake);
+		return complaintVec;
 	}
 	
 	

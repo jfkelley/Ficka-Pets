@@ -1,5 +1,9 @@
 package com.game.fickapets;
 
+import java.util.Vector;
+
+import android.content.Context;
+
 
 
 public class Pet {
@@ -23,7 +27,7 @@ public class Pet {
 		isAwake = true;
 	}
 	public void feed () {
-		double hungerPts = 10;  // for now
+		double hungerPts = 5;  // for now
 		condition.petHasEaten (hungerPts);
 	}
 	
@@ -36,6 +40,11 @@ public class Pet {
 		Attributes atts = new Attributes ();
 		atts.isAwake = isAwake;
 		return condition.fillAttributes (atts, isAwake);
+	}
+	
+	public Vector<Complaint> getComplaints (Context context) {
+		Vector<Complaint> complaints = new Vector<Complaint>();
+		return condition.addComplaints(context, complaints, isAwake);
 	}
 	
 }

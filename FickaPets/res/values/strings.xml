@@ -11,4 +11,11 @@
 	<string name="sleep">Put to Sleep</string>
 	<string name="awake">Wake Up</string>
 	<string name="reset">Reset</string>
+	
+	<!--  Complaint messages for notifications -->
+	<string name="petNeedsFood">Your pet needs food</string>
+	<string name="petStarving">Your pet is starving</string>
+	<string name="petTired">Your pet is tired</string>
+	<string name="petVeryTired">Your pet is sleep deprived</string>
+	
 </resources>

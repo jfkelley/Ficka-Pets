@@ -2,12 +2,9 @@ package com.game.fickapets;
 
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,22 +21,7 @@ public class FickaPetsStart extends Activity {
 		return pet;
 	}
 	
-	private void makeNotification() {
-		int icon = R.drawable.ic_launcher;
-		CharSequence contentTitle = "FickaPets";
-		CharSequence contentText = "Your notification works!!";
-		Intent notificationIntent = new Intent(this, FickaPetsStart.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		
-		Notification notification = new Notification(icon, "hello", System.currentTimeMillis());
-		notification.setLatestEventInfo(getApplicationContext(), contentTitle, contentText, contentIntent);
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		notification.defaults |= Notification.DEFAULT_VIBRATE;
-		
-		NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.notify(1, notification);
-		
-	}
+
 
 	private void setSleepButton (Pet pet) {
     	Button sleepButton = (Button) findViewById(R.id.sleepButton);
@@ -62,7 +44,6 @@ public class FickaPetsStart extends Activity {
         super.onCreate(savedInstanceState);
         pet = PersistenceHandler.buildPet(this);
         initLayout (pet);
-        makeNotification();
         
         
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
@@ -79,6 +60,10 @@ public class FickaPetsStart extends Activity {
     /* always called when activity leaves foreground so set up background service here */
     public void onPause () {
     	super.onPause();
+    	Vector<Complaint> complaints = pet.getComplaints(this);
+    	Intent notificationService = new Intent(this, Notifier.class);
+    	notificationService.putExtra("com.game.fickapets.complaints", complaints);
+    	startService(notificationService);
     }
     
     /* looks like onResume is always called when activity comes to foreground, so
@@ -87,6 +72,10 @@ public class FickaPetsStart extends Activity {
     public void onResume () {
     	super.onResume();
     	//kill background service if it's still running
+    	Intent notificationService = new Intent(this, Notifier.class);
+    	if (!stopService(notificationService)) {
+    		System.out.println ("No service was running or we failed to stop it");
+    	}
     }
     
     /* Always called when activity gets destroyed, so save pet's state here */

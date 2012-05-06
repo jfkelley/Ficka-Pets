@@ -2,6 +2,9 @@ package com.game.fickapets;
 
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.Vector;
+
+import android.content.Context;
 
 public class Condition {
 	private long lastUpdate;
@@ -22,7 +25,7 @@ public class Condition {
 	 * For every sample, the tiredness, hunger, and health get updated.
 	 */
 	public void update (boolean isAwake) {
-		Double hoursSinceUpdate = Health.getHoursSinceUpdate(lastUpdate);
+		Double hoursSinceUpdate = Utility.hoursSince (lastUpdate);
 		lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
 		double updateCounter;
 		/* calculate strength and update attributes in half hour increments */
@@ -53,6 +56,10 @@ public class Condition {
 		atts.strength = currentStrength;
 		atts.lastUpdate = lastUpdate;
 		return atts;
+	}
+	
+	public Vector<Complaint> addComplaints (Context context, Vector<Complaint> complaintVec, boolean isAwake) {
+		return health.addComplaints(context, complaintVec, isAwake);
 	}
 	
 }

@@ -1,9 +1,13 @@
 package com.game.fickapets;
 
 
+
 public class Hunger {
-	private static final double INCREASE_RATE_AWAKE = (double)15/32;
-	private static final double INCREASE_RATE_ASLEEP = (double)5/16;
+	//private static final double INCREASE_RATE_AWAKE = (double)15/32;
+	//private static final double INCREASE_RATE_ASLEEP = (double)5/16;
+	private static final double INCREASE_RATE_AWAKE = 60;  //so a hunger notification goes off in ten minutes
+	private static final double INCREASE_RATE_ASLEEP = 1;
+	
 	
 	private double currentHunger;
 	
@@ -33,7 +37,7 @@ public class Hunger {
 		return INCREASE_RATE_ASLEEP;
 	}
 	
-	public double hoursUntil (double hungerReached, boolean isAwake) {
+	public  double hoursUntil (double hungerReached, boolean isAwake) {
 		return (hungerReached - getHunger()) / getRate(isAwake);
 	}
 	

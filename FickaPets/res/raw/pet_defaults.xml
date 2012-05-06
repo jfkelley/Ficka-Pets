@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Pet>
+  <health>90</health>
+  <strength>1</strength>
+  <hunger>50</hunger>
+  <sleepTime>22</sleepTime>  <!-- when we want the pet to need sleep -->
+  <awake>1</awake>	<!-- 0 means asleep anything else means awake -->
+</Pet>

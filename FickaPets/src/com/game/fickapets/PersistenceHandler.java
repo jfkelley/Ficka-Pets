@@ -1,6 +1,8 @@
 package com.game.fickapets;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -8,8 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,6 +26,12 @@ public class PersistenceHandler {
 	private static final String TIREDNESS_KEY = "tirednes";
 	private static final String LASTUPDATE_KEY = "lastUpdate";
 	private static final String DEFAULTSET_KEY = "defaultsSet";
+	
+	
+	private static final String USER_FILE = "userAttributesFile";
+	
+	private static final String COINS_KEY = "coins";
+	private static final String INVENTORY_KEY = "inventory";
 
 	private static Attributes getAttributesFromStoredState (SharedPreferences petState) {
 		Attributes atts = new Attributes ();
@@ -36,31 +42,6 @@ public class PersistenceHandler {
 		atts.tiredness = petState.getFloat(TIREDNESS_KEY, 0);
 		atts.lastUpdate = petState.getLong(LASTUPDATE_KEY, 0);
 		return atts;
-	}
-	
-	private static Element getElementByTagName(Node e, String tagName) {
-		Node child = e.getFirstChild();
-		while (child != null) {
-			if (child instanceof Element && child.getNodeName().equals(tagName)) {
-				return (Element) child;
-			}
-			child = child.getNextSibling();
-		}
-		return null;
-	}
-	
-	private static String getElementText (Element e) {
-		if (e != null && e.getChildNodes().getLength() == 1) {
-			Text elementText = (Text) e.getFirstChild();
-			return elementText.getNodeValue();
-		} else {
-			return "NULL";
-		}
-	}
-	
-	private static String getElementTextByTagName(Element e, String tagName) {
-		Element elem = getElementByTagName(e, tagName);
-		return getElementText(elem);
 	}
 	
 	
@@ -81,16 +62,16 @@ public class PersistenceHandler {
 		}
 	
 		Element pet = doc.getDocumentElement();
-		atts.health = Double.valueOf(getElementTextByTagName(pet, "health"));
-		atts.hunger = Double.valueOf(getElementTextByTagName(pet, "hunger"));
-		atts.strength = Double.valueOf(getElementTextByTagName(pet, "strength"));
-		if (Integer.valueOf(getElementTextByTagName(pet, "awake")) != 0) {
+		atts.health = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "health"));
+		atts.hunger = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "hunger"));
+		atts.strength = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "strength"));
+		if (Integer.valueOf(XMLUtils.getElementTextByTagName(pet, "awake")) != 0) {
 			atts.isAwake = true;
 		} else {
 			atts.isAwake = false;
 		}
 		/* sleepTime tells us what time we'd like the pet to need to sleep when it's first initialized */
-		atts.tiredness = Tiredness.getInitialTiredness(Double.valueOf(getElementTextByTagName(pet, "sleepTime")));
+		atts.tiredness = Tiredness.getInitialTiredness(Double.valueOf(XMLUtils.getElementTextByTagName(pet, "sleepTime")));
 		atts.lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
 		return atts;
 	}
@@ -111,8 +92,18 @@ public class PersistenceHandler {
 		pet = new Pet (atts);
 		return pet;
 	}
-	/* saves everything in SharedPreferences which is android's persistent key value store */
-	public static void saveState (Context context, Pet pet) {
+	
+	public static Pet reset (Context context) {
+		SharedPreferences petState = context.getSharedPreferences (PET_FILE, 0);
+		SharedPreferences.Editor editor = petState.edit ();
+		editor.putBoolean (DEFAULTSET_KEY, false);
+		editor.commit ();
+
+		return buildPet (context);
+		
+	}
+	
+	public static void saveState(Context context, Pet pet) {
 		Attributes atts = pet.getAttributes();
 		SharedPreferences petState = context.getSharedPreferences(PET_FILE, 0);
 		SharedPreferences.Editor editor = petState.edit();
@@ -126,13 +117,51 @@ public class PersistenceHandler {
 		editor.commit();
 	}
 	
-	public static Pet reset (Context context) {
-		SharedPreferences petState = context.getSharedPreferences (PET_FILE, 0);
-		SharedPreferences.Editor editor = petState.edit ();
-		editor.putBoolean (DEFAULTSET_KEY, false);
-		editor.commit ();
+	public static void saveState(Context context, User user) {
+		SharedPreferences userState = context.getSharedPreferences(USER_FILE, 0);
+		SharedPreferences.Editor editor = userState.edit();
+		editor.putInt(COINS_KEY, user.getCoins());
+		editor.putString(INVENTORY_KEY, encodeInventory(user.getInventory()));
+		editor.commit();
+	}
+	
+	/* saves everything in SharedPreferences which is android's persistent key value store */
+	public static void saveState (Context context, Pet pet, User user) {
+		saveState(context, pet);
+		saveState(context, user);
+	}
+	
+	private static String encodeInventory(List<Item> inventory) {
+		StringBuilder sb = new StringBuilder();
+		for (Item item : inventory) {
+			sb.append(item.getId());
+			sb.append(",");
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		return sb.toString();
+	}
+	
+	private static List<Item> decodeInventory(Context context, String text) {
+		String[] ids = text.split(",");
+		List<Item> items = new ArrayList<Item>();
+		for (String id : ids) {
+			items.add(ItemManager.getItem(context, id));
+		}
+		return items;
+	}
+	
+	public static User buildUser(Context context) {
+		SharedPreferences userState = context.getSharedPreferences(USER_FILE, 0);
 
-		return buildPet (context);
-		
+		User u = new User();
+		if (userState.getInt(COINS_KEY, -1) == -1) {
+			return u;
+		} else {
+			int coins = userState.getInt(COINS_KEY, 0);
+			List<Item> inventory = decodeInventory(context, userState.getString(INVENTORY_KEY, ""));
+			u.setCoins(coins);
+			u.setInventory(inventory);
+			return u;
+		}
 	}
 }

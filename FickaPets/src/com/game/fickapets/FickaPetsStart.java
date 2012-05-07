@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 public class FickaPetsStart extends Activity {
 	Pet pet;
+	User user;
 	
 	AsyncTask<Pet, String, Void> updateLoop;
 	
@@ -43,6 +44,7 @@ public class FickaPetsStart extends Activity {
     	// should probably also kill background service if it's still running
         super.onCreate(savedInstanceState);
         pet = PersistenceHandler.buildPet(this);
+        user = PersistenceHandler.buildUser(this);
         initLayout (pet);
         
         
@@ -81,7 +83,7 @@ public class FickaPetsStart extends Activity {
     /* Always called when activity gets destroyed, so save pet's state here */
     public void onDestroy () {
     	super.onDestroy();
-    	PersistenceHandler.saveState (this, pet);
+    	PersistenceHandler.saveState (this, pet, user);
     }
     
 
@@ -106,5 +108,10 @@ public class FickaPetsStart extends Activity {
     	pet = PersistenceHandler.reset (this);
     	setSleepButton (pet);
     	updateLoop = new MainThread(this).execute(pet);
+    }
+    
+    public void shopPressed(View view) {
+    	Intent intent = new Intent(FickaPetsStart.this, ItemShop.class);
+    	startActivity(intent);
     }
 }

@@ -17,5 +17,7 @@
 	<string name="petStarving">Your pet is starving</string>
 	<string name="petTired">Your pet is tired</string>
 	<string name="petVeryTired">Your pet is sleep deprived</string>
+	<string name="itemShopLabel">FickaPets item shop</string>
+	<string name="shop">Shop</string>
 	
 </resources>

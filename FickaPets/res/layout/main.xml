@@ -12,7 +12,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="14dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="5dp"
             android:text="@string/strength"
             android:ems="10" />
 
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/strengthPermanent"
             android:layout_below="@+id/strengthPermanent"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="5dp"
             android:ems="10"
             android:text="@string/health" />
         
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/healthPermanent"
             android:layout_below="@+id/healthPermanent"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="5dp"
             android:ems="10"
             android:text="@string/hunger" />
         
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/hungerPermanent"
             android:layout_below="@+id/hungerPermanent"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="5dp"
             android:ems="10"
             android:text="@string/tiredness" /> 
 		<TextView
@@ -92,7 +92,7 @@
 		    android:layout_width="fill_parent"
 		    android:layout_below="@+id/tiredPermanent"
 		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="20dp"
+		    android:layout_marginTop="5dp"
 		    android:text="@string/feed"
 		    android:onClick="feedPressed" />
 		
@@ -102,7 +102,7 @@
 		    android:layout_width="fill_parent"
 		    android:layout_below="@+id/feedButton"
 		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="20dp"
+		    android:layout_marginTop="5dp"
 		    android:onClick="sleepPressed" />
 		<Button
 		    android:id="@+id/resetButton"
@@ -111,16 +111,26 @@
 		    android:layout_below="@+id/sleepButton"
 		    android:layout_centerHorizontal="true"
 		    android:text="@string/reset"
-		    android:layout_marginTop="20dp"
+		    android:layout_marginTop="5dp"
 		    android:onClick="resetPressed" />
+		
+		<Button
+		    android:id="@+id/shopButton"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/resetButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/shop"
+		    android:layout_marginTop="5dp"
+		    android:onClick="shopPressed" />
 		    
 		<TextView
 		    android:id="@+id/startTime"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/resetButton"
+		    android:layout_below="@+id/shopButton"
 		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="40dp"
+		    android:layout_marginTop="5dp"
 		    />
 		<TextView
 		    android:id="@+id/endTime"
@@ -128,7 +138,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_below="@+id/startTime"
 		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="20dp"
+		    android:layout_marginTop="5dp"
 		    />
 
     </RelativeLayout>

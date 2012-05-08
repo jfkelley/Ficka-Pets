@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Items>
+    <Item type="food">
+        <id>apple</id>
+        <name>Apple</name>
+        <image>apple</image>
+        <price>20</price>
+        <health>5</health>
+    </Item>
+    <Item type="food">
+        <id>banana</id>
+        <name>Bananas</name>
+        <image>banana</image>
+        <price>15</price>
+        <health>6</health>
+    </Item>
+</Items>

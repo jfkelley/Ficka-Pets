@@ -40,7 +40,6 @@ public class FickaPetsStart extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	// should probably also kill background service if it's still running
         super.onCreate(savedInstanceState);
         pet = PersistenceHandler.buildPet(this);
         initLayout (pet);

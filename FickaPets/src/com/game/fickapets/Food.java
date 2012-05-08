@@ -1,11 +1,11 @@
 package com.game.fickapets;
 
 public class Food extends Item {
-	private final int health;
-	public Food(String id, String image, String name, int price, int health) {
+	private final int hungerPoints;
+	public Food(String id, String image, String name, int price, int hungerPoints) {
 		super(id, image, name, price);
-		this.health = health;
+		this.hungerPoints = hungerPoints;
 	}
 	
-	public int getHealth() { return health; }
+	public int getHungerPoints() { return hungerPoints; }
 }

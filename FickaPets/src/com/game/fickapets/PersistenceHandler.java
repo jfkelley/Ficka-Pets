@@ -132,12 +132,14 @@ public class PersistenceHandler {
 	}
 	
 	private static String encodeInventory(List<Item> inventory) {
+		System.out.println(inventory);
 		StringBuilder sb = new StringBuilder();
 		for (Item item : inventory) {
 			sb.append(item.getId());
 			sb.append(",");
 		}
-		sb.deleteCharAt(sb.length() - 1);
+		if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
 	
@@ -153,15 +155,12 @@ public class PersistenceHandler {
 	public static User buildUser(Context context) {
 		SharedPreferences userState = context.getSharedPreferences(USER_FILE, 0);
 
-		User u = new User();
 		if (userState.getInt(COINS_KEY, -1) == -1) {
-			return u;
+			return new User();
 		} else {
 			int coins = userState.getInt(COINS_KEY, 0);
 			List<Item> inventory = decodeInventory(context, userState.getString(INVENTORY_KEY, ""));
-			u.setCoins(coins);
-			u.setInventory(inventory);
-			return u;
+			return new User(coins, inventory);
 		}
 	}
 }

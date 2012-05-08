@@ -9,11 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ItemShop extends Activity {
-	User user;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		System.out.println("created shop");
         super.onCreate(savedInstanceState);
-        user = PersistenceHandler.buildUser(this);
         setContentView(R.layout.shop);
         LinearLayout ll = (LinearLayout)findViewById(R.id.shopLinearLayout);
         for (Item item : ItemManager.allItems(this)) {
@@ -22,18 +21,13 @@ public class ItemShop extends Activity {
         updateTotalCoins();
 	}
 	
-	public void onDestroy () {
-    	super.onDestroy();
-    	PersistenceHandler.saveState (this, user);
-    }
-	
 	private void addButtonForItem(final Item item, LinearLayout ll) {
 		Button b = new Button(this);
 		b.setText(item.getName() + " - " + item.getPrice());
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				user.buyItem(item);
+				User.theUser(ItemShop.this).buyItem(item);
 				updateTotalCoins();
 			}
 		});
@@ -41,7 +35,7 @@ public class ItemShop extends Activity {
 	}
 
 	private void updateTotalCoins() {
-		int coins = user.getCoins();
+		int coins = User.theUser(this).getCoins();
 		String plural = coins == 1 ? "" : "s";
 		((TextView)findViewById(R.id.shopTotalCoins)).setText("You have " + coins + " coin" + plural + ".");
 	}

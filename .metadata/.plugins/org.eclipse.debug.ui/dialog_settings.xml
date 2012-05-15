@@ -2,6 +2,11 @@
 <section name="Workbench">
 	<item value="300" key="org.eclipse.jdt.internal.debug.ui.actions.PopupInspectAction$2DIALOG_WIDTH"/>
 	<item value="250" key="org.eclipse.jdt.internal.debug.ui.actions.PopupInspectAction$2DIALOG_HEIGHT"/>
+	<section name="org.eclipse.debug.ui.SELECT_LAUNCHERS_DIALOG">
+		<item value="450" key="DIALOG_WIDTH"/>
+		<item value="450" key="DIALOG_HEIGHT"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
 	<section name="org.eclipse.debug.ui.SELECT_LAUNCH_SHORTCUT_DIALOG">
 		<item value="253" key="DIALOG_WIDTH"/>
 		<item value="406" key="DIALOG_HEIGHT"/>

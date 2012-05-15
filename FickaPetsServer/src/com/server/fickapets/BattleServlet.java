@@ -13,16 +13,16 @@ public class BattleServlet extends HttpServlet {
 	private static final long serialVersionUID = 6227254987843138881L;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String action = req.getLocalName().toLowerCase();
-		if (action.equals("create")) {
+		String action = req.getRequestURI().toLowerCase();
+		if (action.equals("/create")) {
 			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"));
-		} else if (action.equals("sendmove")) {
+		} else if (action.equals("/sendmove")) {
 			doMove(resp, req.getParameter("uid"), req.getParameter("bid"), req.getParameter("move"), Double.parseDouble(req.getParameter("strength")));
-		} else if (action.equals("openbattles") || action.equals("outgoingchallenges") || action.equals("incomingchallenges")) {
+		} else if (action.equals("/openbattles") || action.equals("outgoingchallenges") || action.equals("incomingchallenges")) {
 			handleBattleQuery(resp, action, req.getParameter("uid"));
-		} else if (action.equals("closebattle")) {
+		} else if (action.equals("/closebattle")) {
 			closeBattle(resp, req.getParameter("uid"), req.getParameter("bid"));
-		} else if (action.equals("battledata")) {
+		} else if (action.equals("/battledata")) {
 			battleData(resp, req.getParameter("uid"), req.getParameter("bid"));
 		}
 	}

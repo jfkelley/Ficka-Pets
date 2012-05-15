@@ -19,5 +19,7 @@
 	<string name="petVeryTired">Your pet is sleep deprived</string>
 	<string name="itemShopLabel">FickaPets item shop</string>
 	<string name="shop">Shop</string>
+	<string name="battle">Battle</string>
+	<string name="battleLabel">Battle</string>
 	
 </resources>

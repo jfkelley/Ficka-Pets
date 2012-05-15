@@ -13,6 +13,8 @@ public class Tiredness {
 	private static final double MIN_TIREDNESS_AFTER_ONE_DAY = INCREASE_RATE * (24 - HOURS_PER_SLEEP);
 	
 	private static double currentTiredness;
+	private static final double MAX_TIREDNESS = 100;
+	private static final double MIN_TIREDNESS = 100;
 	
 	public Tiredness (Attributes atts) {
 		currentTiredness = atts.tiredness;
@@ -46,6 +48,11 @@ public class Tiredness {
 			currentTiredness += hoursSinceUpdate * INCREASE_RATE;
 		} else {
 			currentTiredness = Math.exp (DECREASE_CONSTANT * hoursSinceUpdate + Math.log (currentTiredness));
+		}
+		if (currentTiredness > MAX_TIREDNESS) {
+			currentTiredness = MAX_TIREDNESS;
+		} else if (currentTiredness < MIN_TIREDNESS) {
+			currentTiredness = MIN_TIREDNESS;
 		}
 	}
 	

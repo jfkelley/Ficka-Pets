@@ -52,12 +52,6 @@ public class Pet {
 		petChanged();
 	}
 	
-	public void feed () {
-		double hungerPts = 5;  // for now
-		condition.petHasEaten (hungerPts);
-		petChanged();
-	}
-	
 	public boolean isSleeping () {
 		if (isAwake) return false;
 		return true;

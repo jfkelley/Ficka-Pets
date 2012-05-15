@@ -9,6 +9,9 @@ public class User {
 	
 	private static User theUser;
 	private static Context lastContext;
+	private int coins;
+	private List<Item> inventory;
+	
 	public static User theUser(Context context) {
 		if (theUser == null) {
 			theUser = PersistenceHandler.buildUser(context);
@@ -26,9 +29,6 @@ public class User {
 		PersistenceHandler.saveState(lastContext, this);
 	}
 
-	private int coins;
-	private List<Item> inventory;
-	
 	public User() {
 		this(1000, new ArrayList<Item>());
 	}

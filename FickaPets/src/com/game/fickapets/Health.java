@@ -22,6 +22,8 @@ public class Health {
 	private static final double extremeTiredness = 60;
 	private static final double extremeTirednessRate = -2;
 	
+	private static final double MAX_HEALTH = 100;
+	private static final double MIN_HEALTH = 0;
 
 	public Health (Attributes atts) {
 		currentHealth = atts.health;
@@ -88,7 +90,11 @@ public class Health {
 	public void update (boolean isAwake, Double hoursSinceUpdate) {
 		currentHealth += hungerEffectOnHealth (hoursSinceUpdate, isAwake);
 		currentHealth += tiredEffectOnHealth (hoursSinceUpdate, isAwake);
-
+		if (currentHealth > MAX_HEALTH) {
+			currentHealth = MAX_HEALTH;
+		} else if (currentHealth < MIN_HEALTH) {
+			currentHealth = MIN_HEALTH;
+		}
 		hunger.update (isAwake, hoursSinceUpdate);
 		tiredness.update (isAwake, hoursSinceUpdate);
 	}

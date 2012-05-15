@@ -1,0 +1,24 @@
+package com.game.fickapets;
+
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
+public class UrlImageViewHandler {
+	
+	private String getFilenameForUrl(final String url) {
+		return "" + url.hashCode() + ".urlImage";
+	}
+	
+	
+	public static void setUrlDrawable(final ImageView imageView, final String url, final Drawable defaultDrawable) {
+		if (url == null || url.equals("")) {
+			if (imageView != null) {
+				imageView.setImageDrawable(defaultDrawable);
+			}
+			return;
+		}
+		final String imageFilename = getFilenameForUrl(url);
+	}
+	
+
+}

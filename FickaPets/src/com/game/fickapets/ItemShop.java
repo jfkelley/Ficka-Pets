@@ -25,7 +25,6 @@ public class ItemShop extends Activity {
 		Button b = new Button(this);
 		b.setText(item.getName() + " - " + item.getPrice());
 		b.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				User.theUser(ItemShop.this).buyItem(item);
 				updateTotalCoins();

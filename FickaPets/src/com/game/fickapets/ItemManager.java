@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import android.content.Context;
 
@@ -18,7 +17,7 @@ public class ItemManager {
 	private static Map<String, Item> items = new LinkedHashMap<String, Item>();
 	
 	private static void readItems(Context context) {
-		Document doc;		
+		Document doc;
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance ();
 			factory.setIgnoringElementContentWhitespace (true);

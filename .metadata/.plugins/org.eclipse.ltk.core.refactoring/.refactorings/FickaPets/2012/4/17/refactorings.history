@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.game.fickapets.Strength.java&apos; to &apos;Condition.java&apos;&#x0A;- Original project: &apos;FickaPets&apos;&#x0A;- Original element: &apos;com.game.fickapets.Strength.java&apos;&#x0A;- Renamed element: &apos;com.game.fickapets.Condition.java&apos;" description="Rename compilation unit &apos;Strength.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;com.game.fickapets{Strength.java" name="Condition.java" references="false" stamp="1335464489699" version="1.0"/>
+</session>

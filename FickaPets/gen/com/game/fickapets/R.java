@@ -13,10 +13,13 @@ public final class R {
     public static final class drawable {
         public static final int apple=0x7f020000;
         public static final int banana=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
+        public static final int close=0x7f020002;
+        public static final int facebook_icon=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
     }
     public static final class id {
-        public static final int endTime=0x7f06000d;
+        public static final int battleButton=0x7f06000c;
+        public static final int endTime=0x7f06000e;
         public static final int feedButton=0x7f060008;
         public static final int healthEditable=0x7f060003;
         public static final int healthPermanent=0x7f060002;
@@ -24,10 +27,10 @@ public final class R {
         public static final int hungerPermanent=0x7f060004;
         public static final int resetButton=0x7f06000a;
         public static final int shopButton=0x7f06000b;
-        public static final int shopLinearLayout=0x7f06000e;
-        public static final int shopTotalCoins=0x7f06000f;
+        public static final int shopLinearLayout=0x7f06000f;
+        public static final int shopTotalCoins=0x7f060010;
         public static final int sleepButton=0x7f060009;
-        public static final int startTime=0x7f06000c;
+        public static final int startTime=0x7f06000d;
         public static final int strengthEditable=0x7f060001;
         public static final int strengthPermanent=0x7f060000;
         public static final int tiredEditable=0x7f060007;
@@ -44,6 +47,8 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050001;
         public static final int awake=0x7f050008;
+        public static final int battle=0x7f050010;
+        public static final int battleLabel=0x7f050011;
         public static final int feed=0x7f050006;
         public static final int health=0x7f050003;
         public static final int hello=0x7f050000;

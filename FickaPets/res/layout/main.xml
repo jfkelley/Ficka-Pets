@@ -123,12 +123,20 @@
 		    android:text="@string/shop"
 		    android:layout_marginTop="5dp"
 		    android:onClick="shopPressed" />
-		    
+		<Button
+		    android:id="@+id/battleButton"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/shopButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/battle"
+		    android:layout_marginTop="5dp"
+		    android:onClick="battlePressed" />
 		<TextView
 		    android:id="@+id/startTime"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/shopButton"
+		    android:layout_below="@+id/battleButton"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="5dp"
 		    />

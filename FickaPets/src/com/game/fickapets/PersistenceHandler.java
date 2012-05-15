@@ -26,8 +26,8 @@ public class PersistenceHandler {
 	private static final String TIREDNESS_KEY = "tirednes";
 	private static final String LASTUPDATE_KEY = "lastUpdate";
 	private static final String DEFAULTSET_KEY = "defaultsSet";
-	
-	
+	private static final String ACCESS_TOKEN_KEY = "facebookAccessToken";
+	private static final String ACCESS_EXPIRATION_KEY = "facebookAccessExpires";
 	private static final String USER_FILE = "userAttributesFile";
 	
 	private static final String COINS_KEY = "coins";
@@ -147,7 +147,10 @@ public class PersistenceHandler {
 		String[] ids = text.split(",");
 		List<Item> items = new ArrayList<Item>();
 		for (String id : ids) {
-			items.add(ItemManager.getItem(context, id));
+			/* don't want to add anything for empty strings */
+			if (id.compareTo("") != 0) {
+				items.add(ItemManager.getItem(context, id));
+			}
 		}
 		return items;
 	}
@@ -163,4 +166,22 @@ public class PersistenceHandler {
 			return new User(coins, inventory);
 		}
 	}
+	
+	public static String facebookAccessToken (Context context) {
+		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
+		return facebookPrefs.getString(ACCESS_TOKEN_KEY, null);
+	}
+	public static long facebookTokenExpiration (Context context) {
+		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
+		return facebookPrefs.getLong(ACCESS_EXPIRATION_KEY, 0);
+	}
+	
+	public static void saveFacebookAccess(Context context, String accessToken, long accessExpires) {
+		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
+		SharedPreferences.Editor editor = facebookPrefs.edit();
+		editor.putString(ACCESS_TOKEN_KEY, accessToken);
+		editor.putLong(ACCESS_EXPIRATION_KEY, accessExpires);
+		editor.commit();
+	}
+	
 }

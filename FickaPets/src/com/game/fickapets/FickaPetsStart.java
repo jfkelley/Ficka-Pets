@@ -19,8 +19,17 @@ import android.widget.TextView;
 public class FickaPetsStart extends Activity {
 
 	AsyncTask<Pet, String, Void> updateLoop;
-
-
+	
+	
+	private static int pick_food = 1;
+	private static final int NO_FOOD = 0;
+	
+	private int pickFood() {
+		int returnVal = pick_food;
+		pick_food += 1;
+		return returnVal;
+	}
+	
 	private void setSleepButton (Pet pet) {
 		Button sleepButton = (Button) findViewById(R.id.sleepButton);
 		if (pet.isSleeping()) {
@@ -35,8 +44,6 @@ public class FickaPetsStart extends Activity {
 		setSleepButton (pet);
 	}
 	
-		private static final int PICK_FOOD = 0;
-	private static final int NO_FOOD = 1;
 	
     /** Called when the activity is first created. */
     /*
@@ -109,17 +116,12 @@ public class FickaPetsStart extends Activity {
 	}
     
     
-   /* public void resetPressed (View view) {
-    	while (!updateLoop.cancel(true));
-    	pet = PersistenceHandler.reset (this);
-    	setSleepButton (pet);
-    	updateLoop = new MainThread(this).execute(pet);
-    }*/
 	public void feedPressed (View view) {
 		if (User.theUser(this).getUniqueFood().isEmpty()) {
 			showDialog(NO_FOOD);
 		} else {
-			showDialog(PICK_FOOD);
+			/* returns unique id every time so onCreateDialog gets called every time */
+			showDialog(pickFood());
 		}
 	}
 	
@@ -147,12 +149,27 @@ public class FickaPetsStart extends Activity {
 		Intent intent = new Intent(FickaPetsStart.this, ItemShop.class);
 		startActivity(intent);
 	}
+	
+	public void battlePressed(View view) {
+		Intent intent = new Intent(FickaPetsStart.this, BattleFriendsActivity.class);
+		startActivity(intent);
+	}
 
-
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
-		case PICK_FOOD:
+		case NO_FOOD:
+			AlertDialog noFoodAlert = new AlertDialog.Builder(this)
+				.setMessage("You don't have any food! Please buy some.")
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) { }
+				})
+				.create();
+			return noFoodAlert;
+		/* if we hardcode id, onCreateDialog doesn't get called each time */
+		default:
 			final List<Food> foodInInventory = User.theUser(this).getUniqueFood();
 			String[] items = new String[foodInInventory.size()];
 			for (int i = 0; i < items.length; i++) {
@@ -168,17 +185,6 @@ public class FickaPetsStart extends Activity {
 				})
 				.create();
 			return pickFoodAlert;
-		case NO_FOOD:
-			AlertDialog noFoodAlert = new AlertDialog.Builder(this)
-				.setMessage("You don't have any food! Please buy some.")
-				.setCancelable(false)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) { }
-				})
-				.create();
-			return noFoodAlert;
-		default:
-			return null;
 		}
 	}
 }

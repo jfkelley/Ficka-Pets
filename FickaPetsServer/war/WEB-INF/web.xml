@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>BattleServlet</servlet-name>
+    <servlet-class>com.server.fickapets.BattleServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/create</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/sendmove</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/openbattles</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/outgoingchallenges</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/incomingchallenges</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/closebattle</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/battledata</url-pattern>
+  </servlet-mapping>
+
+</web-app>

@@ -1,5 +1,6 @@
 package com.server.fickapets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -25,6 +26,26 @@ public class BattleServlet extends HttpServlet {
 		} else if (action.equals("/battledata")) {
 			battleData(resp, req.getParameter("uid"), req.getParameter("bid"));
 		}
+	}
+	/* this doesn't work */
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String action = req.getRequestURI().toLowerCase();
+		if (action.equals("/findfriends")) {
+			BufferedReader reader = req.getReader();
+			StringBuilder sb = new StringBuilder();
+			char[] bytes = new char[1024];
+			int bytesRead;
+			while ((bytesRead = reader.read(bytes, 0, bytes.length)) != -1) {
+				sb.append(bytes, 0, bytesRead);
+			}
+			String data = sb.toString();
+			findFriends(resp, req.getParameter("id"), data);
+		}
+	}
+	
+	private void findFriends(HttpServletResponse resp, String id, String data) {
+		System.out.println("ID is: " + id);
+		System.out.println("Data is: " + data);
 	}
 
 	private void battleData(HttpServletResponse resp, String uid, String bid) throws IOException {

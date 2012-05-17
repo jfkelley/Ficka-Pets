@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,8 +18,10 @@ import android.content.SharedPreferences;
 public class PersistenceHandler {
 	
 	private static final String PET_FILE = "petAttributesFile";
-	
-	/* key values for SharedPreferences */
+	private static final String USER_FILE = "userAttributesFile";
+	private static final String CACHE_FILE = "cacheStateFile";
+
+	/* key values for PET_FILE */
 	private static final String HEALTH_KEY = "health";
 	private static final String HUNGER_KEY = "hunger";
 	private static final String AWAKE_KEY = "awake";
@@ -26,12 +29,17 @@ public class PersistenceHandler {
 	private static final String TIREDNESS_KEY = "tirednes";
 	private static final String LASTUPDATE_KEY = "lastUpdate";
 	private static final String DEFAULTSET_KEY = "defaultsSet";
+	
+	/* key values for USER_FILE */
 	private static final String ACCESS_TOKEN_KEY = "facebookAccessToken";
 	private static final String ACCESS_EXPIRATION_KEY = "facebookAccessExpires";
-	private static final String USER_FILE = "userAttributesFile";
-	
 	private static final String COINS_KEY = "coins";
 	private static final String INVENTORY_KEY = "inventory";
+	
+	/* key values for CACHE_FILE */
+	private static final String FILE_QUEUE_KEY = "filesOnDisk";
+	private static final String BYTES_ON_DISK_KEY = "bytesOnDisk";
+	
 
 	private static Attributes getAttributesFromStoredState (SharedPreferences petState) {
 		Attributes atts = new Attributes ();
@@ -183,5 +191,53 @@ public class PersistenceHandler {
 		editor.putLong(ACCESS_EXPIRATION_KEY, accessExpires);
 		editor.commit();
 	}
+	
+	private static String encodeFileArr(Vector<CacheEntry> files) {
+		StringBuilder sb = new StringBuilder();
+		for (CacheEntry entry: files) {
+			String entryStr = entry.name + ":" + entry.bytes.toString() + "|";
+			sb.append(entryStr);
+		}
+		sb = sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
+	}
+	
+	private static Vector<CacheEntry> decodeFileArr(String filesStr) {
+		Vector<CacheEntry> files = new Vector<CacheEntry>();
+		if (filesStr.equals("")) return files;
+		String[] entries = filesStr.split("|");
+		for (String entryStr : entries) {
+			int delimiterIndex = entryStr.indexOf(":");
+			String filename = entryStr.substring(0, delimiterIndex);
+			int bytes = Integer.valueOf(entryStr.substring(delimiterIndex + 1, entryStr.length()));
+			CacheEntry entry = new CacheEntry(filename, bytes);
+			files.add(entry);
+		}
+		return files;
+	}
+	
+	public static void saveImageCacheState(Context context, int bytesOnDisk, Vector<CacheEntry> files) {
+		SharedPreferences cachePrefs = context.getSharedPreferences(CACHE_FILE, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = cachePrefs.edit();
+
+		String filesString = encodeFileArr(files);
+		editor.putString(FILE_QUEUE_KEY, filesString);
+		editor.putInt(BYTES_ON_DISK_KEY, bytesOnDisk);
+		editor.commit();
+	}
+	
+	
+	public static Object[] getImageViewHandlerAtts(Context context) {
+		SharedPreferences cachePrefs = context.getSharedPreferences(CACHE_FILE, Context.MODE_PRIVATE);
+		/* decodeFileArr never returns null, at the least returns empty vector */
+		Vector<CacheEntry> files = decodeFileArr(cachePrefs.getString(FILE_QUEUE_KEY, ""));
+		Integer bytesOnDisk = cachePrefs.getInt(BYTES_ON_DISK_KEY, 0);
+		Object[] attArray = new Object[2];
+		attArray[0] = files;
+		attArray[1] = bytesOnDisk;
+		return attArray;
+	}
+	
+	
 	
 }

@@ -24,7 +24,7 @@
         	android:label="@string/itemShopLabel" >
         </activity>
         <activity
-            android:name=".BattleFriendsActivity"
+            android:name=".FindFriendsActivity"
             android:label="@string/battleLabel" >
         </activity>
     </application>

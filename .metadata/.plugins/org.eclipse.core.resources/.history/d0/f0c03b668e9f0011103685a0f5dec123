@@ -1,0 +1,10 @@
+package com.game.fickapets;
+
+public class CacheEntry {
+	String name;
+	Integer bytes;
+	public CacheEntry(String name, int bytes) {
+		this.name = name;
+		this.bytes = bytes;
+	}
+}

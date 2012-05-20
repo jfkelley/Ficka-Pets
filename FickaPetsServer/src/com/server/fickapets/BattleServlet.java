@@ -1,6 +1,5 @@
 package com.server.fickapets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -9,11 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 public class BattleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 6227254987843138881L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String action = req.getRequestURI().toLowerCase();
 		if (action.equals("/create")) {
 			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"));
@@ -25,27 +26,30 @@ public class BattleServlet extends HttpServlet {
 			closeBattle(resp, req.getParameter("uid"), req.getParameter("bid"));
 		} else if (action.equals("/battledata")) {
 			battleData(resp, req.getParameter("uid"), req.getParameter("bid"));
-		}
-	}
-	/* this doesn't work */
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String action = req.getRequestURI().toLowerCase();
-		if (action.equals("/findfriends")) {
-			BufferedReader reader = req.getReader();
-			StringBuilder sb = new StringBuilder();
-			char[] bytes = new char[1024];
-			int bytesRead;
-			while ((bytesRead = reader.read(bytes, 0, bytes.length)) != -1) {
-				sb.append(bytes, 0, bytesRead);
-			}
-			String data = sb.toString();
-			findFriends(resp, req.getParameter("id"), data);
+		} else if (action.equals("/registeruser")) {
+			registerUser(resp, req.getParameter("id"));
+		} else if (action.equals("/findfriends")) {
+			String content = IOUtils.toString(req.getInputStream(), "UTF-8");
+			findFriends(resp, req.getParameter("id"), content);
 		}
 	}
 	
-	private void findFriends(HttpServletResponse resp, String id, String data) {
+	private void registerUser(HttpServletResponse resp, String id) throws IOException {
+		if (checkNonNullParams(resp, id)) return;
+		User.create(id);
+		resp.setStatus(200);
+	}
+
+	private void findFriends(HttpServletResponse resp, String id, String data) throws IOException {
+		if (checkNonNullParams(resp, id, data)) return;
 		System.out.println("ID is: " + id);
 		System.out.println("Data is: " + data);
+		
+		/*
+		 * Convert data into List<String> of queried friend ids.
+		 * List<String> result = User.filterNonexisting(friends);
+		 * write result back to resp.
+		 */
 	}
 
 	private void battleData(HttpServletResponse resp, String uid, String bid) throws IOException {

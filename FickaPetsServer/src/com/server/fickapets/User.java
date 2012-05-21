@@ -27,6 +27,7 @@ public class User {
 	}
 	
 	public static List<String> filterNonexisting(List<String> ids) {
+		if (ids.isEmpty()) { return new ArrayList<String>(); }
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query(ENTITY_KIND).addFilter(USER_ID_PROPERTY, FilterOperator.IN, ids);
 		List<String> found = new ArrayList<String>();

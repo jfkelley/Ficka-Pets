@@ -6020,3 +6020,444 @@ java.io.IOException: Output Stream is closed
 	at com.android.ddmlib.Log.e(Log.java:230)
 	at com.android.ddmuilib.logcat.LogCatReceiver$1.run(LogCatReceiver.java:110)
 	at java.lang.Thread.run(Thread.java:680)
+!SESSION 2012-05-22 04:06:12.098 -----------------------------------------------
+eclipse.buildId=M20120208-0800
+java.version=1.6.0_31
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/cmckenna/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/cmckenna/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2012-05-22 04:06:26.607
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.ui 4 4 2012-05-22 04:06:35.352
+!MESSAGE Invalid preference page path: XML Syntax
+
+!ENTRY org.eclipse.osgi 4 0 2012-05-22 04:06:42.905
+!MESSAGE An error occurred while automatically activating bundle org.eclipse.jpt.jpa.core (284).
+!STACK 0
+org.osgi.framework.BundleException: The activator org.eclipse.jpt.jpa.core.JptJpaCorePlugin for bundle org.eclipse.jpt.jpa.core is invalid
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:171)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.start(BundleContextImpl.java:679)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:381)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:299)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:345)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1207)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.core.internal.content.ContentType.getDescriber(ContentType.java:271)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.collectMatchingByContents(ContentTypeCatalog.java:184)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:403)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:450)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:346)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:360)
+	at org.eclipse.core.internal.content.ContentTypeMatcher.getDescriptionFor(ContentTypeMatcher.java:86)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.readDescription(ContentDescriptionManager.java:445)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.getDescriptionFor(ContentDescriptionManager.java:355)
+	at org.eclipse.core.internal.resources.File.internalGetCharset(File.java:246)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:207)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:194)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.cacheEncodingState(ResourceTextFileBuffer.java:479)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.initializeFileBufferContent(ResourceTextFileBuffer.java:281)
+	at org.eclipse.core.internal.filebuffers.ResourceFileBuffer.create(ResourceFileBuffer.java:245)
+	at org.eclipse.core.internal.filebuffers.TextFileBufferManager.connect(TextFileBufferManager.java:112)
+	at org.eclipse.wst.sse.core.internal.FileBufferModelManager.getModel(FileBufferModelManager.java:660)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._doCommonGetModel(ModelManagerImpl.java:544)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:508)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:481)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl.getModelForRead(ModelManagerImpl.java:1419)
+	at com.google.gwt.eclipse.core.modules.ModuleFile.doGetModelForRead(ModuleFile.java:230)
+	at com.google.gwt.eclipse.core.modules.AbstractModule$ReadModelOperation.run(AbstractModule.java:55)
+	at com.google.gwt.eclipse.core.modules.AbstractModule.getEntryPoints(AbstractModule.java:178)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPoints(GWTProjectProperties.java:214)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getDefaultEntryPointModules(GWTProjectProperties.java:64)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPointModules(GWTProjectProperties.java:94)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.getDefaultModules(ModuleArgumentProcessor.java:93)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.update(ModuleArgumentProcessor.java:160)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigurationUpdater.update(LaunchConfigurationUpdater.java:151)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.syncUpdate(LaunchConfigAffectingChangesListener.java:93)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.access$2(LaunchConfigAffectingChangesListener.java:89)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener$1.runInWorkspace(LaunchConfigAffectingChangesListener.java:78)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: java.lang.ExceptionInInitializerError
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at java.lang.Class.newInstance0(Class.java:355)
+	at java.lang.Class.newInstance(Class.java:308)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:166)
+	... 56 more
+Caused by: java.lang.IllegalArgumentException: Project facet jst.web has not been defined.
+	at org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl.getProjectFacet(FacetedProjectFrameworkImpl.java:234)
+	at org.eclipse.wst.common.project.facet.core.ProjectFacetsManager.getProjectFacet(ProjectFacetsManager.java:75)
+	at org.eclipse.jpt.jpa.core.JptJpaCorePlugin.<clinit>(JptJpaCorePlugin.java:210)
+	... 63 more
+Root exception:
+java.lang.ExceptionInInitializerError
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at java.lang.Class.newInstance0(Class.java:355)
+	at java.lang.Class.newInstance(Class.java:308)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:166)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.start(BundleContextImpl.java:679)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:381)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:299)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:345)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1207)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.core.internal.content.ContentType.getDescriber(ContentType.java:271)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.collectMatchingByContents(ContentTypeCatalog.java:184)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:403)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:450)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:346)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:360)
+	at org.eclipse.core.internal.content.ContentTypeMatcher.getDescriptionFor(ContentTypeMatcher.java:86)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.readDescription(ContentDescriptionManager.java:445)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.getDescriptionFor(ContentDescriptionManager.java:355)
+	at org.eclipse.core.internal.resources.File.internalGetCharset(File.java:246)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:207)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:194)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.cacheEncodingState(ResourceTextFileBuffer.java:479)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.initializeFileBufferContent(ResourceTextFileBuffer.java:281)
+	at org.eclipse.core.internal.filebuffers.ResourceFileBuffer.create(ResourceFileBuffer.java:245)
+	at org.eclipse.core.internal.filebuffers.TextFileBufferManager.connect(TextFileBufferManager.java:112)
+	at org.eclipse.wst.sse.core.internal.FileBufferModelManager.getModel(FileBufferModelManager.java:660)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._doCommonGetModel(ModelManagerImpl.java:544)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:508)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:481)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl.getModelForRead(ModelManagerImpl.java:1419)
+	at com.google.gwt.eclipse.core.modules.ModuleFile.doGetModelForRead(ModuleFile.java:230)
+	at com.google.gwt.eclipse.core.modules.AbstractModule$ReadModelOperation.run(AbstractModule.java:55)
+	at com.google.gwt.eclipse.core.modules.AbstractModule.getEntryPoints(AbstractModule.java:178)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPoints(GWTProjectProperties.java:214)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getDefaultEntryPointModules(GWTProjectProperties.java:64)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPointModules(GWTProjectProperties.java:94)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.getDefaultModules(ModuleArgumentProcessor.java:93)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.update(ModuleArgumentProcessor.java:160)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigurationUpdater.update(LaunchConfigurationUpdater.java:151)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.syncUpdate(LaunchConfigAffectingChangesListener.java:93)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.access$2(LaunchConfigAffectingChangesListener.java:89)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener$1.runInWorkspace(LaunchConfigAffectingChangesListener.java:78)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: java.lang.IllegalArgumentException: Project facet jst.web has not been defined.
+	at org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl.getProjectFacet(FacetedProjectFrameworkImpl.java:234)
+	at org.eclipse.wst.common.project.facet.core.ProjectFacetsManager.getProjectFacet(ProjectFacetsManager.java:75)
+	at org.eclipse.jpt.jpa.core.JptJpaCorePlugin.<clinit>(JptJpaCorePlugin.java:210)
+	... 63 more
+
+!ENTRY org.eclipse.core.contenttype 4 0 2012-05-22 04:06:42.949
+!MESSAGE Could not create content describer for org.eclipse.jpt.jpa.core.content.baseJpaContent. Content type has been disabled.
+!SESSION 2012-05-22 04:11:04.371 -----------------------------------------------
+eclipse.buildId=M20120208-0800
+java.version=1.6.0_31
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/cmckenna/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/cmckenna/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2012-05-22 04:11:18.162
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.jdt.core 4 2 2012-05-22 04:11:21.461
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.core".
+!STACK 0
+java.lang.NullPointerException
+	at com.google.gdt.eclipse.appengine.rpc.validators.JavaCompilationParticipant.reconcile(JavaCompilationParticipant.java:169)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation$1.run(ReconcileWorkingCopyOperation.java:257)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.notifyParticipants(ReconcileWorkingCopyOperation.java:244)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:728)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:788)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1244)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:126)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:108)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:89)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:87)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:178)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:114)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:136)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:406)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.jdt.core 4 4 2012-05-22 04:11:21.519
+!MESSAGE Exception occurred in reconcile participant
+!STACK 0
+java.lang.NullPointerException
+	at com.google.gdt.eclipse.appengine.rpc.validators.JavaCompilationParticipant.reconcile(JavaCompilationParticipant.java:169)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation$1.run(ReconcileWorkingCopyOperation.java:257)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.notifyParticipants(ReconcileWorkingCopyOperation.java:244)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:728)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:788)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1244)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:126)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:108)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:89)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:87)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:178)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:114)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:136)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:406)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.osgi 4 0 2012-05-22 04:11:23.577
+!MESSAGE An error occurred while automatically activating bundle org.eclipse.jpt.jpa.core (284).
+!STACK 0
+org.osgi.framework.BundleException: The activator org.eclipse.jpt.jpa.core.JptJpaCorePlugin for bundle org.eclipse.jpt.jpa.core is invalid
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:171)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.start(BundleContextImpl.java:679)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:381)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:299)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:345)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1207)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.core.internal.content.ContentType.getDescriber(ContentType.java:271)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.collectMatchingByContents(ContentTypeCatalog.java:184)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:403)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:450)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:346)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:360)
+	at org.eclipse.core.internal.content.ContentTypeMatcher.getDescriptionFor(ContentTypeMatcher.java:86)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.readDescription(ContentDescriptionManager.java:445)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.getDescriptionFor(ContentDescriptionManager.java:355)
+	at org.eclipse.core.internal.resources.File.internalGetCharset(File.java:246)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:207)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:194)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.cacheEncodingState(ResourceTextFileBuffer.java:479)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.initializeFileBufferContent(ResourceTextFileBuffer.java:281)
+	at org.eclipse.core.internal.filebuffers.ResourceFileBuffer.create(ResourceFileBuffer.java:245)
+	at org.eclipse.core.internal.filebuffers.TextFileBufferManager.connect(TextFileBufferManager.java:112)
+	at org.eclipse.wst.sse.core.internal.FileBufferModelManager.getModel(FileBufferModelManager.java:660)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._doCommonGetModel(ModelManagerImpl.java:544)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:508)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:481)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl.getModelForRead(ModelManagerImpl.java:1419)
+	at com.google.gwt.eclipse.core.modules.ModuleFile.doGetModelForRead(ModuleFile.java:230)
+	at com.google.gwt.eclipse.core.modules.AbstractModule$ReadModelOperation.run(AbstractModule.java:55)
+	at com.google.gwt.eclipse.core.modules.AbstractModule.getEntryPoints(AbstractModule.java:178)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPoints(GWTProjectProperties.java:214)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getDefaultEntryPointModules(GWTProjectProperties.java:64)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPointModules(GWTProjectProperties.java:94)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.getDefaultModules(ModuleArgumentProcessor.java:93)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.update(ModuleArgumentProcessor.java:160)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigurationUpdater.update(LaunchConfigurationUpdater.java:151)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.syncUpdate(LaunchConfigAffectingChangesListener.java:93)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.access$2(LaunchConfigAffectingChangesListener.java:89)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener$1.runInWorkspace(LaunchConfigAffectingChangesListener.java:78)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: java.lang.ExceptionInInitializerError
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at java.lang.Class.newInstance0(Class.java:355)
+	at java.lang.Class.newInstance(Class.java:308)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:166)
+	... 56 more
+Caused by: java.lang.IllegalArgumentException: Project facet jst.web has not been defined.
+	at org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl.getProjectFacet(FacetedProjectFrameworkImpl.java:234)
+	at org.eclipse.wst.common.project.facet.core.ProjectFacetsManager.getProjectFacet(ProjectFacetsManager.java:75)
+	at org.eclipse.jpt.jpa.core.JptJpaCorePlugin.<clinit>(JptJpaCorePlugin.java:210)
+	... 63 more
+Root exception:
+java.lang.ExceptionInInitializerError
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at java.lang.Class.newInstance0(Class.java:355)
+	at java.lang.Class.newInstance(Class.java:308)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadBundleActivator(AbstractBundle.java:166)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.start(BundleContextImpl.java:679)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:381)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:299)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:440)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:268)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:463)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:400)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:476)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:429)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:417)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at org.eclipse.osgi.internal.loader.BundleLoader.loadClass(BundleLoader.java:345)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.loadClass(BundleHost.java:229)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.loadClass(AbstractBundle.java:1207)
+	at org.eclipse.core.internal.registry.osgi.RegistryStrategyOSGI.createExecutableExtension(RegistryStrategyOSGI.java:174)
+	at org.eclipse.core.internal.registry.ExtensionRegistry.createExecutableExtension(ExtensionRegistry.java:905)
+	at org.eclipse.core.internal.registry.ConfigurationElement.createExecutableExtension(ConfigurationElement.java:243)
+	at org.eclipse.core.internal.registry.ConfigurationElementHandle.createExecutableExtension(ConfigurationElementHandle.java:55)
+	at org.eclipse.core.internal.content.ContentType.getDescriber(ContentType.java:271)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.collectMatchingByContents(ContentTypeCatalog.java:184)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:403)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.internalFindContentTypesFor(ContentTypeCatalog.java:450)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:346)
+	at org.eclipse.core.internal.content.ContentTypeCatalog.getDescriptionFor(ContentTypeCatalog.java:360)
+	at org.eclipse.core.internal.content.ContentTypeMatcher.getDescriptionFor(ContentTypeMatcher.java:86)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.readDescription(ContentDescriptionManager.java:445)
+	at org.eclipse.core.internal.resources.ContentDescriptionManager.getDescriptionFor(ContentDescriptionManager.java:355)
+	at org.eclipse.core.internal.resources.File.internalGetCharset(File.java:246)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:207)
+	at org.eclipse.core.internal.resources.File.getCharset(File.java:194)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.cacheEncodingState(ResourceTextFileBuffer.java:479)
+	at org.eclipse.core.internal.filebuffers.ResourceTextFileBuffer.initializeFileBufferContent(ResourceTextFileBuffer.java:281)
+	at org.eclipse.core.internal.filebuffers.ResourceFileBuffer.create(ResourceFileBuffer.java:245)
+	at org.eclipse.core.internal.filebuffers.TextFileBufferManager.connect(TextFileBufferManager.java:112)
+	at org.eclipse.wst.sse.core.internal.FileBufferModelManager.getModel(FileBufferModelManager.java:660)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._doCommonGetModel(ModelManagerImpl.java:544)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:508)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl._commonGetModel(ModelManagerImpl.java:481)
+	at org.eclipse.wst.sse.core.internal.model.ModelManagerImpl.getModelForRead(ModelManagerImpl.java:1419)
+	at com.google.gwt.eclipse.core.modules.ModuleFile.doGetModelForRead(ModuleFile.java:230)
+	at com.google.gwt.eclipse.core.modules.AbstractModule$ReadModelOperation.run(AbstractModule.java:55)
+	at com.google.gwt.eclipse.core.modules.AbstractModule.getEntryPoints(AbstractModule.java:178)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPoints(GWTProjectProperties.java:214)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getDefaultEntryPointModules(GWTProjectProperties.java:64)
+	at com.google.gwt.eclipse.core.properties.GWTProjectProperties.getEntryPointModules(GWTProjectProperties.java:94)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.getDefaultModules(ModuleArgumentProcessor.java:93)
+	at com.google.gwt.eclipse.core.launch.processors.ModuleArgumentProcessor.update(ModuleArgumentProcessor.java:160)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigurationUpdater.update(LaunchConfigurationUpdater.java:151)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.syncUpdate(LaunchConfigAffectingChangesListener.java:93)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener.access$2(LaunchConfigAffectingChangesListener.java:89)
+	at com.google.gdt.eclipse.suite.launch.processors.LaunchConfigAffectingChangesListener$1.runInWorkspace(LaunchConfigAffectingChangesListener.java:78)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:38)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+Caused by: java.lang.IllegalArgumentException: Project facet jst.web has not been defined.
+	at org.eclipse.wst.common.project.facet.core.internal.FacetedProjectFrameworkImpl.getProjectFacet(FacetedProjectFrameworkImpl.java:234)
+	at org.eclipse.wst.common.project.facet.core.ProjectFacetsManager.getProjectFacet(ProjectFacetsManager.java:75)
+	at org.eclipse.jpt.jpa.core.JptJpaCorePlugin.<clinit>(JptJpaCorePlugin.java:210)
+	... 63 more
+
+!ENTRY org.eclipse.core.contenttype 4 0 2012-05-22 04:11:23.792
+!MESSAGE Could not create content describer for org.eclipse.jpt.jpa.core.content.baseJpaContent. Content type has been disabled.
+
+!ENTRY org.eclipse.ui 4 4 2012-05-22 04:11:24.374
+!MESSAGE Invalid preference page path: XML Syntax
+
+!ENTRY com.google.gwt.eclipse.oophm 4 0 2012-05-22 04:18:37.957
+!MESSAGE Unable to reload the web server.
+!STACK 0
+java.lang.RuntimeException: java.util.concurrent.ExecutionException: com.google.gwt.dev.shell.remoteui.MessageTransport$RequestException: Unable to restart the web server. It is still in the process of starting up. Wait a few seconds and try again.
+	at com.google.gwt.eclipse.oophm.devmode.DevModeServiceClient.waitForResponse(DevModeServiceClient.java:105)
+	at com.google.gwt.eclipse.oophm.devmode.DevModeServiceClient.restartWebServer(DevModeServiceClient.java:92)
+	at com.google.gwt.eclipse.oophm.views.hierarchical.WebAppLaunchView$ReloadServerAction$1.run(WebAppLaunchView.java:267)
+	at java.lang.Thread.run(Thread.java:680)
+Caused by: java.util.concurrent.ExecutionException: com.google.gwt.dev.shell.remoteui.MessageTransport$RequestException: Unable to restart the web server. It is still in the process of starting up. Wait a few seconds and try again.
+	at java.util.concurrent.FutureTask$Sync.innerGet(FutureTask.java:222)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:83)
+	at com.google.gwt.eclipse.oophm.devmode.DevModeServiceClient.waitForResponse(DevModeServiceClient.java:103)
+	... 3 more
+Caused by: com.google.gwt.dev.shell.remoteui.MessageTransport$RequestException: Unable to restart the web server. It is still in the process of starting up. Wait a few seconds and try again.
+	at com.google.gwt.dev.shell.remoteui.MessageTransport.processFailure(MessageTransport.java:371)
+	at com.google.gwt.dev.shell.remoteui.MessageTransport.processMessage(MessageTransport.java:389)
+	at com.google.gwt.dev.shell.remoteui.MessageTransport.access$400(MessageTransport.java:45)
+	at com.google.gwt.dev.shell.remoteui.MessageTransport$2.run(MessageTransport.java:309)
+	... 1 more
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2012-05-22 04:22:00.063
+!MESSAGE No valid Android XML Editor Delegate found for file /FickaPetsServer/src/com/server/fickapets/FickaPetsServer.gwt.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-05-22 04:22:00.581
+!MESSAGE Failed to load properties file for project 'FickaPetsServer'
+
+!ENTRY com.android.ide.eclipse.adt 2 0 2012-05-22 04:22:24.866
+!MESSAGE No projects found for [/Users/cmckenna/Developer/Ficka-Pets/FickaPetsServer/src/com/server/fickapets/FickaPetsServer.gwt.xml]
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2012-05-22 04:23:33.931
+!MESSAGE No valid Android XML Editor Delegate found for file /FickaPetsServer/src/com/server/fickapets/FickaPetsServer.gwt.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-05-22 04:23:33.993
+!MESSAGE Failed to load properties file for project 'FickaPetsServer'
+
+!ENTRY com.android.ide.eclipse.adt 1 0 2012-05-22 04:30:11.681
+!MESSAGE No valid Android XML Editor Delegate found for file /FickaPetsServer/src/com/server/fickapets/Entry.gwt.xml [Res null, type null]
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-05-22 04:30:11.747
+!MESSAGE Failed to load properties file for project 'FickaPetsServer'
+
+!ENTRY org.eclipse.jdt.debug 4 125 2012-05-22 11:46:44.513
+!MESSAGE Internal error logged from JDI Debug: 
+!STACK 1
+org.eclipse.debug.core.DebugException: Invalid stack frame
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingStackFrame(JDIStackFrame.java:1010)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingThisObject(JDIStackFrame.java:700)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getThis(JDIStackFrame.java:1058)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getHoverInfo2(JavaDebugHover.java:362)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:142)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:85)
+	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:166)
+!SUBENTRY 1 org.eclipse.jdt.debug 4 100 2012-05-22 11:46:44.514
+!MESSAGE Invalid stack frame
+
+!ENTRY org.eclipse.jdt.debug 4 125 2012-05-22 11:46:49.065
+!MESSAGE Internal error logged from JDI Debug: 
+!STACK 1
+org.eclipse.debug.core.DebugException: Invalid stack frame
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingStackFrame(JDIStackFrame.java:1010)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingThisObject(JDIStackFrame.java:700)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getThis(JDIStackFrame.java:1058)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getHoverInfo2(JavaDebugHover.java:362)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:142)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:85)
+	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:166)
+!SUBENTRY 1 org.eclipse.jdt.debug 4 100 2012-05-22 11:46:49.065
+!MESSAGE Invalid stack frame

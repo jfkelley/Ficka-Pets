@@ -44,49 +44,19 @@ public class BattleActivity extends Activity {
     	opponentName = extras.getString(FindFriendsActivity.OPPONENT_NAME_KEY);
     	myId = extras.getString(FindFriendsActivity.MY_ID_KEY);
     	server = new FickaServer(this); 
-    	createNewBattle(myId, opponentId, server);
+    	new CreateGameTask().execute();
     }
     
     /* here, we serialize battle into json and write it out to file */
     public void onDestroy() {
+    	super.onDestroy();
+    	server.close();
     	if (!gameOver) {
     		PersistenceHandler.saveBattle(this, battleId, opponentName, myMove.toString(), myId, opponentId);
     	}
     }
-    private class CreateGameTask extends AsyncTask<Void, Void, String> {
-    	protected String doInBackground(Void...voids) {
-    		try {
-    			return server.createGame(myId, opponentId);
-    		} catch(IOException ex) {
-    			System.out.println("failed to create game on server");
-    			ex.printStackTrace();
-    			return null;
-    		}
-    	}
-    	protected void onPostExecute(String bid) {
-    		battleId = bid;
-    		myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
-    	}
-    }
    
-    private void createNewBattle(final String mId, final String opponentId, final FickaServer server) {
-    	new CreateGameTask().execute();
-    	/*new Thread(new Runnable() {
-    		public void run() {
-    			try {
-    				final String bid = server.createGame(mId, opponentId);
-    				runOnUiThread(new Runnable() {
-    					public void run() {
-    						battleId = bid;
-    						myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
-    					}
-    				});
-    			} catch(Exception ex) {
-    				ex.printStackTrace();
-    			}
-    		}
-    	}).run();*/
-    }
+    
     /* returns the damage done to victim.  The victim's starting strength is treated as life and after
      * attacker wins a move, the victim's life goes down by the damage returned here.  If this returns 50 and
      * victim's starting strength is 100, then victim loses half his life. If both opponents start with the same
@@ -94,6 +64,14 @@ public class BattleActivity extends Activity {
      */
     private double getDamageOnAttack(double attackerStrength) {
     	return attackerStrength / MOVES_TO_WIN;
+    }
+    
+
+    
+    public void onFightPressed(View v) {
+    	if (v.getVisibility() == View.VISIBLE) {
+        	showDialog(ATTACK_DIALOG);
+    	}
     }
     
     protected Dialog onCreateDialog(int id) {
@@ -109,7 +87,12 @@ public class BattleActivity extends Activity {
 				.setItems(moves, new OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
 						myMove = item;
-						new PollOponnentMove().execute();
+						/* checking again in case of double click on this dialog */
+						if (findViewById(R.id.fightButton).getVisibility() == View.VISIBLE) { 
+							new SendMoveTask().execute();
+							new PollOponnentMove().execute();
+							findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+						}
 					}
 				})
 				.create();
@@ -119,11 +102,8 @@ public class BattleActivity extends Activity {
     	}
     }
     
-    public void onFightPressed(View v) {
-    	if (v.getVisibility() == View.VISIBLE) {
-        	showDialog(ATTACK_DIALOG);
-    	}
-    }
+    
+    
     /* returns true if myMove wins and false if opponentMove wins */
     private boolean getWinner(Integer myMove, Integer opponentMove) {
     	assert (myMove == 1 || myMove == 2 || myMove == 3);
@@ -161,7 +141,7 @@ public class BattleActivity extends Activity {
     				}
     			});
     		}
-    	});
+    	}).run();
     }
     
     private void animateMove(boolean iWonMove, Integer myMove, Integer opponentMove, double damage) {
@@ -200,44 +180,47 @@ public class BattleActivity extends Activity {
     	double damageToLoser;
     	if (iWin) {
     		/* attacker strength determines damage done to victim */
-    		damageToLoser = getDamageOnAttack(opponentStartingStrength);
-    	} else {
     		damageToLoser = getDamageOnAttack(myStartingStrength);
+    	} else {
+    		damageToLoser = getDamageOnAttack(opponentStartingStrength);
     	}
     	animateMove(iWin, myMove, opponentMove, damageToLoser);
+    	myMove = null;
+    	findViewById(R.id.battleButton).setVisibility(View.VISIBLE);
     }
+    
+    /* Background asynctasks for talking to server -------------------------------------------------------------------------------------*/
+    
+    
+	private boolean battleCreated() {
+		if (battleId != null) return true;
+		return false;
+	}
+	
+	private void waitUntilBattleCreated() throws InterruptedException {
+		while (!battleCreated()) {
+			Thread.sleep(2000);
+		}
+	}
     
     /* Should be called after we've made a move and need to get the opponent's move to continue.  Polls
      * the server for opponent's move every SECONDS_BETWEEN_POLL.
      */
     private class PollOponnentMove extends AsyncTask<Void, Void, String[]> {
-    	private String opponentStrength;
-    	private String opponentMove;
     	private static final int SECONDS_BETWEEN_POLL = 3;
-    	private boolean battleCreated() {
-    		if (battleId != null) return true;
-    		return false;
-    	}
-    	
-    	private void waitUntilBattleCreated() throws InterruptedException {
-    		while (!battleCreated()) {
-    			Thread.sleep(2000);
-    		}
-    	}
-    	
+
 		@Override
 		protected String[] doInBackground(Void... params) {
 			try {
+				/* possible to make move before server returned with battle id */
 				waitUntilBattleCreated();
-				Map<String, String> battleMap = server.getOppMove(myId, battleId);
+				Map<String, String> battleMap = server.getBattleData(myId, battleId);
 				while (battleMap.get(FickaServer.OPP_MOVE_KEY) == null) {
 					Thread.sleep(SECONDS_BETWEEN_POLL * 1000);
 				}
-				opponentMove = battleMap.get(FickaServer.OPP_MOVE_KEY);
-				opponentStrength = battleMap.get(FickaServer.OPP_STRENGTH_KEY);
 				String[] result = new String[2];
-				result[0] = opponentMove;
-				result[1] = opponentStrength;
+				result[0] = battleMap.get(FickaServer.OPP_MOVE_KEY);
+				result[1] = battleMap.get(FickaServer.OPP_STRENGTH_KEY);
 				return result;
 			} catch(Exception ex) {}
 			return null;
@@ -247,7 +230,37 @@ public class BattleActivity extends Activity {
 			String opponentMove = data[0];
 			String opponentStrength = data[1];
     		playMove(Integer.valueOf(opponentMove), Double.valueOf(opponentStrength));
+    		/* Not sure what to do for multiple moves - need to send something to server here */
 		}
+    }
+    /* creates a new game */
+    private class CreateGameTask extends AsyncTask<Void, Void, String> {
+    	protected String doInBackground(Void...voids) {
+    		try {
+    			return server.createGame(myId, opponentId);
+    		} catch(IOException ex) {
+    			System.out.println("failed to create game on server");
+    			ex.printStackTrace();
+    			return null;
+    		}
+    	}
+    	protected void onPostExecute(String bid) {
+    		battleId = bid;
+    		myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
+    	}
+    }
+    /* sends move */
+    private class SendMoveTask extends AsyncTask<Void, Void, Void> {
+    	protected Void doInBackground(Void...voids) {
+    		try {
+    			waitUntilBattleCreated();
+    			server.sendMove(myMove.toString(), myId, battleId);
+    		} catch(Exception ex) {
+    			System.out.println("failed to send move");
+    			ex.printStackTrace();
+    		}
+			return null;
+    	}
     }
     
 }

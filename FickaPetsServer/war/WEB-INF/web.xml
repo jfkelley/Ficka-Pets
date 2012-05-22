@@ -39,5 +39,13 @@
     <servlet-name>BattleServlet</servlet-name>
     <url-pattern>/battledata</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/registeruser</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BattleServlet</servlet-name>
+    <url-pattern>/findfriends</url-pattern>
+  </servlet-mapping>
 
 </web-app>

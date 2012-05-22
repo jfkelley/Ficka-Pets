@@ -1,9 +1,15 @@
 package com.server.fickapets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +19,7 @@ public class BattleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 6227254987843138881L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String action = req.getRequestURI().toLowerCase();
 		if (action.equals("/create")) {
 			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"));
@@ -25,27 +31,97 @@ public class BattleServlet extends HttpServlet {
 			closeBattle(resp, req.getParameter("uid"), req.getParameter("bid"));
 		} else if (action.equals("/battledata")) {
 			battleData(resp, req.getParameter("uid"), req.getParameter("bid"));
-		}
-	}
-	/* this doesn't work */
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String action = req.getRequestURI().toLowerCase();
-		if (action.equals("/findfriends")) {
-			BufferedReader reader = req.getReader();
-			StringBuilder sb = new StringBuilder();
-			char[] bytes = new char[1024];
-			int bytesRead;
-			while ((bytesRead = reader.read(bytes, 0, bytes.length)) != -1) {
-				sb.append(bytes, 0, bytesRead);
-			}
-			String data = sb.toString();
-			findFriends(resp, req.getParameter("id"), data);
+		} else if (action.equals("/registeruser")) {
+			registerUser(resp, req.getParameter("id"));
+		} else if (action.equals("/findfriends")) {
+			String content = streamToString(req.getInputStream());
+			findFriends(resp, content);
 		}
 	}
 	
-	private void findFriends(HttpServletResponse resp, String id, String data) {
-		System.out.println("ID is: " + id);
-		System.out.println("Data is: " + data);
+	private void registerUser(HttpServletResponse resp, String id) throws IOException {
+		if (checkNonNullParams(resp, id)) return;
+		User.create(id);
+		resp.setStatus(200);
+	}
+	
+	private static class Friend {
+		private String name;
+		private String id;
+		public Friend(String name, String id){
+			this.name = name; this.id = id;
+		}
+	}
+
+	/*
+	 *  JSON parsing/encoding by hand here :(
+	 *  Many JSON libraries simply don't work with GAE, and the one that I could find that does,
+	 *  doesn't support encoding well, only decoding.
+	 */
+	
+	private void findFriends(HttpServletResponse resp, String data) throws IOException {
+		if (checkNonNullParams(resp, data)) return;
+		List<Friend> friends = filterNotUsingApp(fromJSON(data));
+		PrintWriter wr = resp.getWriter();
+		wr.write(toJSON(friends));
+		wr.close();
+	}
+	
+	private static final String NAME_PATTERN = "\"name\":\\s*\"([^\"]+)\"";
+	private static final String ID_PATTERN = "\"id\":\\s*\"([^\"]+)\"";
+	
+	private static final Pattern JSON_FRIEND_PATTERN = Pattern.compile(NAME_PATTERN + "\\s*,\\s*" + ID_PATTERN);
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		String line;
+		while (!(line = s.nextLine()).equals("")) {
+			Matcher m = JSON_FRIEND_PATTERN.matcher(line);
+			if (m.find()) {
+				System.out.println(m.group(0));
+				System.out.println(m.group(1));
+				System.out.println(m.group(2));
+			} else {
+				System.out.println("not found");
+			}
+		}
+	}
+	
+	private List<Friend> fromJSON(String data) {
+		Matcher m = JSON_FRIEND_PATTERN.matcher(data);
+		List<Friend> friends = new ArrayList<Friend>();
+		while (m.find()) {
+			String name = m.group(1);
+			String friendId = m.group(2);
+			friends.add(new Friend(name, friendId));
+		}
+		return friends;
+	}
+	
+	private List<Friend> filterNotUsingApp(List<Friend> allFriends) {
+		List<String> ids = new ArrayList<String>();
+		for (Friend f : allFriends) {
+			ids.add(f.id);
+		}
+		List<String> keep = User.filterNonexisting(ids);
+		List<Friend> usingApp = new ArrayList<Friend>();
+		for (Friend f : allFriends) {
+			if (keep.contains(f.id)) usingApp.add(f);
+		}
+		return usingApp;
+	}
+	
+	private String toJSON(List<Friend> friends) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[\n");
+		for (int i = 0; i < friends.size(); i++) {
+			Friend f = friends.get(i);
+			sb.append(String.format("\t{\n\t\t\"name\": \"%s\",\n\t\t\"id\": \"%s\"\n\t}", f.name, f.id));
+			if (i != friends.size() - 1) sb.append(",");
+			sb.append("\n");
+		}
+		sb.append("]");
+		return sb.toString();
 	}
 
 	private void battleData(HttpServletResponse resp, String uid, String bid) throws IOException {
@@ -131,5 +207,16 @@ public class BattleServlet extends HttpServlet {
 			}
 		}
 		return false;
+	}
+	
+	private static String streamToString(InputStream in) throws IOException {
+		InputStreamReader rd = new InputStreamReader(in, "UTF-8");
+		StringBuilder sb = new StringBuilder();
+		char[] buf = new char[0x1000];
+		int n;
+		while ((n = rd.read(buf)) != -1) {
+			sb.append(Arrays.copyOfRange(buf, 0, n));
+		}
+		return sb.toString();
 	}
 }

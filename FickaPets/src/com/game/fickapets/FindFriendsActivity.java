@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.android.AsyncFacebookRunner;
@@ -38,11 +40,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class FindFriendsActivity extends ListActivity {
-	private static String BASE_SERVER_URL = "http://10.31.114.24:8888/";
 	private static final String GET_MY_DATA = "me.data";
 	private static final String GET_FRIENDS_DATA = "friends.data";
 	private static final String GET_DATA_FOR_PHOTOS = "data for photos";
-	private static final int NUM_PHOTOS = 25;
+	private static final int NUM_PHOTOS = 25;						/* num photos taken from unfiltered friends list */
 	
 	private static final String FIND_FRIENDS_URL = "findfriends";
 	public static final String OPPONENT_NAME_KEY = "opponentName";
@@ -52,12 +53,11 @@ public class FindFriendsActivity extends ListActivity {
 	private UrlImageViewHandler imageViewHandler;
 	
 	private Facebook facebook = new Facebook("439484749410212");
-	//private AsyncFacebookRunner runner;
-	//private Vector<String> photoUrls = new Vector<String>();
+
 	/* this has the url and name of each person displayed */
 	private Vector<FriendPhotoInfo> friends;
 	
-	private String friendsFacebookIdJson;
+	private JSONObject facebookFriendsJson;
 	private String mFacebookId;
 	
     @Override
@@ -89,28 +89,33 @@ public class FindFriendsActivity extends ListActivity {
 		PersistenceHandler.saveFacebookAccess(this, facebook.getAccessToken(), facebook.getAccessExpires());
 
 		AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
+		/* pretty sure the friend filter for these works */
 		//runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
-		//runner.request("me", new FacebookDataListener(), GET_MY_DATA);
+		
+		runner.request("me", new FacebookDataListener(), GET_MY_DATA);
+		
+		//three of these photos.  Any others come from server
 		runner.request("me/friends", new FacebookDataListener(), GET_DATA_FOR_PHOTOS);
     }
     
     /* runs in UI thread */
-    private void gotFriendsIds(String friendsFacebookIdJson) {
-    	if (this.friendsFacebookIdJson == null) {
-        	this.friendsFacebookIdJson = friendsFacebookIdJson;
+    private void gotFriendsIds(JSONObject facebookFriendsJson) {
+    	if (this.facebookFriendsJson == null) {
+        	this.facebookFriendsJson = facebookFriendsJson;
         	if (mFacebookId != null) {
-    			new AsyncFacebookFriendFinder().execute();
+    			new FickaServerFilter().execute(facebookFriendsJson);
         	}
     	}
     	
     }
     
-    /* runs in UI thread */
+    /* runs in UI thread. I want facebook id before we start putting friends in view so it's there
+     * before user can move to battle activity */
     private void gotMyId(String mFacebookId) {
     	if (this.mFacebookId == null) {
     		this.mFacebookId = mFacebookId;
-    		if (friendsFacebookIdJson != null) {
-    			new AsyncFacebookFriendFinder().execute();
+    		if (facebookFriendsJson != null) {
+    			new FickaServerFilter().execute(facebookFriendsJson);
     		}
     	}
     }
@@ -164,13 +169,12 @@ public class FindFriendsActivity extends ListActivity {
     					}
     				};
     			} else if (responseType.equals(GET_FRIENDS_DATA)) {
-        			final JSONArray data = json.getJSONArray("data");
-        			final String friendsArr = data.toString();
         			methodToRun = new Runnable() {
         				public void run() {
-        					gotFriendsIds(friendsArr);
+        					gotFriendsIds(json);
         				}
         			};
+        			/* only run since there aren't any friends on server currently */
     			} else if (responseType.equals(GET_DATA_FOR_PHOTOS)) {
     				final JSONArray data = json.getJSONArray("data");
     				methodToRun = new Runnable() {
@@ -196,11 +200,11 @@ public class FindFriendsActivity extends ListActivity {
     		
     	}
     }
-   
-    private class AsyncFacebookFriendFinder extends AsyncTask<Void, Void, JSONObject> {
+   /* goes to server to find friends filtered by who plays game or not */
+    private class FickaServerFilter extends AsyncTask<JSONObject, Void, JSONArray> {
     	
     	private String streamToString(InputStream is) throws IOException {
-    		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+    		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
     		char[] bytes = new char[1024];
     		int bytesRead;
     		StringBuilder sb = new StringBuilder();
@@ -209,38 +213,53 @@ public class FindFriendsActivity extends ListActivity {
     		}
     		return sb.toString();
     	}
-    	
-    	protected JSONObject doInBackground(Void...params) {
-    		AndroidHttpClient client = AndroidHttpClient.newInstance(FindFriendsActivity.this.getPackageName());
-    		String url = BASE_SERVER_URL + FIND_FRIENDS_URL;
-    		JSONObject jsonResponse = null;
-    		try {
-        		HttpPost post = new HttpPost(url);
-        		post.setEntity(new StringEntity(friendsFacebookIdJson));
-        		HttpParams httpParams = new BasicHttpParams();
-        		httpParams.setParameter("id", mFacebookId);
-        		post.setParams(httpParams); 
-    			
-        		HttpResponse httpResponse = client.execute(post);
-        		/* this returns a 404 right now */
-        		int status = httpResponse.getStatusLine().getStatusCode();
-        		if (status != HttpURLConnection.HTTP_OK){
-        			// add a status message here
-        			return null;
-        		}
-        		String response = streamToString(httpResponse.getEntity().getContent());
-        		jsonResponse = new JSONObject(response);
-        		System.out.println(jsonResponse);
-    		} catch(Exception ex) {
-    			ex.printStackTrace();
-    		} finally {
-    			client.close();
+    	private JSONArray concatJSONArray(JSONArray baseArr, JSONArray arrToAppend) throws JSONException{
+    		for (int i = 0; i < arrToAppend.length(); i++) {
+    			baseArr.put(baseArr.length(), arrToAppend.getJSONObject(i));
     		}
-			return jsonResponse;
+    		return baseArr;
     	}
     	
-    	protected void onPostExecute(JSONObject jsonResponse) {
-    		System.out.println(jsonResponse);
+    	/* flattens linked list of JSONObjects that facebook returns into an array of friend objects */
+    	private JSONArray flattenFriends(JSONObject friends) {
+    		AndroidHttpClient client = AndroidHttpClient.newInstance(FindFriendsActivity.this.getPackageName());
+    		//String url = FACEBOOK_BASE_URL + "/me/friends?access_token=" + facebook.getAccessToken();
+    		JSONArray flattenedArr = null;
+    		try {
+        		flattenedArr = friends.getJSONArray("data");
+    			while (friends.getJSONObject("paging").has("next")) {
+    				HttpGet get = new HttpGet(friends.getJSONObject("paging").getString("next"));
+    				HttpResponse resp = client.execute(get);
+    				int status = resp.getStatusLine().getStatusCode();
+    				if (status != HttpURLConnection.HTTP_OK) {
+    					//handle this somehow
+    					return flattenedArr;
+    				}
+    				friends = new JSONObject(streamToString(resp.getEntity().getContent()));
+    				flattenedArr = concatJSONArray(flattenedArr, friends.getJSONArray("data"));
+    			}
+    		} catch(Exception ex) {
+    			System.out.println("failed to flatten array");
+    			ex.printStackTrace();
+    		}
+    		return flattenedArr;
+    	}
+    	
+    	protected JSONArray doInBackground(JSONObject...friends) {
+    		JSONArray filteredFriends = null;
+    		JSONArray allFriends = flattenFriends(friends[0]);
+    		FickaServer server = new FickaServer(FindFriendsActivity.this);
+    		try {
+    			filteredFriends = server.applyFriendFilter(allFriends);
+    		} catch(Exception ex) {
+    			ex.printStackTrace();
+    		}
+    		server.close();
+    		return filteredFriends;
+    	}
+    	
+    	protected void onPostExecute(JSONArray filteredFriends) {
+    		gotFriendsIdsForPhotos(filteredFriends);
     	}
     }
     

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/openBattleList"
+        android:layout_width="match_parent"
+        android:layout_height="270dp" >
+    </ListView>
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="174dp"
+        android:layout_height="56dp"
+        android:text="@string/findFriends"
+        android:onClick="onFindFriendsClicked" 
+        />
+
+</LinearLayout>

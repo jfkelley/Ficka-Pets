@@ -1,15 +1,21 @@
 package com.game.fickapets;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.Document;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Element;
 
 import android.content.Context;
@@ -20,6 +26,7 @@ public class PersistenceHandler {
 	private static final String PET_FILE = "petAttributesFile";
 	private static final String USER_FILE = "userAttributesFile";
 	private static final String CACHE_FILE = "cacheStateFile";
+	private static final String BATTLE_FILE = "battleStateFile";
 
 	/* key values for PET_FILE */
 	private static final String HEALTH_KEY = "health";
@@ -40,6 +47,12 @@ public class PersistenceHandler {
 	private static final String FILE_QUEUE_KEY = "filesOnDisk";
 	private static final String BYTES_ON_DISK_KEY = "bytesOnDisk";
 	
+	/* key values for battle JSONObject */
+	public static final String MY_MOVE = "myMove";
+	public static final String BATTLE_ID = "battleId";
+	public static final String OPPONENT = "opponentName";
+	public static final String MY_ID = "myFacebookId";
+	public static final String OPPONENT_ID = "opponentFacebookId";
 
 	private static Attributes getAttributesFromStoredState (SharedPreferences petState) {
 		Attributes atts = new Attributes ();
@@ -52,34 +65,25 @@ public class PersistenceHandler {
 		return atts;
 	}
 	
+
+	
 	
 	/* pull all defaults from an xml doc in res/raw */
 	private static Attributes getAttributesFromDefaults (Context context) {
 		Attributes atts = new Attributes ();
-		/* the parseable document */
-		Document doc;		
-		/* Initialize parser */
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance ();
-			factory.setIgnoringElementContentWhitespace (true);
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(context.getResources().openRawResource(R.raw.pet_defaults));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
+		
 	
-		Element pet = doc.getDocumentElement();
-		atts.health = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "health"));
-		atts.hunger = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "hunger"));
-		atts.strength = Double.valueOf(XMLUtils.getElementTextByTagName(pet, "strength"));
-		if (Integer.valueOf(XMLUtils.getElementTextByTagName(pet, "awake")) != 0) {
+		Element pet = XMLUtils.getDocumentElement(context.getResources().openRawResource(R.raw.pet_defaults));
+		atts.health = Double.valueOf(XMLUtils.getChildElementTextByTagName(pet, "health"));
+		atts.hunger = Double.valueOf(XMLUtils.getChildElementTextByTagName(pet, "hunger"));
+		atts.strength = Double.valueOf(XMLUtils.getChildElementTextByTagName(pet, "strength"));
+		if (Integer.valueOf(XMLUtils.getChildElementTextByTagName(pet, "awake")) != 0) {
 			atts.isAwake = true;
 		} else {
 			atts.isAwake = false;
 		}
 		/* sleepTime tells us what time we'd like the pet to need to sleep when it's first initialized */
-		atts.tiredness = Tiredness.getInitialTiredness(Double.valueOf(XMLUtils.getElementTextByTagName(pet, "sleepTime")));
+		atts.tiredness = Tiredness.getInitialTiredness(Double.valueOf(XMLUtils.getChildElementTextByTagName(pet, "sleepTime")));
 		atts.lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
 		return atts;
 	}
@@ -238,6 +242,84 @@ public class PersistenceHandler {
 		return attArray;
 	}
 	
+	public static String getFileAsString(Context context, String filename) throws IOException {
+		File file = context.getFileStreamPath(filename);
+		if (!file.exists()) return null;
+		FileInputStream fis = new FileInputStream(file);
+		byte[] bytes = new byte[1024];
+		StringBuilder sb = new StringBuilder();
+		int bytesRead = fis.read(bytes, 0, bytes.length);
+		while (bytesRead != -1) {
+			sb.append(new String(bytes));
+		}
+		return sb.toString();
+	}
 	
+	public static JSONArray getBattles(Context context) {
+		try {
+			String jsonString = getFileAsString(context, BATTLE_FILE);
+			if (jsonString == null) {
+				return new JSONArray();
+			} else {
+				return new JSONArray(jsonString);
+			}
+		} catch(Exception ex) {
+			return null;
+		}
+	}
+	/* returns index with bid if it exists in array.  Otherwise returns -1 */
+	private static int getIndexWithBattle(String bid, JSONArray battles) {
+		try {
+			for (int i = 0; i < battles.length(); i++) {
+				JSONObject battle = battles.getJSONObject(i);
+				if (battle.getString("bid").equals(bid)) {
+					return i;
+				}
+			}
+		} catch(Exception ex) {
+			System.out.println("Json battle file is invalid");
+		}
+		return -1;
+	}
+	
+	public static void writeStringToFile(Context context, String filename, String jsonArrStr) {
+		try {
+			File file = context.getFileStreamPath(filename);
+			if (file.exists()) file.delete();
+			FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
+			fos.write(jsonArrStr.getBytes());
+			fos.flush();
+			fos.close();
+		} catch(IOException ex) {
+			System.out.println("Failed to write to json battle file");
+			ex.printStackTrace();
+		}
+		
+	}
+	
+	public static void saveBattle(Context context, String bid, String opponentName, String myMove, String myId, String opponentId) {
+		try {
+			JSONArray battles = getBattles(context);
+			int index = getIndexWithBattle(bid, battles);
+			JSONObject battle = battles.getJSONObject(index);
+			if (battle == null) {
+				battle = new JSONObject();
+			} 
+			battle.put(BATTLE_ID, bid);
+			battle.put(OPPONENT, opponentName);
+			battle.put(MY_MOVE, myMove);
+			battle.put(MY_ID, myId);
+			battle.put(OPPONENT_ID, opponentId);
+			if (index == -1) {
+				battles.put(battles.length(), battle);
+			} else {
+				battles.put(index, battle);
+			}
+			writeStringToFile(context, BATTLE_FILE, battles.toString());
+		} catch(JSONException ex) {
+			System.out.println("tried to add an invalid value to a json object");
+			ex.printStackTrace();
+		} 
+	}
 	
 }

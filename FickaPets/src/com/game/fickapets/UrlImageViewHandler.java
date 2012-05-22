@@ -27,7 +27,6 @@ import android.graphics.drawable.Drawable;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -72,31 +71,31 @@ public class UrlImageViewHandler {
 	
 	
 	
-	public void setUrlDrawable(final TextView imageView, final String url, final int defaultResource) {
-		if (url == null || url.equals("") || imageView == null) {
+	public void setUrlDrawable(final TextView textView, final String url, final int defaultResource) {
+		if (url == null || url.equals("") || textView == null) {
 			return;
 		}
-		if (context == null) context = imageView.getContext();
+		if (context == null) context = textView.getContext();
 		
 		if (imageIsCached(url)) {
 			BitmapDrawable image = getImageFromCache(url);
 			if (image != null) {
 				//imageView.setImageDrawable(image);
-				imageView.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
+				textView.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
 				return;
 			}
 		}
 		/* image not cached, so let's download it */
 		
-		if (pendingViews.get(imageView) != null && pendingViews.get(imageView).equals(url)) {
+		if (pendingViews.get(textView) != null && pendingViews.get(textView).equals(url)) {
 			/* psyche. we already started downloading this url for that image */
 			return;
 		}
-		pendingViews.put(imageView, url);
-		final Drawable defaultDrawable = imageView.getResources().getDrawable(defaultResource);
+		pendingViews.put(textView, url);
+		final Drawable defaultDrawable = textView.getResources().getDrawable(defaultResource);
 		//imageView.setImageDrawable(defaultDrawable);
-		imageView.setCompoundDrawablesWithIntrinsicBounds(defaultDrawable, null, null, null);
-		new ImageDownloader().execute(url, imageView);
+		textView.setCompoundDrawablesWithIntrinsicBounds(defaultDrawable, null, null, null);
+		new ImageDownloader().execute(url, textView);
 	}
 	
 	public void preLoadUrl(String url) {
@@ -140,7 +139,7 @@ public class UrlImageViewHandler {
 	}
 	
 	private class ImageDownloader extends AsyncTask<Object, Void, Bitmap> {
-		private TextView imageView;
+		private TextView textView;
 		private String url;
 		@Override
 		protected Bitmap doInBackground(Object...params) {
@@ -152,7 +151,7 @@ public class UrlImageViewHandler {
 					return null;
 				}
 				if (params[1] instanceof TextView) {
-					imageView = (TextView) params[1];
+					textView = (TextView) params[1];
 				}
 				
 			}
@@ -194,17 +193,17 @@ public class UrlImageViewHandler {
 			if (result != null) {
 				cacheImage(result, url, bytes);
 				/* imageView is null if we're pre-fetching images */
-				if (imageView == null) return;
+				if (textView == null) return;
 				
-				String pendingUrl = pendingViews.get(imageView);
+				String pendingUrl = pendingViews.get(textView);
 				/* image is removed from pendingView meaning its image has already been set */
 				if (pendingUrl == null) return;
 				
 				BitmapDrawable imageToUse = getImageFromCache (pendingUrl);
 				if (imageToUse == null) return;
 				//imageView.setImageDrawable(imageToUse);
-				imageView.setCompoundDrawablesWithIntrinsicBounds(imageToUse, null, null, null);
-				pendingViews.remove(imageView);
+				textView.setCompoundDrawablesWithIntrinsicBounds(imageToUse, null, null, null);
+				pendingViews.remove(textView);
 			}
 		}
 	};

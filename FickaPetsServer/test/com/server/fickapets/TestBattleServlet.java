@@ -177,7 +177,7 @@ public class TestBattleServlet {
 		}
 		datastore.delete(keys);
 		datastore.put(savedEntities);
-		//helper.tearDown();
+		helper.tearDown();
 	}
 
 }

@@ -3,6 +3,7 @@ package com.game.fickapets;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+
 /* utility methods that don't really belong to any class */
 public class Utility {
 	public static long hoursToMillis (double hours) {
@@ -14,4 +15,5 @@ public class Utility {
 		long diff = Calendar.getInstance(TimeZone.getDefault()).getTimeInMillis() - timeInMillis;
 		return diff / (double)1000.0 / 60 / 60;
 	}
+
 }

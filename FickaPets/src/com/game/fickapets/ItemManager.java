@@ -30,15 +30,15 @@ public class ItemManager {
 		
 		Element itemsElement = doc.getDocumentElement();
 		for (Element itemElement : XMLUtils.getElementsByTagName(itemsElement, "Item")) {
-			String id = XMLUtils.getElementTextByTagName(itemElement, "id");
-			String name = XMLUtils.getElementTextByTagName(itemElement, "name");
-			String imageLocation = XMLUtils.getElementTextByTagName(itemElement, "image");
-			int price = Integer.valueOf(XMLUtils.getElementTextByTagName(itemElement, "price"));
+			String id = XMLUtils.getChildElementTextByTagName(itemElement, "id");
+			String name = XMLUtils.getChildElementTextByTagName(itemElement, "name");
+			String imageLocation = XMLUtils.getChildElementTextByTagName(itemElement, "image");
+			int price = Integer.valueOf(XMLUtils.getChildElementTextByTagName(itemElement, "price"));
 			Item item;
 			
 			String type = itemElement.getAttributes().getNamedItem("type").getNodeValue();
 			if (type.equals("food")) {
-				int health = Integer.valueOf(XMLUtils.getElementTextByTagName(itemElement, "health"));
+				int health = Integer.valueOf(XMLUtils.getChildElementTextByTagName(itemElement, "health"));
 				item = new Food(id, name, imageLocation, price, health);
 			} else {
 				System.err.println("unknown item type in items.xml");

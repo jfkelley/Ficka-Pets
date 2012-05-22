@@ -199,7 +199,6 @@ public class BattleServlet extends HttpServlet {
 		resp.setStatus(200);
 		resp.getWriter().write(b.getId());
 	}
-	
 	private boolean checkNonNullParams(HttpServletResponse resp, Object... params) throws IOException {
 		for (Object o : params) {
 			if (o == null) {

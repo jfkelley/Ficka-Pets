@@ -21,5 +21,6 @@
 	<string name="shop">Shop</string>
 	<string name="battle">Battle</string>
 	<string name="battleLabel">Battle</string>
+	<string name="findFriends">Find Friends to Battle</string>
 	
 </resources>

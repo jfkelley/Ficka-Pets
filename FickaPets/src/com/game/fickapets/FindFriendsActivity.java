@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -44,11 +45,13 @@ public class FindFriendsActivity extends ListActivity {
 	private static final int NUM_PHOTOS = 25;
 	
 	private static final String FIND_FRIENDS_URL = "findfriends";
-	private static final String FACEBOOK_BASE_URL = "https://graph.facebook.com/";
-	
+	public static final String OPPONENT_NAME_KEY = "opponentName";
+	public static final String OPPONENT_ID_KEY = "opponentId";
+	public static final String MY_ID_KEY = "myId";
+	public static final String FACEBOOK_BASE_URL = "https://graph.facebook.com/";
 	private UrlImageViewHandler imageViewHandler;
 	
-	Facebook facebook = new Facebook("439484749410212");
+	private Facebook facebook = new Facebook("439484749410212");
 	//private AsyncFacebookRunner runner;
 	//private Vector<String> photoUrls = new Vector<String>();
 	/* this has the url and name of each person displayed */
@@ -62,30 +65,29 @@ public class FindFriendsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         imageViewHandler = new UrlImageViewHandler(this);
         friends = new Vector<FriendPhotoInfo>();
-        String accessToken = PersistenceHandler.facebookAccessToken(this);
-        long expires = PersistenceHandler.facebookTokenExpiration(this);
-        if (accessToken != null) {
-        	facebook.setAccessToken(accessToken);
-        }
-        if (expires != 0) {
-        	facebook.setAccessExpires(expires);
-        }
-        if (!facebook.isSessionValid()) {
-        	facebook.authorize(this, new DialogListener() {
-        		//@Override
-        		public void onComplete(Bundle values) {
+        
+	    String accessToken = PersistenceHandler.facebookAccessToken(this);
+	    long expires = PersistenceHandler.facebookTokenExpiration(this);
+	    if (accessToken != null) {
+	    	facebook.setAccessToken(accessToken);
+	    }
+	    if (expires != 0) {
+	    	facebook.setAccessExpires(expires);
+	    }
+	    if (!facebook.isSessionValid()) {
+	    	facebook.authorize(this, new DialogListener() {
+	    		//@Override
+	    		public void onComplete(Bundle values) {}
 
-        		}
+	    		public void onFacebookError(FacebookError error) {}
 
-        		public void onFacebookError(FacebookError error) {}
+	    		public void onError(DialogError e) {}
+	        
+	    		public void onCancel() {}
+	    	});
+	    }
+		PersistenceHandler.saveFacebookAccess(this, facebook.getAccessToken(), facebook.getAccessExpires());
 
-        		public void onError(DialogError e) {}
-            
-        		public void onCancel() {}
-        	});
-        }
-		PersistenceHandler.saveFacebookAccess(FindFriendsActivity.this, facebook.getAccessToken(), facebook.getAccessExpires());
-		
 		AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
 		//runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
 		//runner.request("me", new FacebookDataListener(), GET_MY_DATA);
@@ -114,15 +116,14 @@ public class FindFriendsActivity extends ListActivity {
     }
     /* runs in UI thread */
     private void gotFriendsIdsForPhotos(JSONArray friendArr) {
-    	/* uh, not actually using urls vector.  Using friends vector since I need url and name. urls vec exists because listadapter
-    	 * only accepts vector of strings.  uugghh */
-    	Vector<String> fakeOut = new Vector<String>();
+		/* this list doesn't do anything.  Haven't been able to get listview working without this thing */
+		ArrayList<String> list = new ArrayList<String>();
     	try {
     		for (int i = 0; i < NUM_PHOTOS && i < friendArr.length(); i++) {
     			String id = friendArr.getJSONObject(i).getString("id");
-    			fakeOut.add(id);
     			String name = friendArr.getJSONObject(i).getString("name");
     			friends.add(new FriendPhotoInfo(name, id));
+    			list.add(id);
     			String url = FACEBOOK_BASE_URL + id + "/picture";
     			imageViewHandler.preLoadUrl(url);
     		}
@@ -130,7 +131,7 @@ public class FindFriendsActivity extends ListActivity {
     		ex.printStackTrace();
     		return;
     	}
-    	setListAdapter(new FriendArrayAdapter(this, fakeOut));
+    	setListAdapter(new FriendArrayAdapter(this, list));
     }
     
     
@@ -179,17 +180,21 @@ public class FindFriendsActivity extends ListActivity {
     				};
     			}
      			if (methodToRun != null) {
-    				runOnUiThread(new Thread(methodToRun));
+    				runOnUiThread(methodToRun);
     			}
     		} catch(Exception ex) {
     			ex.printStackTrace();
     			return;
     		}
     	}
-    	public void onFacebookError(FacebookError fbe, Object state) {}
+    	public void onFacebookError(FacebookError fbe, Object state) {
+    		
+    	}
     	public void onFileNotFoundException(FileNotFoundException ex, Object state) {}
     	public void onIOException (IOException ex, Object state) {}
-    	public void onMalformedURLException(MalformedURLException ex, Object state) {}
+    	public void onMalformedURLException(MalformedURLException ex, Object state) {
+    		
+    	}
     }
    
     private class AsyncFacebookFriendFinder extends AsyncTask<Void, Void, JSONObject> {
@@ -241,8 +246,8 @@ public class FindFriendsActivity extends ListActivity {
     
   
    private class FriendArrayAdapter extends ArrayAdapter<String> {
-	   public FriendArrayAdapter(Context context, List<String> urls) {
-		   super (context, 0, urls);
+	   public FriendArrayAdapter(Context context, List<String> list) {
+		   super (context, 0, list);
 	   }
 	   
 	   @Override
@@ -266,11 +271,10 @@ public class FindFriendsActivity extends ListActivity {
    @Override
    public void onListItemClick(ListView lv, View view, int position, long id) {
 	   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
-	   intent.putExtra("name",friends.get(position).name);
-	   intent.putExtra("id", friends.get(position).id);
-	   
-	   /* battle activity not done */
-	   //startActivity(intent);
+	   intent.putExtra(OPPONENT_NAME_KEY,friends.get(position).name);
+	   intent.putExtra(OPPONENT_ID_KEY, friends.get(position).id);
+	   intent.putExtra(MY_ID_KEY, mFacebookId);
+	   startActivity(intent);
    }
    
    private class FriendPhotoInfo {

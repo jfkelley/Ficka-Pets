@@ -151,7 +151,7 @@ public class FickaPetsStart extends Activity {
 	}
 	
 	public void battlePressed(View view) {
-		Intent intent = new Intent(FickaPetsStart.this, FindFriendsActivity.class);
+		Intent intent = new Intent(FickaPetsStart.this, BattleListActivity.class);
 		startActivity(intent);
 	}
 

@@ -34,7 +34,6 @@ INDEX VERSION 1.126+/Users/cmckenna/Developer/Ficka-Pets/.metadata/.plugins/org.
 3261932019.index
 1510086417.index
 2105472423.index
-1916721542.index
 4249315662.index
 770573466.index
 4200381596.index

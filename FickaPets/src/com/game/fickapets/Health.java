@@ -18,6 +18,8 @@ public class Health {
 	private static final double hotSpot = 50;				/* where you ideally want to keep your pet for maximum health */
 	private static final double positiveRange = 10;			/* max distance from hotspot before negative impact on health */
 	
+	
+	private static final double generallyTired = 32;
 	/* values that determine how tiredness effects health */
 	private static final double extremeTiredness = 60;
 	private static final double extremeTirednessRate = -2;
@@ -135,7 +137,6 @@ public class Health {
 	}
 	
 	private Vector<Complaint> addTirednessComplaints(Context context, Vector<Complaint> complaintVec, boolean isAwake) {
-		double generallyTired = 32;
 		
 		double hoursUntilTired = tiredness.hoursUntil(generallyTired, isAwake);
 		if (hoursUntilTired > 0) {
@@ -162,6 +163,18 @@ public class Health {
 		complaintVec = addHungerComplaints(context, complaintVec, isAwake);
 		complaintVec = addTirednessComplaints(context, complaintVec, isAwake);
 		return complaintVec;
+	}
+	
+	public boolean isHungry() {
+		return hunger.getHunger() > hotSpot + positiveRange;
+	}
+	
+	public boolean isFull() {
+		return hunger.getHunger() < hotSpot - positiveRange;
+	}
+	
+	public boolean isTired() {
+		return tiredness.getTiredness() > generallyTired;
 	}
 	
 	

@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FickaPetsStart extends Activity {
@@ -42,10 +43,25 @@ public class FickaPetsStart extends Activity {
 	private void initLayout (Pet pet) {
 		setContentView(R.layout.main);
 		setSleepButton (pet);
+		setPetStateImage(pet);
 	}
 	
 	
-    /** Called when the activity is first created. */
+    private void setPetStateImage(final Pet pet) {
+    	// Use an AsyncTask in case we get called from a different thread.
+    	AsyncTask<Object, Object, Integer> task = new AsyncTask<Object, Object, Integer>(){
+			protected Integer doInBackground(Object... params) {
+				return getPetStateImageId(pet);
+			}
+			protected void onPostExecute(Integer result) {
+				ImageView image = (ImageView) findViewById(R.id.petImageView);
+				image.setImageResource(result);
+			}
+    	};
+    	task.execute();
+	}
+
+	/** Called when the activity is first created. */
     /*
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +82,20 @@ public class FickaPetsStart extends Activity {
         updateLoop = new MainThread(this).execute(pet);
     } */
 
+	private int getPetStateImageId(Pet pet) {
+		if (pet.isSleeping()) {
+			return R.drawable.pet_asleep;
+		} else if (pet.isHungry()) {
+			return R.drawable.pet_hungry;
+		} else if (pet.isFull()) {
+			return R.drawable.pet_full;
+		} else if (pet.isTired()) {
+			return R.drawable.pet_tired;
+		}else {
+			return R.drawable.pet_normal;
+		}
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +114,12 @@ public class FickaPetsStart extends Activity {
 		TextView start = (TextView) findViewById (R.id.startTime);
 		start.setText(startTime);
 
+		Pet.thePet(this).addListener(new PetListener(){
+			public void petChanged() {
+				setPetStateImage(Pet.thePet(FickaPetsStart.this));
+			}
+		});
+		
 		updateLoop = new MainThread(this).execute(Pet.thePet(this));
 	}
 	/* always called when activity leaves foreground so set up background service here */

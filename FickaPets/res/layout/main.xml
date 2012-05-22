@@ -5,16 +5,72 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.48" >
         
-        <TextView
-            android:id="@+id/strengthPermanent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+        <ImageView
+	        android:id="@+id/petImageView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="100dp"
+	        android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="14dp"
             android:layout_marginTop="5dp"
+            android:src="@drawable/pet_normal" />
+		
+		<Button 
+		    android:id="@+id/feedButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/petImageView"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="3dp"
+		    android:text="@string/feed"
+		    android:onClick="feedPressed" />
+		
+		<Button 
+		    android:id="@+id/sleepButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/feedButton"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="3dp"
+		    android:onClick="sleepPressed" />
+		<Button
+		    android:id="@+id/resetButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/sleepButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/reset"
+		    android:layout_marginTop="3dp"
+		    android:onClick="resetPressed" />
+		
+		<Button
+		    android:id="@+id/shopButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/resetButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/shop"
+		    android:layout_marginTop="3dp"
+		    android:onClick="shopPressed" />
+		<Button
+		    android:id="@+id/battleButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/shopButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/battle"
+		    android:layout_marginTop="3dp"
+		    android:onClick="battlePressed" />
+		
+		<TextView
+            android:id="@+id/strengthPermanent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/battleButton"
+            android:layout_below="@+id/battleButton"
+            android:layout_marginTop="5dp"
             android:text="@string/strength"
-            android:ems="10" />
+            android:ems="8" />
 
         <TextView
             android:id="@+id/strengthEditable"
@@ -24,7 +80,7 @@
             android:layout_alignBottom="@+id/strengthPermanent"
             android:layout_toLeftOf="@+id/strengthPermanent"
             android:layout_alignParentRight="true"
-            android:ems="10" />
+            android:ems="8" />
 
         <TextView
             android:id="@+id/healthPermanent"
@@ -33,7 +89,7 @@
             android:layout_alignLeft="@+id/strengthPermanent"
             android:layout_below="@+id/strengthPermanent"
             android:layout_marginTop="5dp"
-            android:ems="10"
+            android:ems="8"
             android:text="@string/health" />
         
 		<TextView
@@ -44,7 +100,7 @@
 		    android:layout_alignBaseline="@+id/healthPermanent"
 		    android:layout_alignBottom="@+id/healthPermanent"
 		    android:layout_alignParentRight="true" 
-		    android:ems="10" />
+		    android:ems="8" />
 		
 		<TextView
             android:id="@+id/hungerPermanent"
@@ -53,7 +109,7 @@
             android:layout_alignLeft="@+id/healthPermanent"
             android:layout_below="@+id/healthPermanent"
             android:layout_marginTop="5dp"
-            android:ems="10"
+            android:ems="8"
             android:text="@string/hunger" />
         
 		<TextView
@@ -64,7 +120,7 @@
 		    android:layout_alignBaseline="@id/hungerPermanent"
 		    android:layout_alignBottom="@id/hungerPermanent"
 		    android:layout_alignParentRight="true" 
-		    android:ems="10" />
+		    android:ems="8" />
 		
 		
 		<TextView
@@ -74,7 +130,7 @@
             android:layout_alignLeft="@+id/hungerPermanent"
             android:layout_below="@+id/hungerPermanent"
             android:layout_marginTop="5dp"
-            android:ems="10"
+            android:ems="8"
             android:text="@string/tiredness" /> 
 		<TextView
 		    android:id="@+id/tiredEditable"
@@ -84,61 +140,16 @@
 		    android:layout_alignBaseline="@+id/tiredPermanent"
 		    android:layout_alignBottom="@+id/tiredPermanent"
 		    android:layout_alignParentRight="true" 
-		    android:ems="10" />
+		    android:ems="8" />
 		
-		<Button 
-		    android:id="@+id/feedButton"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/tiredPermanent"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="5dp"
-		    android:text="@string/feed"
-		    android:onClick="feedPressed" />
-		
-		<Button 
-		    android:id="@+id/sleepButton"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/feedButton"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="5dp"
-		    android:onClick="sleepPressed" />
-		<Button
-		    android:id="@+id/resetButton"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/sleepButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/reset"
-		    android:layout_marginTop="5dp"
-		    android:onClick="resetPressed" />
-		
-		<Button
-		    android:id="@+id/shopButton"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/resetButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/shop"
-		    android:layout_marginTop="5dp"
-		    android:onClick="shopPressed" />
-		<Button
-		    android:id="@+id/battleButton"
-		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/shopButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/battle"
-		    android:layout_marginTop="5dp"
-		    android:onClick="battlePressed" />
 		<TextView
 		    android:id="@+id/startTime"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/battleButton"
+		    android:layout_below="@+id/tiredEditable"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="5dp"
+		    android:ems="8"
 		    />
 		<TextView
 		    android:id="@+id/endTime"
@@ -147,6 +158,7 @@
 		    android:layout_below="@+id/startTime"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="5dp"
+		    android:ems="8"
 		    />
 
     </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.game.fickapets;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import android.content.Context;
@@ -21,35 +23,55 @@ public class Pet {
 		thePet = PersistenceHandler.reset(context);
 		lastContext = context;
 	}
-	private synchronized void petChanged() {
-		PersistenceHandler.saveState(lastContext, this);
-	}
 	
 	private Condition condition;
 	//private double boredom;
 	
 	private boolean isAwake;
 	
+	private Set<PetListener> listeners;
+	
 	public Pet(Attributes atts) {
 		condition = new Condition(atts);
 		isAwake = atts.isAwake;
+		listeners = new HashSet<PetListener>();
+		listeners.add(new PetListener() {
+			public void petChanged() {
+				PersistenceHandler.saveState(lastContext, Pet.this);
+			}
+		});
+		condition.addListener(new ConditionListener() {
+			public void conditionChanged(Condition condition) {
+				notifyListeners();
+			}
+		});
+	}
+	
+	private void notifyListeners() {
+		for (PetListener listener : listeners) {
+			listener.petChanged();
+		}
+	}
+	
+	public void addListener(PetListener listener) {
+		listeners.add(listener);
 	}
 	
 	public void putToSleep () {
 		condition.update (isAwake);
 		isAwake = false;
-		petChanged();
+		notifyListeners();
 	}
 	
 	public void wakeUp () {
 		condition.update (isAwake);
 		isAwake = true;
-		petChanged();
+		notifyListeners();
 	}
 	
 	public void feed(Food food) {
 		condition.petHasEaten(food.getHungerPoints());
-		petChanged();
+		notifyListeners();
 	}
 	
 	public boolean isSleeping () {
@@ -57,15 +79,28 @@ public class Pet {
 		return true;
 	}
 	
-	public Attributes getAttributes () {
+	public Attributes getAttributes(boolean updateBefore) {
 		Attributes atts = new Attributes ();
 		atts.isAwake = isAwake;
-		return condition.fillAttributes (atts, isAwake);
+		return condition.fillAttributes (atts, isAwake, updateBefore);
+	}
+	
+	public Attributes getAttributes () {
+		return getAttributes(true);
 	}
 	
 	public Vector<Complaint> getComplaints (Context context) {
 		Vector<Complaint> complaints = new Vector<Complaint>();
 		return condition.addComplaints(context, complaints, isAwake);
+	}
+	public boolean isHungry() {
+		return condition.getHealth().isHungry();
+	}
+	public boolean isFull() {
+		return condition.getHealth().isFull();
+	}
+	public boolean isTired() {
+		return condition.getHealth().isTired();
 	}
 	
 }

@@ -112,7 +112,7 @@ public class PersistenceHandler {
 	}
 	
 	public static void saveState(Context context, Pet pet) {
-		Attributes atts = pet.getAttributes();
+		Attributes atts = pet.getAttributes(false);
 		SharedPreferences petState = context.getSharedPreferences(PET_FILE, 0);
 		SharedPreferences.Editor editor = petState.edit();
 		editor.putFloat(HEALTH_KEY, (float) atts.health);

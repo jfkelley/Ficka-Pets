@@ -35,7 +35,7 @@ public class BattleActivity extends Activity {
 	private boolean gameOver = false;
 
 	
-	
+	 
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.battle);

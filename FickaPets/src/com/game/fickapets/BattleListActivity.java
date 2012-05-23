@@ -29,6 +29,7 @@ public class BattleListActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.battle_list);
 		
+		
 		TextView tv = new TextView(this);
 		imageViewHandler = new UrlImageViewHandler(this);
 		tv.setText("Current Battles");
@@ -55,10 +56,12 @@ public class BattleListActivity extends Activity{
 				long id) {
 			try {
 				Intent intent = new Intent(BattleListActivity.this, BattleActivity.class);
-				JSONObject thisBattle = battleArr.getJSONObject(position);
-				intent.putExtra(FindFriendsActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
-				intent.putExtra(FindFriendsActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
-				intent.putExtra(FindFriendsActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
+				JSONObject thisBattle = battleArr.getJSONObject(position-1);
+				intent.putExtra(BattleActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
+				intent.putExtra(BattleActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
+				intent.putExtra(BattleActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
+				intent.putExtra(BattleActivity.MY_MOVE_KEY, thisBattle.getString(PersistenceHandler.MY_MOVE));
+				intent.putExtra(BattleActivity.BATTLE_ID_KEY, thisBattle.getString(PersistenceHandler.BATTLE_ID));
 				startActivity(intent);
 			} catch(Exception ex) {
 				System.out.println("Failed to get data out of json array");

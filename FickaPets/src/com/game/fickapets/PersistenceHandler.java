@@ -1,9 +1,11 @@
 package com.game.fickapets;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -245,12 +247,13 @@ public class PersistenceHandler {
 	public static String getFileAsString(Context context, String filename) throws IOException {
 		File file = context.getFileStreamPath(filename);
 		if (!file.exists()) return null;
-		FileInputStream fis = new FileInputStream(file);
-		byte[] bytes = new byte[1024];
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+		char[] bytes = new char[1024];
 		StringBuilder sb = new StringBuilder();
-		int bytesRead = fis.read(bytes, 0, bytes.length);
+		int bytesRead = br.read(bytes, 0, bytes.length);
 		while (bytesRead != -1) {
-			sb.append(new String(bytes));
+			sb.append(bytes, 0, bytesRead);
+			bytesRead = br.read(bytes, 0, bytes.length);
 		}
 		return sb.toString();
 	}
@@ -282,7 +285,7 @@ public class PersistenceHandler {
 		return -1;
 	}
 	
-	public static void writeStringToFile(Context context, String filename, String jsonArrStr) {
+	private static void writeStringToFile(Context context, String filename, String jsonArrStr) {
 		try {
 			File file = context.getFileStreamPath(filename);
 			if (file.exists()) file.delete();
@@ -301,10 +304,12 @@ public class PersistenceHandler {
 		try {
 			JSONArray battles = getBattles(context);
 			int index = getIndexWithBattle(bid, battles);
-			JSONObject battle = battles.getJSONObject(index);
-			if (battle == null) {
+			JSONObject battle;
+			if (index >= 0) {
+				battle = battles.getJSONObject(index);
+			} else {
 				battle = new JSONObject();
-			} 
+			}
 			battle.put(BATTLE_ID, bid);
 			battle.put(OPPONENT, opponentName);
 			battle.put(MY_MOVE, myMove);

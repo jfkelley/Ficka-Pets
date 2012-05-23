@@ -20,7 +20,11 @@ public class BattleActivity extends Activity {
 	/* successful attacks to win if opponent has equal strength */
 	private static final double MOVES_TO_WIN = 4;
 	private static final int ATTACK_DIALOG = 0;
-	
+	public static final String OPPONENT_NAME_KEY = "opponentName";
+	public static final String OPPONENT_ID_KEY = "opponentId";
+	public static final String MY_ID_KEY = "myId";
+	public static final String BATTLE_ID_KEY = "battleIdKey";
+	public static final String MY_MOVE_KEY = "myMoveKey";
 
 	/* magic is 1, water attack is 2, fire attack is 3.  1 beats 2, 2 beats 3, and 3 beats 1 */
 	
@@ -33,26 +37,42 @@ public class BattleActivity extends Activity {
 	private Double myStartingStrength;
 	private Double opponentStartingStrength;
 	private boolean gameOver = false;
-
+	private PollOpponentMove pollOpponentMove;
 	
 	 
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.battle);
+    	server = new FickaServer(this);
     	Bundle extras = getIntent().getExtras();
-    	opponentId = extras.getString(FindFriendsActivity.OPPONENT_ID_KEY);
-    	opponentName = extras.getString(FindFriendsActivity.OPPONENT_NAME_KEY);
-    	myId = extras.getString(FindFriendsActivity.MY_ID_KEY);
-    	server = new FickaServer(this); 
-    	new CreateGameTask().execute();
+    	opponentId = extras.getString(OPPONENT_ID_KEY);
+    	opponentName = extras.getString(OPPONENT_NAME_KEY);
+    	myId = extras.getString(MY_ID_KEY);
+    	String bid = extras.getString(BATTLE_ID_KEY);
+    	String myMove = extras.getString(MY_MOVE_KEY);
+    	
+    	/* check that bid and myMove aren't empty or null since they're null from FindFriendsActivity
+    	 * and myMove could be empty if we didn't make a move before leaving battle last time
+    	 */
+    	if (myMove != null && !myMove.equals("")) {
+    		this.myMove = Integer.valueOf(myMove);
+    		/* already made a move so view is invisible */
+    		findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+    	}
+    	if (bid != null && !bid.equals("")) {
+    		battleId = bid;
+    	} else {
+    		new CreateGameTask().execute();
+    	}
     }
     
     /* here, we serialize battle into json and write it out to file */
     public void onDestroy() {
     	super.onDestroy();
-    	server.close();
-    	if (!gameOver) {
-    		PersistenceHandler.saveBattle(this, battleId, opponentName, myMove.toString(), myId, opponentId);
+    	if (pollOpponentMove != null) pollOpponentMove.cancel(true);
+    	if (!gameOver && battleId != null) {
+    		String myMove = this.myMove == null ? "" : this.myMove.toString();
+    		PersistenceHandler.saveBattle(this, battleId, opponentName, myMove, myId, opponentId);
     	}
     }
    
@@ -90,7 +110,8 @@ public class BattleActivity extends Activity {
 						/* checking again in case of double click on this dialog */
 						if (findViewById(R.id.fightButton).getVisibility() == View.VISIBLE) { 
 							new SendMoveTask().execute();
-							new PollOponnentMove().execute();
+							pollOpponentMove = new PollOpponentMove();
+							pollOpponentMove.execute();
 							findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
 						}
 					}
@@ -206,7 +227,7 @@ public class BattleActivity extends Activity {
     /* Should be called after we've made a move and need to get the opponent's move to continue.  Polls
      * the server for opponent's move every SECONDS_BETWEEN_POLL.
      */
-    private class PollOponnentMove extends AsyncTask<Void, Void, String[]> {
+    private class PollOpponentMove extends AsyncTask<Void, Void, String[]> {
     	private static final int SECONDS_BETWEEN_POLL = 3;
 
 		@Override
@@ -215,20 +236,27 @@ public class BattleActivity extends Activity {
 				/* possible to make move before server returned with battle id */
 				waitUntilBattleCreated();
 				Map<String, String> battleMap = server.getBattleData(myId, battleId);
-				while (battleMap.get(FickaServer.OPP_MOVE_KEY) == null) {
+				while (battleMap.get(FickaServer.OPP_MOVE_KEY).equals("null")) {
+					if (isCancelled()) return null;
 					Thread.sleep(SECONDS_BETWEEN_POLL * 1000);
+					battleMap = server.getBattleData(myId, battleId);
 				}
 				String[] result = new String[2];
 				result[0] = battleMap.get(FickaServer.OPP_MOVE_KEY);
 				result[1] = battleMap.get(FickaServer.OPP_STRENGTH_KEY);
 				return result;
-			} catch(Exception ex) {}
-			return null;
+			} catch(Exception ex) {
+				System.out.println("Couldn't get battle data");
+				ex.printStackTrace();
+				return null;
+			}
 		}
 		
 		protected void onPostExecute(String[] data) {
+			if (data == null) return;
 			String opponentMove = data[0];
 			String opponentStrength = data[1];
+			
     		playMove(Integer.valueOf(opponentMove), Double.valueOf(opponentStrength));
     		/* Not sure what to do for multiple moves - need to send something to server here */
 		}
@@ -236,25 +264,29 @@ public class BattleActivity extends Activity {
     /* creates a new game */
     private class CreateGameTask extends AsyncTask<Void, Void, String> {
     	protected String doInBackground(Void...voids) {
+    		String bid = null;
     		try {
-    			return server.createGame(myId, opponentId);
+    			bid = server.createGame(myId, opponentId);
     		} catch(IOException ex) {
     			System.out.println("failed to create game on server");
     			ex.printStackTrace();
-    			return null;
     		}
+    		return bid;
     	}
     	protected void onPostExecute(String bid) {
-    		battleId = bid;
     		myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
+    		battleId = bid;
     	}
     }
     /* sends move */
     private class SendMoveTask extends AsyncTask<Void, Void, Void> {
     	protected Void doInBackground(Void...voids) {
     		try {
+    			//String myMove = strings[0];
+    			//String myId = strings[1];
+    			//String battleId = strings[2];
     			waitUntilBattleCreated();
-    			server.sendMove(myMove.toString(), myId, battleId);
+    			server.sendMove(myMove.toString(), myId, battleId, myStartingStrength.toString());
     		} catch(Exception ex) {
     			System.out.println("failed to send move");
     			ex.printStackTrace();

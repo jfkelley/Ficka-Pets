@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 public class PersistenceHandler {
 	
@@ -55,6 +56,8 @@ public class PersistenceHandler {
 	public static final String OPPONENT = "opponentName";
 	public static final String MY_ID = "myFacebookId";
 	public static final String OPPONENT_ID = "opponentFacebookId";
+	public static final String OPPONENT_HEALTH = "opponentBattleHealth";
+	public static final String MY_HEALTH = "myBattleHealth";
 
 	private static Attributes getAttributesFromStoredState (SharedPreferences petState) {
 		Attributes atts = new Attributes ();
@@ -300,8 +303,16 @@ public class PersistenceHandler {
 		
 	}
 	
-	public static void saveBattle(Context context, String bid, String opponentName, String myMove, String myId, String opponentId) {
+	public static void saveBattle(Context context, Bundle bundle) {
 		try {
+			String bid = bundle.getString(BattleActivity.BATTLE_ID_KEY);
+			String opponentName = bundle.getString(BattleActivity.OPPONENT_NAME_KEY);
+			String myMove = bundle.getString(BattleActivity.MY_MOVE_KEY);
+			String myId = bundle.getString(BattleActivity.MY_ID_KEY);
+			String opponentId = bundle.getString(BattleActivity.OPPONENT_ID_KEY);
+			Integer opponentBattleHealth = bundle.getInt(BattleActivity.OPPONENT_HEALTH_KEY);
+			Integer myBattleHealth = bundle.getInt(BattleActivity.MY_HEALTH_KEY);
+			
 			JSONArray battles = getBattles(context);
 			int index = getIndexWithBattle(bid, battles);
 			JSONObject battle;
@@ -315,6 +326,8 @@ public class PersistenceHandler {
 			battle.put(MY_MOVE, myMove);
 			battle.put(MY_ID, myId);
 			battle.put(OPPONENT_ID, opponentId);
+			battle.put(OPPONENT_HEALTH, opponentBattleHealth);
+			battle.put(MY_HEALTH, myBattleHealth);
 			if (index == -1) {
 				battles.put(battles.length(), battle);
 			} else {
@@ -326,5 +339,32 @@ public class PersistenceHandler {
 			ex.printStackTrace();
 		} 
 	}
+	/* can't seem to change size so I'll just copy over to new json array */
+	private static JSONArray removeBattleAtIndex(JSONArray battles, int battleIndex) throws JSONException {
+		JSONArray newArr = new JSONArray();
+		int newArrIndex = 0;
+		for (int i = 0; i < battles.length(); i++) {
+			if (i != battleIndex) {
+				newArr.put(newArrIndex, battles.getJSONObject(i));
+				newArrIndex++;
+			}
+		}
+		return newArr;
+	}
+	
+	public static void removeBattle(Context context, String bid) {
+		try {
+			JSONArray battles = getBattles(context);
+			int battleIndex = getIndexWithBattle(bid, battles);
+			if (battleIndex >= 0) {
+				battles = removeBattleAtIndex(battles, battleIndex);
+			}
+			writeStringToFile(context, BATTLE_FILE, battles.toString());
+		} catch (Exception ex) {
+			System.out.println("failed to remove battle");
+			ex.printStackTrace();
+		}
+	}
+	
 	
 }

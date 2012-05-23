@@ -70,7 +70,10 @@ public class FindFriendsActivity extends ListActivity {
 	    if (!facebook.isSessionValid()) {
 	    	facebook.authorize(this, new DialogListener() {
 	    		//@Override
-	    		public void onComplete(Bundle values) {}
+	    		public void onComplete(Bundle values) {
+	    			PersistenceHandler.saveFacebookAccess(FindFriendsActivity.this, facebook.getAccessToken(), facebook.getAccessExpires());
+	    			fetchData();
+	    		}
 
 	    		public void onFacebookError(FacebookError error) {}
 
@@ -78,16 +81,23 @@ public class FindFriendsActivity extends ListActivity {
 	        
 	    		public void onCancel() {}
 	    	});
+	    } else {
+	    	fetchData();
 	    }
-		PersistenceHandler.saveFacebookAccess(this, facebook.getAccessToken(), facebook.getAccessExpires());
 
-		AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
-		/* pretty sure the friend filter for these works */
+		
+    }
+    
+    private void fetchData() {
+    	AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
+    	
+		/* remove this comment and comment out GET_DATA_FOR_PHOTOS to run friend filter */
 		//runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
 		
 		runner.request("me", new FacebookDataListener(), GET_MY_DATA);
 		
-		//three of these photos.  Any others come from server
+		// Comment this out and uncomment GET_FRIENDS_DATA
+		//to run friend filter.  This just fetches first NUM_PHOTOS friends returned from facebook
 		runner.request("me/friends", new FacebookDataListener(), GET_DATA_FOR_PHOTOS);
     }
     

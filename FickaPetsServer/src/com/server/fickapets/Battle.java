@@ -62,14 +62,32 @@ public class Battle {
 	public String getId() {
 		return KeyFactory.keyToString(entity.getKey());
 	}
+	/* newMove should have format "num1_num2" where num1 is the move number, which starts with zero and num2 is the move */
+	private boolean isNewMove(String newMove, String oldMovesStr) {
+		if (oldMovesStr == null) return true;
+		String[] pieces = newMove.split("_");
+		String[] oldMoves = oldMovesStr.split(" ");
+		if (Integer.valueOf(pieces[0]) >= oldMoves.length) {
+			return true;
+		}
+		return false;
+	}
 	
 	public boolean setMove(String uid, String move, double strength) {
-		if (user1.equals(uid) && move1 == null) {
-			move1 = move;
+		if (user1.equals(uid) && isNewMove(move, move1)) {//move1 == null) {
+			if (move1 != null) {
+				move1 = move1 + " " + move.split("_")[1];
+			} else {
+				move1 = move.split("_")[1];
+			}
 			strength1 = strength;
 			return true;
-		} else if (user2.equals(uid) && move2 == null) {
-			move2 = move;
+		} else if (user2.equals(uid) && isNewMove(move, move2)) {//move2 == null) {
+			if (move2 != null) {
+				move2 = move2 + " " + move.split("_")[1];
+			} else {
+				move2 = move.split("_")[1];
+			}
 			strength2 = strength;
 			return true;
 		} else {

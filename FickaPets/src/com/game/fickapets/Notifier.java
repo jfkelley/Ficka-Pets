@@ -14,7 +14,7 @@ import android.os.IBinder;
 
 
 public class Notifier extends IntentService {
-	
+	public static int FOREGROUND_NOTIFICATION = 480210;
 	public Notifier () {
 		super("NotificationService");
 	}
@@ -26,7 +26,8 @@ public class Notifier extends IntentService {
 	
 	public int onStartCommand (Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
-		return START_REDELIVER_INTENT;
+		/* won't be recreated if killed */
+		return START_NOT_STICKY;
 	}
 	
 	private void sendNotification (String title, String message, int id) {
@@ -40,10 +41,18 @@ public class Notifier extends IntentService {
 		manager.notify(id, notification);
 	}
 	
+	private void runInForeground() {
+		Notification notification = new Notification(R.drawable.ic_launcher, "FickaPets", System.currentTimeMillis());
+		Intent notificaitonIntent = new Intent(this, FickaPetsStart.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificaitonIntent, 0);
+		notification.setLatestEventInfo(this, "FickaPets", "FickaPets", pendingIntent);
+		startForeground(FOREGROUND_NOTIFICATION, notification);
+	}
+	
 	protected void onHandleIntent (Intent intent) {
-
+		/* looks like android ignores this as old API */
 		setForeground(true);
-			
+		runInForeground();	
 			
 		@SuppressWarnings("unchecked")
 		ArrayList<Complaint> complaints = (ArrayList<Complaint>) intent.getSerializableExtra("com.game.fickapets.complaints");

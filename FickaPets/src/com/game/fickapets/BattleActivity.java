@@ -3,6 +3,8 @@ package com.game.fickapets;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 import android.app.Activity;
@@ -20,24 +22,36 @@ public class BattleActivity extends Activity {
 	/* successful attacks to win if opponent has equal strength */
 	private static final double MOVES_TO_WIN = 4;
 	private static final int ATTACK_DIALOG = 0;
+	
 	public static final String OPPONENT_NAME_KEY = "opponentName";
 	public static final String OPPONENT_ID_KEY = "opponentId";
 	public static final String MY_ID_KEY = "myId";
 	public static final String BATTLE_ID_KEY = "battleIdKey";
 	public static final String MY_MOVE_KEY = "myMoveKey";
+	public static final String NUM_MOVES_KEY = "numMovesPlayedKey";
+	public static final String OPPONENT_HEALTH_KEY = "opponentBattleHealth";
+	public static final String MY_HEALTH_KEY = "myBattleHealth";
 
 	/* magic is 1, water attack is 2, fire attack is 3.  1 beats 2, 2 beats 3, and 3 beats 1 */
 	
+	/* should never change throughout game */
 	private String opponentId;
 	private String opponentName;
 	private String myId;
 	private String battleId;
-	private FickaServer server;
-	private Integer myMove;
 	private Double myStartingStrength;
 	private Double opponentStartingStrength;
-	private boolean gameOver = false;
+	
 	private PollOpponentMove pollOpponentMove;
+	private FickaServer server;
+	
+	/* change as game progresses */
+	private Integer myMove;
+	private Integer myBattleHealth;
+	private Integer opponentBattleHealth;
+	private Integer numMovesPlayed;
+	private boolean gameOver = false;
+	
 	
 	 
     public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +62,20 @@ public class BattleActivity extends Activity {
     	opponentId = extras.getString(OPPONENT_ID_KEY);
     	opponentName = extras.getString(OPPONENT_NAME_KEY);
     	myId = extras.getString(MY_ID_KEY);
-    	String bid = extras.getString(BATTLE_ID_KEY);
-    	String myMove = extras.getString(MY_MOVE_KEY);
+    	/* should default to zero */
+    	numMovesPlayed = extras.getInt(NUM_MOVES_KEY);
+    	/* should default to 100 */
+    	myBattleHealth = extras.getInt(MY_HEALTH_KEY) > 0 ? extras.getInt(MY_HEALTH_KEY) : 100;
+    	/* default to 100 */
+    	opponentBattleHealth = extras.getInt(OPPONENT_HEALTH_KEY) > 0 ? extras.getInt(OPPONENT_HEALTH_KEY) : 100;
+    	setProgressBars(myBattleHealth, opponentBattleHealth);
+    	
     	
     	/* check that bid and myMove aren't empty or null since they're null from FindFriendsActivity
     	 * and myMove could be empty if we didn't make a move before leaving battle last time
     	 */
+    	String bid = extras.getString(BATTLE_ID_KEY);
+    	String myMove = extras.getString(MY_MOVE_KEY);
     	if (myMove != null && !myMove.equals("")) {
     		this.myMove = Integer.valueOf(myMove);
     		/* already made a move so view is invisible */
@@ -64,6 +86,12 @@ public class BattleActivity extends Activity {
     	} else {
     		new CreateGameTask().execute();
     	}
+ 
+    }
+    
+    private void setProgressBars(Integer myBattleHealth, Integer opponentBattleHealth) {
+    	((ProgressBar)findViewById(R.id.myBattleHealth)).setProgress(myBattleHealth);
+    	((ProgressBar)findViewById(R.id.opponentBattleHealth)).setProgress(opponentBattleHealth);
     }
     
     /* here, we serialize battle into json and write it out to file */
@@ -72,7 +100,18 @@ public class BattleActivity extends Activity {
     	if (pollOpponentMove != null) pollOpponentMove.cancel(true);
     	if (!gameOver && battleId != null) {
     		String myMove = this.myMove == null ? "" : this.myMove.toString();
-    		PersistenceHandler.saveBattle(this, battleId, opponentName, myMove, myId, opponentId);
+    		Bundle bundle = new Bundle();
+    		bundle.putString(BATTLE_ID_KEY, battleId);
+    		bundle.putString(OPPONENT_NAME_KEY, opponentName);
+    		bundle.putString(MY_MOVE_KEY, myMove);
+    		bundle.putString(MY_ID_KEY, myId);
+    		bundle.putString(OPPONENT_ID_KEY, opponentId);
+    		bundle.putInt(MY_HEALTH_KEY, myBattleHealth);
+    		bundle.putInt(OPPONENT_HEALTH_KEY, opponentBattleHealth);
+    		PersistenceHandler.saveBattle(this, bundle);
+    		/* if it's game over, erase battle data if it exists */
+    	} else if (gameOver) {
+    		PersistenceHandler.removeBattle(this, battleId);
     	}
     }
    
@@ -109,7 +148,7 @@ public class BattleActivity extends Activity {
 						myMove = item;
 						/* checking again in case of double click on this dialog */
 						if (findViewById(R.id.fightButton).getVisibility() == View.VISIBLE) { 
-							new SendMoveTask().execute();
+							new SendMoveTask().execute(numMovesPlayed);
 							pollOpponentMove = new PollOpponentMove();
 							pollOpponentMove.execute();
 							findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
@@ -143,10 +182,10 @@ public class BattleActivity extends Activity {
     private void gameOver(boolean iWin) {
     	gameOver = true;
     	if (iWin) {
-    		Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(this, "You win!", Toast.LENGTH_LONG).show();
     		/* adjust strength or whatever we do to reward victories here */
     	} else {
-    		Toast.makeText(this, opponentName + " has beaten you", Toast.LENGTH_SHORT);
+    		Toast.makeText(this, opponentName + " has beaten you", Toast.LENGTH_LONG);
     	}
     	new Thread(new Runnable() {
     		public void run() {
@@ -165,9 +204,10 @@ public class BattleActivity extends Activity {
     	}).run();
     }
     
-    private void animateMove(boolean iWonMove, Integer myMove, Integer opponentMove, double damage) {
-    	int battleHealthDrop;
+    /* returns the loser's new battle health having lost this move */
+    private int getLoserBattleHealth(boolean iWonMove, double damage) {
     	int battleHealth;
+    	int battleHealthDrop;
     	if (!iWonMove) {
     		battleHealthDrop = getBattleHealthDrop(damage, myStartingStrength);
         	battleHealth = ((ProgressBar) findViewById(R.id.myBattleHealth)).getProgress();
@@ -175,18 +215,25 @@ public class BattleActivity extends Activity {
     		battleHealthDrop = getBattleHealthDrop(damage, opponentStartingStrength);
         	battleHealth = ((ProgressBar) findViewById(R.id.opponentBattleHealth)).getProgress();
     	}
-    	int newBattleHealth;
-    	if (battleHealth - battleHealthDrop < 0) {
-    		newBattleHealth = 0;
-    	} else {
-    		newBattleHealth = (battleHealth - battleHealthDrop);
-    	}
+    	int resultingHealth = battleHealth - battleHealthDrop;
+    	if (resultingHealth < 0) resultingHealth = 0;
+    	return resultingHealth;
+    }
+    
+    private void updateProgressBar(boolean iWonMove, int newBattleHealth) {
     	if (!iWonMove) {
     		((ProgressBar) findViewById(R.id.myBattleHealth)).setProgress(newBattleHealth);
+    		myBattleHealth = newBattleHealth;
     	} else {
     		((ProgressBar) findViewById(R.id.opponentBattleHealth)).setProgress(newBattleHealth);
+    		opponentBattleHealth = newBattleHealth;
     	}
-    	if (newBattleHealth <= 0) {
+    }
+    
+    private void animateMove(boolean iWonMove, Integer myMove, Integer opponentMove, double damage) {
+    	int battleHealth = getLoserBattleHealth(iWonMove, damage);
+    	updateProgressBar(iWonMove, battleHealth);
+    	if (battleHealth == 0) {
     		gameOver(iWonMove);
     	}
     }
@@ -212,10 +259,13 @@ public class BattleActivity extends Activity {
     
     /* Background asynctasks for talking to server -------------------------------------------------------------------------------------*/
     
+
     
 	private boolean battleCreated() {
-		if (battleId != null) return true;
-		return false;
+		if (battleId == null) {
+			return false;
+		}
+		return true;
 	}
 	
 	private void waitUntilBattleCreated() throws InterruptedException {
@@ -251,14 +301,22 @@ public class BattleActivity extends Activity {
 				return null;
 			}
 		}
+		/* oppMove should never be null when we get here */
+		private Integer getOpponentMove(String encodedMoves) {
+			String[] moves = encodedMoves.split(" ");
+			if (moves.length > numMovesPlayed) {
+				return Integer.valueOf(moves[numMovesPlayed]);
+			} else {
+				return null;
+			}
+		}
 		
 		protected void onPostExecute(String[] data) {
 			if (data == null) return;
-			String opponentMove = data[0];
+			Integer opponentMove = getOpponentMove(data[0]);
 			String opponentStrength = data[1];
 			
-    		playMove(Integer.valueOf(opponentMove), Double.valueOf(opponentStrength));
-    		/* Not sure what to do for multiple moves - need to send something to server here */
+    		playMove(opponentMove, Double.valueOf(opponentStrength));
 		}
     }
     /* creates a new game */
@@ -279,14 +337,15 @@ public class BattleActivity extends Activity {
     	}
     }
     /* sends move */
-    private class SendMoveTask extends AsyncTask<Void, Void, Void> {
-    	protected Void doInBackground(Void...voids) {
+    private class SendMoveTask extends AsyncTask<Integer, Void, Void> {
+    	protected Void doInBackground(Integer...integers) {
     		try {
     			//String myMove = strings[0];
     			//String myId = strings[1];
     			//String battleId = strings[2];
+    			Integer numMovesPlayed = integers[0];
     			waitUntilBattleCreated();
-    			server.sendMove(myMove.toString(), myId, battleId, myStartingStrength.toString());
+    			server.sendMove(numMovesPlayed.toString() + "_" + myMove.toString(), myId, battleId, myStartingStrength.toString());
     		} catch(Exception ex) {
     			System.out.println("failed to send move");
     			ex.printStackTrace();
@@ -294,5 +353,4 @@ public class BattleActivity extends Activity {
 			return null;
     	}
     }
-    
 }

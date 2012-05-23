@@ -18,8 +18,6 @@
 <fullyQualifiedTypeName name="org.apache.http.params.BasicHttpParams"/>
 <fullyQualifiedTypeName name="org.apache.http.HttpResponse"/>
 <fullyQualifiedTypeName name="org.apache.http.HttpEntity"/>
-<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
-<fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="java.net.HttpURLConnection"/>
 <fullyQualifiedTypeName name="java.io.ByteArrayInputStream"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.raw"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="org.apache.http.client.methods.HttpRequestBase"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.layout"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.id"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
 </qualifiedTypeNameHistroy>

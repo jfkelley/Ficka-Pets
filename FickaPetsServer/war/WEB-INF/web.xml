@@ -10,6 +10,10 @@
     <servlet-name>BattleServlet</servlet-name>
     <servlet-class>com.server.fickapets.BattleServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>AdminServlet</servlet-name>
+    <servlet-class>com.server.fickapets.AdminServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>BattleServlet</servlet-name>
@@ -46,6 +50,11 @@
   <servlet-mapping>
     <servlet-name>BattleServlet</servlet-name>
     <url-pattern>/findfriends</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/clear</url-pattern>
   </servlet-mapping>
 
 </web-app>

@@ -10,7 +10,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
 public class User {
-	private static final String ENTITY_KIND = "user";
+	public static final String ENTITY_KIND = "user";
 	private static final String USER_ID_PROPERTY = "uid";
 	
 	public static void create(String id) {

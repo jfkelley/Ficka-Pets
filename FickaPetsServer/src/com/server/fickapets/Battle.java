@@ -14,7 +14,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
 public class Battle {
-	private static final String ENTITY_KIND = "battle";
+	public static final String ENTITY_KIND = "battle";
 
 	private final String user1, user2;
 	private String move1, move2;

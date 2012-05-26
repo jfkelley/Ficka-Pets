@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="android.graphics.Bitmap"/>
-<fullyQualifiedTypeName name="android.graphics.BitmapFactory"/>
 <fullyQualifiedTypeName name="android.graphics.drawable.BitmapDrawable"/>
 <fullyQualifiedTypeName name="com.facebook.android.AsyncFacebookRunner"/>
 <fullyQualifiedTypeName name="com.facebook.android.AsyncFacebookRunner.RequestListener"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.id"/>
 <fullyQualifiedTypeName name="android.os.Bundle"/>
+<fullyQualifiedTypeName name="java.util.concurrent.locks.Lock"/>
+<fullyQualifiedTypeName name="java.util.concurrent.locks.ReentrantLock"/>
 </qualifiedTypeNameHistroy>

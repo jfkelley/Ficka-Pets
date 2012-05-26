@@ -278,7 +278,7 @@ public class PersistenceHandler {
 		try {
 			for (int i = 0; i < battles.length(); i++) {
 				JSONObject battle = battles.getJSONObject(i);
-				if (battle.getString("bid").equals(bid)) {
+				if (battle.getString(BATTLE_ID).equals(bid)) {
 					return i;
 				}
 			}

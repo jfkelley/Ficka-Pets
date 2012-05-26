@@ -303,31 +303,10 @@ public class PersistenceHandler {
 		
 	}
 	
-	public static void saveBattle(Context context, Bundle bundle) {
+	public static void saveBattle(Context context, JSONObject battle) {
 		try {
-			String bid = bundle.getString(BattleActivity.BATTLE_ID_KEY);
-			String opponentName = bundle.getString(BattleActivity.OPPONENT_NAME_KEY);
-			String myMove = bundle.getString(BattleActivity.MY_MOVE_KEY);
-			String myId = bundle.getString(BattleActivity.MY_ID_KEY);
-			String opponentId = bundle.getString(BattleActivity.OPPONENT_ID_KEY);
-			Integer opponentBattleHealth = bundle.getInt(BattleActivity.OPPONENT_HEALTH_KEY);
-			Integer myBattleHealth = bundle.getInt(BattleActivity.MY_HEALTH_KEY);
-			
 			JSONArray battles = getBattles(context);
-			int index = getIndexWithBattle(bid, battles);
-			JSONObject battle;
-			if (index >= 0) {
-				battle = battles.getJSONObject(index);
-			} else {
-				battle = new JSONObject();
-			}
-			battle.put(BATTLE_ID, bid);
-			battle.put(OPPONENT, opponentName);
-			battle.put(MY_MOVE, myMove);
-			battle.put(MY_ID, myId);
-			battle.put(OPPONENT_ID, opponentId);
-			battle.put(OPPONENT_HEALTH, opponentBattleHealth);
-			battle.put(MY_HEALTH, myBattleHealth);
+			int index = getIndexWithBattle(battle.getString(BattleState.BATTLE_ID), battles);
 			if (index == -1) {
 				battles.put(battles.length(), battle);
 			} else {

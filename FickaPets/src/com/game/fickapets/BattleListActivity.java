@@ -56,22 +56,13 @@ public class BattleListActivity extends Activity{
 				long id) {
 			try {
 				Intent intent = new Intent(BattleListActivity.this, BattleActivity.class);
-				/* apparently position starting index is 1 */
-				JSONObject thisBattle = battleArr.getJSONObject(position-1);
-				intent.putExtra(BattleActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
-				intent.putExtra(BattleActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
-				intent.putExtra(BattleActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
-				intent.putExtra(BattleActivity.MY_MOVE_KEY, thisBattle.getString(PersistenceHandler.MY_MOVE));
-				intent.putExtra(BattleActivity.BATTLE_ID_KEY, thisBattle.getString(PersistenceHandler.BATTLE_ID));
-				intent.putExtra(BattleActivity.OPPONENT_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.OPPONENT_HEALTH)));
-				intent.putExtra(BattleActivity.MY_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.MY_HEALTH)));
+				intent = BattleState.addExtrasToIntent(intent, battleArr.getJSONObject(position-1));
 				startActivity(intent);
 			} catch(Exception ex) {
 				System.out.println("Failed to get data out of json array");
 				ex.printStackTrace();
 			}
 		}
-		
 	}
 	
 	public void onFindFriendsClicked(View v) {

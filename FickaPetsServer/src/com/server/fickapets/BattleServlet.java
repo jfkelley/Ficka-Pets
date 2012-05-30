@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+
 public class BattleServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 6227254987843138881L;
@@ -25,7 +28,7 @@ public class BattleServlet extends HttpServlet {
 			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"));
 		} else if (action.equals("/sendmove")) {
 			doMove(resp, req.getParameter("uid"), req.getParameter("bid"), req.getParameter("move"), Double.parseDouble(req.getParameter("strength")));
-		} else if (action.equals("/openbattles") || action.equals("outgoingchallenges") || action.equals("incomingchallenges")) {
+		} else if (action.equals("/openbattles") || action.equals("/outgoingchallenges") || action.equals("/incomingchallenges")) {
 			handleBattleQuery(resp, action, req.getParameter("uid"));
 		} else if (action.equals("/closebattle")) {
 			closeBattle(resp, req.getParameter("uid"), req.getParameter("bid"));
@@ -36,7 +39,7 @@ public class BattleServlet extends HttpServlet {
 		} else if (action.equals("/findfriends")) {
 			String content = streamToString(req.getInputStream());
 			findFriends(resp, content);
-		}
+		} 
 	}
 	
 	private void registerUser(HttpServletResponse resp, String id) throws IOException {

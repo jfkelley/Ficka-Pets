@@ -13,9 +13,9 @@ import android.content.Intent;
 import android.os.IBinder;
 
 
-public class Notifier extends IntentService {
+public class PetNotifier extends IntentService {
 	public static int FOREGROUND_NOTIFICATION = 480210;
-	public Notifier () {
+	public PetNotifier () {
 		super("NotificationService");
 	}
 	
@@ -30,7 +30,7 @@ public class Notifier extends IntentService {
 		return START_NOT_STICKY;
 	}
 	
-	private void sendNotification (String title, String message, int id) {
+	private void sendNotification (String title, String message) {
 		Intent notificationIntent = new Intent(this, FickaPetsStart.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		Notification notification = new Notification(R.drawable.ic_launcher, "", System.currentTimeMillis());
@@ -38,7 +38,7 @@ public class Notifier extends IntentService {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notification.defaults |= Notification.DEFAULT_VIBRATE;
 		NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.notify(id, notification);
+		manager.notify(NotificationIdHandler.getNewId(), notification);
 	}
 	
 	private void runInForeground() {
@@ -58,7 +58,6 @@ public class Notifier extends IntentService {
 		ArrayList<Complaint> complaints = (ArrayList<Complaint>) intent.getSerializableExtra("com.game.fickapets.complaints");
 		
 		Collections.sort (complaints, new ComplaintsCompare());
-		int id = 0;
 		while (complaints.size() > 0) {
 			try {
 				Thread.sleep (Utility.hoursToMillis (complaints.get (0).hoursBeforeComplaint));
@@ -66,9 +65,8 @@ public class Notifier extends IntentService {
 				System.out.println ("Couldn't put Notifier service to sleep");
 				ex.printStackTrace ();
 			}
-			sendNotification ("FickaPets", complaints.get(0).complaint, id);
+			sendNotification ("FickaPets", complaints.get(0).complaint);
 			complaints.remove (0);
-			id++;
 		}
 	}
 	

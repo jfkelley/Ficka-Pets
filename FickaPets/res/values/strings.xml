@@ -22,5 +22,6 @@
 	<string name="battle">Battle</string>
 	<string name="battleLabel">Battle</string>
 	<string name="findFriends">Find Friends to Battle</string>
+	<string name="loadingGame">Loading Battle</string>
 	
 </resources>

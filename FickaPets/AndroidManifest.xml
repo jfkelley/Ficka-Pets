@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Notifier" android:exported="false" />
+        <service android:name=".PetNotifier" android:exported="false" />
+        <service android:name=".BattleNotifier" android:exported="false" />
         <activity
         	android:name=".ItemShop"
         	android:label="@string/itemShopLabel" >

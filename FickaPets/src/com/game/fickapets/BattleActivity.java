@@ -51,18 +51,37 @@ public class BattleActivity extends Activity {
 	 
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.battle);
+    	setContentView(R.layout.on_progress);
+    	
     	server = new FickaServer(this);
     	Bundle extras = getIntent().getExtras();
+    	
+    	/* empties bundle into battle state object */
     	bState = new BattleState(this, extras);
-    	setProgressBars(bState.myHealth, bState.opponentHealth);
+    	if (bState.bid == null) {
+    		new CreateGameTask().execute();
+    	} else {
+    		setContentView(R.layout.battle);
+        	setProgressBars(bState.myHealth, bState.opponentHealth);
+    	}
     	if (bState.myMove != null) {
     		/* already made a move so view is invisible */
     		findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+    		
+    		if (bState.opponentMove == null) {
+    			startWaitingOnOppMove();
+    		} else {
+    			/* if we have opponent move, we also have opponent strength */
+    			playMove();
+    		}
     	}
-    	if (bState.bid == null) {
-    		new CreateGameTask().execute();
-    	}
+
+    }
+    
+    private void startWaitingOnOppMove() {
+    	pollOpponentMove = new PollOpponentMove();
+    	pollOpponentMove.execute();
+    
     }
     
     private void setProgressBars(Integer myBattleHealth, Integer opponentBattleHealth) {
@@ -115,12 +134,14 @@ public class BattleActivity extends Activity {
 						bState.myMove = item;
 						/* checking again in case of double click on this dialog */
 						if (findViewById(R.id.fightButton).getVisibility() == View.VISIBLE) { 
-							new SendMoveTask().execute(bState.numMovesPlayed);
-							if (bState.opponentMove != null) {
-								pollOpponentMove = new PollOpponentMove();
-								pollOpponentMove.execute();
-							}
 							findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+							new SendMoveTask().execute(bState.numMovesPlayed);
+							if (bState.opponentMove == null) {
+								startWaitingOnOppMove();
+							} else {
+								playMove();
+							}
+							
 						}
 					}
 				})
@@ -170,7 +191,7 @@ public class BattleActivity extends Activity {
     				}
     			});
     		}
-    	}).run();
+    	}).start();
     }
     
     /* returns the loser's new battle health having lost this move */
@@ -178,10 +199,10 @@ public class BattleActivity extends Activity {
     	int battleHealth;
     	int battleHealthDrop;
     	if (!iWonMove) {
-    		battleHealthDrop = getBattleHealthDrop(damage, Double.valueOf(bState.myStartingStrength));
+    		battleHealthDrop = getBattleHealthDrop(damage, bState.myStartingStrength);
         	battleHealth = ((ProgressBar) findViewById(R.id.myBattleHealth)).getProgress();
     	} else {
-    		battleHealthDrop = getBattleHealthDrop(damage, Double.valueOf(bState.opponentStartingStrength));
+    		battleHealthDrop = getBattleHealthDrop(damage, bState.opponentStartingStrength);
         	battleHealth = ((ProgressBar) findViewById(R.id.opponentBattleHealth)).getProgress();
     	}
     	int resultingHealth = battleHealth - battleHealthDrop;
@@ -195,7 +216,7 @@ public class BattleActivity extends Activity {
     		bState.myHealth = newBattleHealth;
     	} else {
     		((ProgressBar) findViewById(R.id.opponentBattleHealth)).setProgress(newBattleHealth);
-    		bState.myHealth = newBattleHealth;
+    		bState.opponentHealth = newBattleHealth;
     	}
     }
     
@@ -207,23 +228,31 @@ public class BattleActivity extends Activity {
     	}
     }
     
-    
-    private void playMove(Integer opponentMove, Double opponentStrength) {
+    /* if this is called from PollOpponentMove, no need to put opponentMove in battle state since it's
+     * cleared anyways after method finishes.  But if opponentMove was known before our move made, need
+     * to clear it
+     */
+    private void playMove() {
     	assert bState.myMove != null;
-    	boolean iWin = getWinner(bState.myMove, opponentMove);
+    	boolean iWin = getWinner(bState.myMove, bState.opponentMove);
     	/* damage is proportional to victim's starting strength.  If damage is half victim's starting strength, 
     	 * then victim loses half his life
     	 */
     	double damageToLoser;
     	if (iWin) {
     		/* attacker strength determines damage done to victim */
-    		damageToLoser = getDamageOnAttack(Double.valueOf(bState.myStartingStrength));
+    		damageToLoser = getDamageOnAttack(bState.myStartingStrength);
     	} else {
-    		damageToLoser = getDamageOnAttack(Double.valueOf(bState.opponentStartingStrength));
+    		damageToLoser = getDamageOnAttack(bState.opponentStartingStrength);
     	}
-    	animateMove(iWin, bState.myMove, opponentMove, damageToLoser);
+    	animateMove(iWin, bState.myMove, bState.opponentMove, damageToLoser);
     	bState.myMove = null;
-    	findViewById(R.id.battleButton).setVisibility(View.VISIBLE);
+    	bState.opponentMove = null;
+    	bState.numMovesPlayed = bState.numMovesPlayed + 1;
+    	/* setting fightButton to visible closes the loop.  When another move is selected
+    	 * we start waiting on opponent move again
+    	 */
+    	findViewById(R.id.fightButton).setVisibility(View.VISIBLE);
     }
     
     /* Background asynctasks for talking to server -------------------------------------------------------------------------------------*/
@@ -247,7 +276,7 @@ public class BattleActivity extends Activity {
      * the server for opponent's move every SECONDS_BETWEEN_POLL.
      */
     private class PollOpponentMove extends AsyncTask<Void, Void, String[]> {
-    	private static final int SECONDS_BETWEEN_POLL = 3;
+    	private static final int SECONDS_BETWEEN_POLL = 7;
 
 		@Override
 		protected String[] doInBackground(Void... params) {
@@ -255,7 +284,7 @@ public class BattleActivity extends Activity {
 				/* possible to make move before server returned with battle id */
 				waitUntilBattleCreated();
 				Map<String, String> battleMap = server.getBattleData(bState.myId, bState.bid);
-				while (battleMap.get(FickaServer.OPP_MOVE_KEY).equals("null")) {
+				while (!isNewMove(battleMap)) {
 					if (isCancelled()) return null;
 					Thread.sleep(SECONDS_BETWEEN_POLL * 1000);
 					battleMap = server.getBattleData(bState.myId, bState.bid);
@@ -270,6 +299,18 @@ public class BattleActivity extends Activity {
 				return null;
 			}
 		}
+		
+		private boolean isNewMove(Map<String, String> battleMap) {
+			if (battleMap.get(FickaServer.OPP_MOVE_KEY) != null) {
+				String encodedMoves = battleMap.get(FickaServer.OPP_MOVE_KEY);
+				String[] moves = encodedMoves.split(" ");
+				if (moves.length > bState.numMovesPlayed) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		/* oppMove should never be null when we get here */
 		private Integer getOpponentMove(String encodedMoves) {
 			String[] moves = encodedMoves.split(" ");
@@ -283,9 +324,11 @@ public class BattleActivity extends Activity {
 		protected void onPostExecute(String[] data) {
 			if (data == null) return;
 			Integer opponentMove = getOpponentMove(data[0]);
-			String opponentStrength = data[1];
-			
-    		playMove(opponentMove, Double.valueOf(opponentStrength));
+			assert opponentMove != null;
+			Double opponentStrength = Double.valueOf(data[1]);
+			bState.opponentStartingStrength = opponentStrength;
+			bState.opponentMove = opponentMove;
+    		playMove();
 		}
     }
     /* creates a new game */
@@ -301,6 +344,8 @@ public class BattleActivity extends Activity {
     		return bid;
     	}
     	protected void onPostExecute(String bid) {
+    		setContentView(R.layout.battle);
+        	setProgressBars(bState.myHealth, bState.opponentHealth);
     		bState.myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
     		bState.bid = bid;
     	}
@@ -309,9 +354,6 @@ public class BattleActivity extends Activity {
     private class SendMoveTask extends AsyncTask<Integer, Void, Void> {
     	protected Void doInBackground(Integer...integers) {
     		try {
-    			//String myMove = strings[0];
-    			//String myId = strings[1];
-    			//String battleId = strings[2];
     			Integer numMovesPlayed = integers[0];
     			waitUntilBattleCreated();
     			server.sendMove(numMovesPlayed.toString() + "_" + bState.myMove.toString(), bState.myId, bState.bid, bState.myStartingStrength.toString());

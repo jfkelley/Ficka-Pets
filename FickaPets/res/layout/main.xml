@@ -61,13 +61,22 @@
 		    android:text="@string/battle"
 		    android:layout_marginTop="3dp"
 		    android:onClick="battlePressed" />
+		<Button
+		    android:id="@+id/gameButton"
+		    android:layout_height="40dp"
+		    android:layout_width="fill_parent"
+		    android:layout_below="@+id/battleButton"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/game"
+		    android:layout_marginTop="3dp"
+		    android:onClick="gamePressed" />
 		
 		<TextView
             android:id="@+id/strengthPermanent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/battleButton"
-            android:layout_below="@+id/battleButton"
+            android:layout_below="@+id/gameButton"
             android:layout_marginTop="5dp"
             android:text="@string/strength"
             android:ems="8" />

@@ -30,13 +30,14 @@ public final class R {
     public static final class id {
         public static final int battleButton=0x7f06000c;
         public static final int button1=0x7f060006;
-        public static final int endTime=0x7f060016;
+        public static final int endTime=0x7f060017;
         public static final int feedButton=0x7f060008;
         public static final int fightButton=0x7f060004;
-        public static final int healthEditable=0x7f060010;
-        public static final int healthPermanent=0x7f06000f;
-        public static final int hungerEditable=0x7f060012;
-        public static final int hungerPermanent=0x7f060011;
+        public static final int gameButton=0x7f06000d;
+        public static final int healthEditable=0x7f060011;
+        public static final int healthPermanent=0x7f060010;
+        public static final int hungerEditable=0x7f060013;
+        public static final int hungerPermanent=0x7f060012;
         public static final int imageView1=0x7f060001;
         public static final int imageView2=0x7f060000;
         public static final int myBattleHealth=0x7f060002;
@@ -45,14 +46,14 @@ public final class R {
         public static final int petImageView=0x7f060007;
         public static final int resetButton=0x7f06000a;
         public static final int shopButton=0x7f06000b;
-        public static final int shopLinearLayout=0x7f060017;
-        public static final int shopTotalCoins=0x7f060018;
+        public static final int shopLinearLayout=0x7f060018;
+        public static final int shopTotalCoins=0x7f060019;
         public static final int sleepButton=0x7f060009;
-        public static final int startTime=0x7f060015;
-        public static final int strengthEditable=0x7f06000e;
-        public static final int strengthPermanent=0x7f06000d;
-        public static final int tiredEditable=0x7f060014;
-        public static final int tiredPermanent=0x7f060013;
+        public static final int startTime=0x7f060016;
+        public static final int strengthEditable=0x7f06000f;
+        public static final int strengthPermanent=0x7f06000e;
+        public static final int tiredEditable=0x7f060015;
+        public static final int tiredPermanent=0x7f060014;
     }
     public static final class layout {
         public static final int battle=0x7f030000;
@@ -69,8 +70,10 @@ public final class R {
         public static final int awake=0x7f050008;
         public static final int battle=0x7f050010;
         public static final int battleLabel=0x7f050011;
+        public static final int catchCoins=0x7f050014;
         public static final int feed=0x7f050006;
         public static final int findFriends=0x7f050012;
+        public static final int game=0x7f050013;
         public static final int health=0x7f050003;
         public static final int hello=0x7f050000;
         public static final int hunger=0x7f050004;

@@ -55,7 +55,6 @@ public class UrlImageViewHandler {
 	private static DisplayMetrics mMetrics;
 	private static Context context;
 	
-	
 	@SuppressWarnings("unchecked")
 	public UrlImageViewHandler(Context context) {
 		UrlImageViewHandler.context = context;
@@ -102,6 +101,7 @@ public class UrlImageViewHandler {
 		new ImageDownloader().execute(url, null);
 	}
 	
+	
 	private static boolean imageInMemory(String url) {
 		return downloadedImages.containsKey(url);
 	}
@@ -122,9 +122,9 @@ public class UrlImageViewHandler {
 			image = downloadedImages.get(url);
 		} else if (imageOnDisk(url)) {
 			String filename = getFilenameForUrl(url);
-			/* move to the back of array since we just accessed and doing LRU eviction */
+			/* move to memory since we just accessed. Leave in file queue so it'll be deleted if and when its time comes*/
 			CacheEntry entry = files.remove(files.indexOf(new CacheEntry(filename, 0)));
-			files.add(entry);
+			//files.add(entry);
 			
 			File file = context.getFileStreamPath(filename);
 			
@@ -132,6 +132,7 @@ public class UrlImageViewHandler {
 				try {
 					FileInputStream fis = context.openFileInput(filename);
 					image = new BitmapDrawable(mResources, BitmapFactory.decodeStream(fis));
+					cacheImage(image, url, entry.bytes);
 				} catch(Exception ex) {}
 			}
 		}
@@ -153,7 +154,6 @@ public class UrlImageViewHandler {
 				if (params[1] instanceof TextView) {
 					textView = (TextView) params[1];
 				}
-				
 			}
 			AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
 			try {
@@ -210,11 +210,11 @@ public class UrlImageViewHandler {
 
 	
 	private static void moveToFileSystem (CacheEntry entry, final BitmapDrawable image) {
+		
 		final String filename = getFilenameForUrl(entry.name);
-		File file = context.getFileStreamPath(filename);
-		if (!file.exists()) {
-			final CacheEntry fileEntry = new CacheEntry(filename, entry.bytes);
-			
+
+		final CacheEntry fileEntry = new CacheEntry(filename, entry.bytes);
+		if (!files.contains(fileEntry)) {
 			files.add(fileEntry);
 			bytesOnDisk += fileEntry.bytes;
 			while (bytesOnDisk > MAX_BYTES_ON_DISK) {
@@ -227,11 +227,16 @@ public class UrlImageViewHandler {
 								fileToRemove.delete();
 							} catch(Exception ex) {}
 						}
-					});
+					}).start();
 				}
 				bytesOnDisk -= entryToRemove.bytes;
 			}
-			
+		} else {
+			files.remove(fileEntry);
+			files.add(fileEntry);
+		}
+		File file = context.getFileStreamPath(filename);
+		if (!file.exists()) {
 			new Thread(new Runnable() {
 				public void run() {
 					try {
@@ -240,7 +245,7 @@ public class UrlImageViewHandler {
 						saveCacheState();
 					} catch(IOException ex) {}
 				}
-			});
+			}).start();
 		}
 	}
 	

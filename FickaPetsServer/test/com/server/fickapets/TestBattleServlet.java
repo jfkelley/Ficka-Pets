@@ -28,18 +28,18 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+//import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+//import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
 public class TestBattleServlet {
 	
 	static Collection<Entity> savedEntities;
-	private final LocalServiceTestHelper helper =
-	       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	//private final LocalServiceTestHelper helper =
+	  //     new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
 	@Before
 	public void setUp() throws Exception {
-		helper.setUp();
+		//helper.setUp();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("battle");
 		Iterable<Entity> entities = datastore.prepare(q).asIterable();
@@ -177,7 +177,7 @@ public class TestBattleServlet {
 		}
 		datastore.delete(keys);
 		datastore.put(savedEntities);
-		helper.tearDown();
+		//helper.tearDown();
 	}
 
 }

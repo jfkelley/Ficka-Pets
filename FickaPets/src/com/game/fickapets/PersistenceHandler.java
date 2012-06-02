@@ -1,17 +1,16 @@
 package com.game.fickapets;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ import org.w3c.dom.Element;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 public class PersistenceHandler {
 	
@@ -53,6 +53,8 @@ public class PersistenceHandler {
 	public static final String OPPONENT = "opponentName";
 	public static final String MY_ID = "myFacebookId";
 	public static final String OPPONENT_ID = "opponentFacebookId";
+	public static final String OPPONENT_HEALTH = "opponentBattleHealth";
+	public static final String MY_HEALTH = "myBattleHealth";
 
 	private static Attributes getAttributesFromStoredState (SharedPreferences petState) {
 		Attributes atts = new Attributes ();
@@ -245,12 +247,13 @@ public class PersistenceHandler {
 	public static String getFileAsString(Context context, String filename) throws IOException {
 		File file = context.getFileStreamPath(filename);
 		if (!file.exists()) return null;
-		FileInputStream fis = new FileInputStream(file);
-		byte[] bytes = new byte[1024];
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+		char[] bytes = new char[1024];
 		StringBuilder sb = new StringBuilder();
-		int bytesRead = fis.read(bytes, 0, bytes.length);
+		int bytesRead = br.read(bytes, 0, bytes.length);
 		while (bytesRead != -1) {
-			sb.append(new String(bytes));
+			sb.append(bytes, 0, bytesRead);
+			bytesRead = br.read(bytes, 0, bytes.length);
 		}
 		return sb.toString();
 	}
@@ -282,7 +285,7 @@ public class PersistenceHandler {
 		return -1;
 	}
 	
-	public static void writeStringToFile(Context context, String filename, String jsonArrStr) {
+	private static void writeStringToFile(Context context, String filename, String jsonArrStr) {
 		try {
 			File file = context.getFileStreamPath(filename);
 			if (file.exists()) file.delete();
@@ -297,19 +300,31 @@ public class PersistenceHandler {
 		
 	}
 	
-	public static void saveBattle(Context context, String bid, String opponentName, String myMove, String myId, String opponentId) {
+	public static void saveBattle(Context context, Bundle bundle) {
 		try {
+			String bid = bundle.getString(BattleActivity.BATTLE_ID_KEY);
+			String opponentName = bundle.getString(BattleActivity.OPPONENT_NAME_KEY);
+			String myMove = bundle.getString(BattleActivity.MY_MOVE_KEY);
+			String myId = bundle.getString(BattleActivity.MY_ID_KEY);
+			String opponentId = bundle.getString(BattleActivity.OPPONENT_ID_KEY);
+			Integer opponentBattleHealth = bundle.getInt(BattleActivity.OPPONENT_HEALTH_KEY);
+			Integer myBattleHealth = bundle.getInt(BattleActivity.MY_HEALTH_KEY);
+			
 			JSONArray battles = getBattles(context);
 			int index = getIndexWithBattle(bid, battles);
-			JSONObject battle = battles.getJSONObject(index);
-			if (battle == null) {
+			JSONObject battle;
+			if (index >= 0) {
+				battle = battles.getJSONObject(index);
+			} else {
 				battle = new JSONObject();
-			} 
+			}
 			battle.put(BATTLE_ID, bid);
 			battle.put(OPPONENT, opponentName);
 			battle.put(MY_MOVE, myMove);
 			battle.put(MY_ID, myId);
 			battle.put(OPPONENT_ID, opponentId);
+			battle.put(OPPONENT_HEALTH, opponentBattleHealth);
+			battle.put(MY_HEALTH, myBattleHealth);
 			if (index == -1) {
 				battles.put(battles.length(), battle);
 			} else {
@@ -321,5 +336,32 @@ public class PersistenceHandler {
 			ex.printStackTrace();
 		} 
 	}
+	/* can't seem to change size so I'll just copy over to new json array */
+	private static JSONArray removeBattleAtIndex(JSONArray battles, int battleIndex) throws JSONException {
+		JSONArray newArr = new JSONArray();
+		int newArrIndex = 0;
+		for (int i = 0; i < battles.length(); i++) {
+			if (i != battleIndex) {
+				newArr.put(newArrIndex, battles.getJSONObject(i));
+				newArrIndex++;
+			}
+		}
+		return newArr;
+	}
+	
+	public static void removeBattle(Context context, String bid) {
+		try {
+			JSONArray battles = getBattles(context);
+			int battleIndex = getIndexWithBattle(bid, battles);
+			if (battleIndex >= 0) {
+				battles = removeBattleAtIndex(battles, battleIndex);
+			}
+			writeStringToFile(context, BATTLE_FILE, battles.toString());
+		} catch (Exception ex) {
+			System.out.println("failed to remove battle");
+			ex.printStackTrace();
+		}
+	}
+	
 	
 }

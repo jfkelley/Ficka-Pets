@@ -14,7 +14,7 @@ public class Tiredness {
 	
 	private static double currentTiredness;
 	private static final double MAX_TIREDNESS = 100;
-	private static final double MIN_TIREDNESS = 100;
+	private static final double MIN_TIREDNESS = 0;
 	
 	public Tiredness (Attributes atts) {
 		currentTiredness = atts.tiredness;

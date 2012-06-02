@@ -17,8 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
+
 import org.json.JSONArray;
 import org.w3c.dom.Element;
 
@@ -29,24 +28,19 @@ public class FickaServer {
 	public static final String OPP_MOVE_KEY = "opponentmove";
 	public static final String OPP_STRENGTH_KEY = "opponentStrength";
 	
-	private static final String BASE_URL = "http://10.31.112.42:8888/";
+	private static final String BASE_URL = "http://10.31.112.194:8888/";
 	private static final String CREATE = BASE_URL + "create?uid1=%s&uid2=%s";
-	private static final String SEND_MOVE = BASE_URL + "sendmove?uid=%s&bid=%s&move=%s";
+	private static final String SEND_MOVE = BASE_URL + "sendmove?uid=%s&bid=%s&move=%s&strength=%s";
 	private static final String BATTLE_DATA = BASE_URL + "battledata?uid=%s&bid=%s";
 	private static final String CLOSE_BATTLE = BASE_URL + "closebattle?uid=%s&bid=%s";
 	private static final String FIND_FRIENDS = BASE_URL + "findfriends";
 	
-	//private AndroidHttpClient client;
-	private Context context;
+	Context context;
 	public FickaServer(Context context) {
 		this.context = context;
-		//client = AndroidHttpClient.newInstance(context.getPackageName());
 	}
 	
-	/* must call this when done using this instance, else we'll get an error - could override client's finalize if this becomes an issue*/
-	public void close() {
-		//client.close();
-	}
+	
 	
 	private static String urlFormat(String format, Object... objects) throws UnsupportedEncodingException {
 		String[] strings = new String[objects.length];
@@ -58,16 +52,18 @@ public class FickaServer {
 	
 	public String createGame(String myId, String theirId) throws IOException {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+
 		String url = urlFormat(CREATE, myId, theirId);
 		
 		HttpGet get = new HttpGet(url);
 
 		HttpResponse resp = client.execute(get);
+		client.close();
+
 		if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
 			return null;
 		}
 		String battleId = responseToString(resp);
-		client.close();
 		return battleId;
 	}
 
@@ -76,17 +72,12 @@ public class FickaServer {
 		return req;
 	}
 	
-	public boolean sendMove(String move, String uid, String battleId) throws IOException {
+	public boolean sendMove(String move, String uid, String battleId, String strength) throws IOException {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
 
-		String url = urlFormat(SEND_MOVE, uid, battleId, move);
+		String url = urlFormat(SEND_MOVE, uid, battleId, move, strength);
 		HttpGet get = new HttpGet(url);
 		setCharEncoding(get);
-		HttpParams params = new BasicHttpParams();
-		params.setParameter("uid", uid);
-		params.setParameter("bid", battleId);
-		params.setParameter("move", move);
-		get.setParams(params);
 		HttpResponse resp = client.execute(get);
 		client.close();
 
@@ -160,7 +151,7 @@ public class FickaServer {
 		char[] cbuf = new char[1024];
 		int charsRead = br.read(cbuf, 0, cbuf.length);
 		while (charsRead != -1) {
-			sb.append(cbuf);
+			sb.append(cbuf, 0, charsRead);
 			charsRead = br.read(cbuf, 0, cbuf.length);
 		}
 		return sb.toString();

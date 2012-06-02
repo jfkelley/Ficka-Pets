@@ -35,6 +35,11 @@
             android:name=".BattleListActivity"
             android:label="@string/battleLabel" >
         </activity>
+        
+        <activity
+            android:name=".CatchCoins"
+            android:label="@string/catchCoins" >
+        </activity>
     </application>
 
 </manifest>

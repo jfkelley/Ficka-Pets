@@ -13,10 +13,6 @@ import java.util.Vector;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +39,9 @@ public class FindFriendsActivity extends ListActivity {
 	private static final String GET_MY_DATA = "me.data";
 	private static final String GET_FRIENDS_DATA = "friends.data";
 	private static final String GET_DATA_FOR_PHOTOS = "data for photos";
-	private static final int NUM_PHOTOS = 25;						/* num photos taken from unfiltered friends list */
+	private static final int NUM_PHOTOS = 5;						/* num photos taken from unfiltered friends list */
 	
-	private static final String FIND_FRIENDS_URL = "findfriends";
-	public static final String OPPONENT_NAME_KEY = "opponentName";
-	public static final String OPPONENT_ID_KEY = "opponentId";
-	public static final String MY_ID_KEY = "myId";
+
 	public static final String FACEBOOK_BASE_URL = "https://graph.facebook.com/";
 	private UrlImageViewHandler imageViewHandler;
 	
@@ -77,7 +70,10 @@ public class FindFriendsActivity extends ListActivity {
 	    if (!facebook.isSessionValid()) {
 	    	facebook.authorize(this, new DialogListener() {
 	    		//@Override
-	    		public void onComplete(Bundle values) {}
+	    		public void onComplete(Bundle values) {
+	    			PersistenceHandler.saveFacebookAccess(FindFriendsActivity.this, facebook.getAccessToken(), facebook.getAccessExpires());
+	    			fetchData();
+	    		}
 
 	    		public void onFacebookError(FacebookError error) {}
 
@@ -85,16 +81,23 @@ public class FindFriendsActivity extends ListActivity {
 	        
 	    		public void onCancel() {}
 	    	});
+	    } else {
+	    	fetchData();
 	    }
-		PersistenceHandler.saveFacebookAccess(this, facebook.getAccessToken(), facebook.getAccessExpires());
 
-		AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
-		/* pretty sure the friend filter for these works */
+		
+    }
+    
+    private void fetchData() {
+    	AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
+    	
+		/* remove this comment and comment out GET_DATA_FOR_PHOTOS to run friend filter */
 		//runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
 		
 		runner.request("me", new FacebookDataListener(), GET_MY_DATA);
 		
-		//three of these photos.  Any others come from server
+		// Comment this out and uncomment GET_FRIENDS_DATA
+		//to run friend filter.  This just fetches first NUM_PHOTOS friends returned from facebook
 		runner.request("me/friends", new FacebookDataListener(), GET_DATA_FOR_PHOTOS);
     }
     
@@ -220,10 +223,9 @@ public class FindFriendsActivity extends ListActivity {
     		return baseArr;
     	}
     	
-    	/* flattens linked list of JSONObjects that facebook returns into an array of friend objects */
+    	/* flattens linked list of JSONObjects that facebook returns into an array of name:id JSONObjects */
     	private JSONArray flattenFriends(JSONObject friends) {
     		AndroidHttpClient client = AndroidHttpClient.newInstance(FindFriendsActivity.this.getPackageName());
-    		//String url = FACEBOOK_BASE_URL + "/me/friends?access_token=" + facebook.getAccessToken();
     		JSONArray flattenedArr = null;
     		try {
         		flattenedArr = friends.getJSONArray("data");
@@ -232,7 +234,6 @@ public class FindFriendsActivity extends ListActivity {
     				HttpResponse resp = client.execute(get);
     				int status = resp.getStatusLine().getStatusCode();
     				if (status != HttpURLConnection.HTTP_OK) {
-    					//handle this somehow
     					return flattenedArr;
     				}
     				friends = new JSONObject(streamToString(resp.getEntity().getContent()));
@@ -254,7 +255,6 @@ public class FindFriendsActivity extends ListActivity {
     		} catch(Exception ex) {
     			ex.printStackTrace();
     		}
-    		server.close();
     		return filteredFriends;
     	}
     	
@@ -290,9 +290,9 @@ public class FindFriendsActivity extends ListActivity {
    @Override
    public void onListItemClick(ListView lv, View view, int position, long id) {
 	   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
-	   intent.putExtra(OPPONENT_NAME_KEY,friends.get(position).name);
-	   intent.putExtra(OPPONENT_ID_KEY, friends.get(position).id);
-	   intent.putExtra(MY_ID_KEY, mFacebookId);
+	   intent.putExtra(BattleActivity.OPPONENT_NAME_KEY,friends.get(position).name);
+	   intent.putExtra(BattleActivity.OPPONENT_ID_KEY, friends.get(position).id);
+	   intent.putExtra(BattleActivity.MY_ID_KEY, mFacebookId);
 	   startActivity(intent);
    }
    

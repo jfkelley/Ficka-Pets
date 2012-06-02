@@ -150,6 +150,10 @@ public class FickaPetsStart extends Activity {
 		System.out.println("destroy start");
 		super.onDestroy();
 	}
+	
+	public void gamePressed(View view) {
+		startActivity(new Intent(FickaPetsStart.this, CatchCoins.class));
+	}
     
     
 	public void feedPressed (View view) {

@@ -29,6 +29,7 @@ public class BattleListActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.battle_list);
 		
+		
 		TextView tv = new TextView(this);
 		imageViewHandler = new UrlImageViewHandler(this);
 		tv.setText("Current Battles");
@@ -55,10 +56,15 @@ public class BattleListActivity extends Activity{
 				long id) {
 			try {
 				Intent intent = new Intent(BattleListActivity.this, BattleActivity.class);
-				JSONObject thisBattle = battleArr.getJSONObject(position);
-				intent.putExtra(FindFriendsActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
-				intent.putExtra(FindFriendsActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
-				intent.putExtra(FindFriendsActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
+				/* apparently position starting index is 1 */
+				JSONObject thisBattle = battleArr.getJSONObject(position-1);
+				intent.putExtra(BattleActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
+				intent.putExtra(BattleActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
+				intent.putExtra(BattleActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
+				intent.putExtra(BattleActivity.MY_MOVE_KEY, thisBattle.getString(PersistenceHandler.MY_MOVE));
+				intent.putExtra(BattleActivity.BATTLE_ID_KEY, thisBattle.getString(PersistenceHandler.BATTLE_ID));
+				intent.putExtra(BattleActivity.OPPONENT_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.OPPONENT_HEALTH)));
+				intent.putExtra(BattleActivity.MY_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.MY_HEALTH)));
 				startActivity(intent);
 			} catch(Exception ex) {
 				System.out.println("Failed to get data out of json array");
@@ -88,7 +94,7 @@ public class BattleListActivity extends Activity{
 				JSONObject thisBattle = battleArr.getJSONObject(position);
 				String text = "Continue battle with " + thisBattle.getString(PersistenceHandler.OPPONENT);
 				textView.setText(text);
-				String url = FindFriendsActivity.FACEBOOK_BASE_URL + thisBattle.getString(PersistenceHandler.BATTLE_ID) + "/picture";
+				String url = FindFriendsActivity.FACEBOOK_BASE_URL + thisBattle.getString(PersistenceHandler.OPPONENT_ID) + "/picture";
 				imageViewHandler.setUrlDrawable(textView, url, R.drawable.ic_launcher);
 				return textView;
 			} catch(JSONException ex) {

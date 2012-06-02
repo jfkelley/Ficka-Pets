@@ -56,13 +56,14 @@ public class Battle {
 
 	public void save() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		fillEntityProperties();
 		datastore.put(entity);
 	}
 
 	public String getId() {
 		return KeyFactory.keyToString(entity.getKey());
 	}
-	/* newMove should have format "num1_num2" where num1 is the move number, which starts with zero and num2 is the move */
+	/* newMove should have format "num1_num2" where num1 is the move number, which starts with zero, and num2 is the move */
 	private boolean isNewMove(String newMove, String oldMovesStr) {
 		if (oldMovesStr == null) return true;
 		String[] pieces = newMove.split("_");

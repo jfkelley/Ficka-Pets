@@ -117,6 +117,7 @@ public class FindFriendsActivity extends ListActivity {
     private void gotMyId(String mFacebookId) {
     	if (this.mFacebookId == null) {
     		this.mFacebookId = mFacebookId;
+    		PersistenceHandler.saveFacebookId(this, mFacebookId);
     		if (facebookFriendsJson != null) {
     			new FickaServerFilter().execute(facebookFriendsJson);
     		}
@@ -290,9 +291,9 @@ public class FindFriendsActivity extends ListActivity {
    @Override
    public void onListItemClick(ListView lv, View view, int position, long id) {
 	   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
-	   intent.putExtra(BattleActivity.OPPONENT_NAME_KEY,friends.get(position).name);
-	   intent.putExtra(BattleActivity.OPPONENT_ID_KEY, friends.get(position).id);
-	   intent.putExtra(BattleActivity.MY_ID_KEY, mFacebookId);
+	   intent.putExtra(BattleState.OPPONENT_NAME,friends.get(position).name);
+	   intent.putExtra(BattleState.OPPONENT_ID, friends.get(position).id);
+	   intent.putExtra(BattleState.MY_ID, mFacebookId);
 	   startActivity(intent);
    }
    

@@ -19,7 +19,6 @@ import org.w3c.dom.Element;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 
 public class PersistenceHandler {
 	
@@ -42,6 +41,7 @@ public class PersistenceHandler {
 	private static final String ACCESS_EXPIRATION_KEY = "facebookAccessExpires";
 	private static final String COINS_KEY = "coins";
 	private static final String INVENTORY_KEY = "inventory";
+	private static final String FACEBOOK_ID_KEY = "facebookId";
 	
 	/* key values for CACHE_FILE */
 	private static final String FILE_QUEUE_KEY = "filesOnDisk";
@@ -185,6 +185,7 @@ public class PersistenceHandler {
 		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
 		return facebookPrefs.getString(ACCESS_TOKEN_KEY, null);
 	}
+	
 	public static long facebookTokenExpiration (Context context) {
 		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
 		return facebookPrefs.getLong(ACCESS_EXPIRATION_KEY, 0);
@@ -196,6 +197,17 @@ public class PersistenceHandler {
 		editor.putString(ACCESS_TOKEN_KEY, accessToken);
 		editor.putLong(ACCESS_EXPIRATION_KEY, accessExpires);
 		editor.commit();
+	}
+	
+	public static void saveFacebookId(Context context, String myId) {
+		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
+		SharedPreferences.Editor editor = facebookPrefs.edit();
+		editor.putString(FACEBOOK_ID_KEY, myId);
+		editor.commit();
+	}
+	public static String getFacebookId(Context context) {
+		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
+		return facebookPrefs.getString(FACEBOOK_ID_KEY, null);
 	}
 	
 	private static String encodeFileArr(Vector<CacheEntry> files) {
@@ -258,24 +270,39 @@ public class PersistenceHandler {
 		return sb.toString();
 	}
 	
-	public static JSONArray getBattles(Context context) {
+	public static List<BattleState> getBattles(Context context) {
+		List<BattleState> battles = new ArrayList<BattleState>();
+		try {
+			JSONArray jsonArr = getBattlesArr(context);
+			for (int i = 0; i < jsonArr.length(); i++) {
+				battles.add(new BattleState(context, jsonArr.getJSONObject(i)));
+			}
+			return battles;
+		} catch(Exception ex) {
+			System.out.println("couldn't pull json objects out of json array");
+			ex.printStackTrace();
+		}
+		return battles;
+	}
+	
+	public static JSONArray getBattlesArr(Context context) {
 		try {
 			String jsonString = getFileAsString(context, BATTLE_FILE);
-			if (jsonString == null) {
-				return new JSONArray();
-			} else {
-				return new JSONArray(jsonString);
-			}
+			if (jsonString == null) return new JSONArray();
+			return new JSONArray(jsonString);
 		} catch(Exception ex) {
+			System.out.println("Couldn't get battle json array from file");
+			ex.printStackTrace();
 			return null;
 		}
 	}
+	
 	/* returns index with bid if it exists in array.  Otherwise returns -1 */
 	private static int getIndexWithBattle(String bid, JSONArray battles) {
 		try {
 			for (int i = 0; i < battles.length(); i++) {
 				JSONObject battle = battles.getJSONObject(i);
-				if (battle.getString("bid").equals(bid)) {
+				if (battle.getString(BattleState.BATTLE_ID).equals(bid)) {
 					return i;
 				}
 			}
@@ -300,31 +327,10 @@ public class PersistenceHandler {
 		
 	}
 	
-	public static void saveBattle(Context context, Bundle bundle) {
+	public static void saveBattle(Context context, JSONObject battle) {
 		try {
-			String bid = bundle.getString(BattleActivity.BATTLE_ID_KEY);
-			String opponentName = bundle.getString(BattleActivity.OPPONENT_NAME_KEY);
-			String myMove = bundle.getString(BattleActivity.MY_MOVE_KEY);
-			String myId = bundle.getString(BattleActivity.MY_ID_KEY);
-			String opponentId = bundle.getString(BattleActivity.OPPONENT_ID_KEY);
-			Integer opponentBattleHealth = bundle.getInt(BattleActivity.OPPONENT_HEALTH_KEY);
-			Integer myBattleHealth = bundle.getInt(BattleActivity.MY_HEALTH_KEY);
-			
-			JSONArray battles = getBattles(context);
-			int index = getIndexWithBattle(bid, battles);
-			JSONObject battle;
-			if (index >= 0) {
-				battle = battles.getJSONObject(index);
-			} else {
-				battle = new JSONObject();
-			}
-			battle.put(BATTLE_ID, bid);
-			battle.put(OPPONENT, opponentName);
-			battle.put(MY_MOVE, myMove);
-			battle.put(MY_ID, myId);
-			battle.put(OPPONENT_ID, opponentId);
-			battle.put(OPPONENT_HEALTH, opponentBattleHealth);
-			battle.put(MY_HEALTH, myBattleHealth);
+			JSONArray battles = getBattlesArr(context);
+			int index = getIndexWithBattle(battle.getString(BattleState.BATTLE_ID), battles);
 			if (index == -1) {
 				battles.put(battles.length(), battle);
 			} else {
@@ -351,7 +357,7 @@ public class PersistenceHandler {
 	
 	public static void removeBattle(Context context, String bid) {
 		try {
-			JSONArray battles = getBattles(context);
+			JSONArray battles = getBattlesArr(context);
 			int battleIndex = getIndexWithBattle(bid, battles);
 			if (battleIndex >= 0) {
 				battles = removeBattleAtIndex(battles, battleIndex);

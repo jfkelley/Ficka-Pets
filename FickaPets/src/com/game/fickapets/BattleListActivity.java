@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 public class BattleListActivity extends Activity{
 	
-	JSONArray battleArr;
+	List<BattleState> battleArr;
 	UrlImageViewHandler imageViewHandler;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,14 +36,15 @@ public class BattleListActivity extends Activity{
 		ListView lv = (ListView) findViewById(R.id.openBattleList);
 		lv.addHeaderView(tv);
 		battleArr = PersistenceHandler.getBattles(this);
+		/* when i learn more about array adapters, get rid of this list */
 		List<String> list = fillList(battleArr);
 		lv.setAdapter(new BattleAdapter(this, list));
 		lv.setOnItemClickListener(new ItemClickListener());
 	}
-	/* again, not sure how to get array adapter to work without this list */
-	private List<String> fillList(JSONArray battleArr) {
+	/* again, not sure how to get array adapter to work without this list - returns a list of strings that is the same size as the listview */
+	private List<String> fillList(List<BattleState> battleArr) {
 		List<String> list = new ArrayList<String>();
-		for (int i = 0; i < battleArr.length(); i++) {
+		for (int i = 0; i < battleArr.size(); i++) {
 			list.add("string");
 		}
 		return list;
@@ -56,22 +57,13 @@ public class BattleListActivity extends Activity{
 				long id) {
 			try {
 				Intent intent = new Intent(BattleListActivity.this, BattleActivity.class);
-				/* apparently position starting index is 1 */
-				JSONObject thisBattle = battleArr.getJSONObject(position-1);
-				intent.putExtra(BattleActivity.OPPONENT_NAME_KEY, thisBattle.getString(PersistenceHandler.OPPONENT));
-				intent.putExtra(BattleActivity.OPPONENT_ID_KEY, thisBattle.getString(PersistenceHandler.OPPONENT_ID));
-				intent.putExtra(BattleActivity.MY_ID_KEY, thisBattle.getString(PersistenceHandler.MY_ID));
-				intent.putExtra(BattleActivity.MY_MOVE_KEY, thisBattle.getString(PersistenceHandler.MY_MOVE));
-				intent.putExtra(BattleActivity.BATTLE_ID_KEY, thisBattle.getString(PersistenceHandler.BATTLE_ID));
-				intent.putExtra(BattleActivity.OPPONENT_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.OPPONENT_HEALTH)));
-				intent.putExtra(BattleActivity.MY_HEALTH_KEY, Integer.valueOf(thisBattle.getString(PersistenceHandler.MY_HEALTH)));
+				intent = BattleState.addExtrasToIntent(intent, battleArr.get(position-1).toJSON());
 				startActivity(intent);
 			} catch(Exception ex) {
 				System.out.println("Failed to get data out of json array");
 				ex.printStackTrace();
 			}
 		}
-		
 	}
 	
 	public void onFindFriendsClicked(View v) {
@@ -91,10 +83,10 @@ public class BattleListActivity extends Activity{
 					textView = new TextView(BattleListActivity.this);
 				}
 				textView.setCompoundDrawablePadding(10);
-				JSONObject thisBattle = battleArr.getJSONObject(position);
-				String text = "Continue battle with " + thisBattle.getString(PersistenceHandler.OPPONENT);
+				JSONObject thisBattle = battleArr.get(position).toJSON();
+				String text = "Continue battle with " + thisBattle.getString(BattleState.OPPONENT_NAME);
 				textView.setText(text);
-				String url = FindFriendsActivity.FACEBOOK_BASE_URL + thisBattle.getString(PersistenceHandler.OPPONENT_ID) + "/picture";
+				String url = FindFriendsActivity.FACEBOOK_BASE_URL + thisBattle.getString(BattleState.OPPONENT_ID) + "/picture";
 				imageViewHandler.setUrlDrawable(textView, url, R.drawable.ic_launcher);
 				return textView;
 			} catch(JSONException ex) {

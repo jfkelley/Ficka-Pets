@@ -24,5 +24,14 @@
 	<string name="petStarving">Your pet is starving</string>
 	<string name="petTired">Your pet is tired</string>
 	<string name="petVeryTired">Your pet is sleep deprived</string>
+<<<<<<< HEAD
+=======
+	<string name="itemShopLabel">FickaPets item shop</string>
+	<string name="shop">Shop</string>
+	<string name="battle">Battle</string>
+	<string name="battleLabel">Battle</string>
+	<string name="findFriends">Find Friends to Battle</string>
+	<string name="loadingGame">Loading Battle</string>
+>>>>>>> da0e80257bfa4186b0a71a453ced0d8324390730
 	
 </resources>

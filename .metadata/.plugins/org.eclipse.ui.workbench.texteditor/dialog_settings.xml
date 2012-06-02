@@ -13,18 +13,20 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Over" key="selection"/>
+		<item value="getIncoming" key="selection"/>
 		<list key="findhistory">
-			<item value="Over"/>
-			<item value="game"/>
-			<item value="getIndexWithBattle"/>
-			<item value="new Thread"/>
-			<item value="newThread"/>
-			<item value="getImageFromCache"/>
-			<item value="ImageDownloader"/>
-			<item value="asynctask"/>
+			<item value="getIncoming"/>
+			<item value="PersistenceHandler"/>
+			<item value="Persistence"/>
+			<item value="Battle"/>
+			<item value="state."/>
+			<item value="extras"/>
+			<item value="myStartingStrength"/>
+			<item value="strength"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
+			<item value="bStateBundle"/>
 		</list>
 	</section>
 </section>

@@ -29,6 +29,7 @@ public final class R {
     }
     public static final class id {
         public static final int battleButton=0x7f06000c;
+        public static final int battleProgressBar=0x7f060017;
         public static final int button1=0x7f060006;
         public static final int endTime=0x7f060017;
         public static final int feedButton=0x7f060008;
@@ -59,7 +60,8 @@ public final class R {
         public static final int battle=0x7f030000;
         public static final int battle_list=0x7f030001;
         public static final int main=0x7f030002;
-        public static final int shop=0x7f030003;
+        public static final int on_progress=0x7f030003;
+        public static final int shop=0x7f030004;
     }
     public static final class raw {
         public static final int items=0x7f040000;
@@ -78,6 +80,7 @@ public final class R {
         public static final int hello=0x7f050000;
         public static final int hunger=0x7f050004;
         public static final int itemShopLabel=0x7f05000e;
+        public static final int loadingGame=0x7f050013;
         /**   Complaint messages for notifications 
          */
         public static final int petNeedsFood=0x7f05000a;

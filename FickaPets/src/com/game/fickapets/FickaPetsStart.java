@@ -95,15 +95,20 @@ public class FickaPetsStart extends Activity {
 			return R.drawable.pet_normal;
 		}
 	}
+	
+	public void startChallengeNotificationService() {
+		Intent battleNotifier = new Intent(this, BattleNotifier.class);
+		startService(battleNotifier);
+	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// should probably also kill background service if it's still running
 		super.onCreate(savedInstanceState);
 		User.theUser(this);
 		initLayout (Pet.thePet(this));
-
+		
+		startChallengeNotificationService();
 
 		Calendar cal = Calendar.getInstance(TimeZone.getDefault());
 		Integer startHour = cal.get(Calendar.HOUR_OF_DAY);
@@ -126,7 +131,7 @@ public class FickaPetsStart extends Activity {
 	public void onPause () {
 		super.onPause();
 		Vector<Complaint> complaints = Pet.thePet(this).getComplaints(this);
-		Intent notificationService = new Intent(this, Notifier.class);
+		Intent notificationService = new Intent(this, PetNotifier.class);
 		notificationService.putExtra("com.game.fickapets.complaints", complaints);
 		startService(notificationService);
 		PersistenceHandler.saveState(this, User.theUser(this));
@@ -138,8 +143,8 @@ public class FickaPetsStart extends Activity {
 	public void onResume () {
 		System.out.println("resumed start");
 		super.onResume();
-		//kill background service if it's still running
-		Intent notificationService = new Intent(this, Notifier.class);
+		//kill health notification service if it's still running
+		Intent notificationService = new Intent(this, PetNotifier.class);
 		if (!stopService(notificationService)) {
 			System.out.println ("No service was running or we failed to stop it");
 		}

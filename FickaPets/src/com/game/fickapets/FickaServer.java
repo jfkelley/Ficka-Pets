@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -19,6 +21,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Element;
 
 import android.content.Context;
@@ -27,13 +30,17 @@ import android.net.http.AndroidHttpClient;
 public class FickaServer {
 	public static final String OPP_MOVE_KEY = "opponentmove";
 	public static final String OPP_STRENGTH_KEY = "opponentStrength";
+	public static final String OPP_ID_KEY = "opponentIdentifier";
 	
-	private static final String BASE_URL = "http://10.31.112.194:8888/";
+	private static final String BASE_URL = "http://10.31.112.120:8888/";
+	private static final String GRAPH_BASE_URL = "https://graph.facebook.com/";
+		
 	private static final String CREATE = BASE_URL + "create?uid1=%s&uid2=%s";
 	private static final String SEND_MOVE = BASE_URL + "sendmove?uid=%s&bid=%s&move=%s&strength=%s";
 	private static final String BATTLE_DATA = BASE_URL + "battledata?uid=%s&bid=%s";
 	private static final String CLOSE_BATTLE = BASE_URL + "closebattle?uid=%s&bid=%s";
 	private static final String FIND_FRIENDS = BASE_URL + "findfriends";
+	private static final String INCOMING_CHALLENGES = BASE_URL + "incomingchallenges?uid=%s";
 	
 	Context context;
 	public FickaServer(Context context) {
@@ -58,11 +65,12 @@ public class FickaServer {
 		HttpGet get = new HttpGet(url);
 
 		HttpResponse resp = client.execute(get);
-		client.close();
 
 		if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+			client.close();
 			return null;
 		}
+		client.close();
 		String battleId = responseToString(resp);
 		return battleId;
 	}
@@ -80,7 +88,7 @@ public class FickaServer {
 		setCharEncoding(get);
 		HttpResponse resp = client.execute(get);
 		client.close();
-
+		
 		if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
 			return false;
 		}
@@ -103,8 +111,15 @@ public class FickaServer {
 		battleElem = XMLUtils.getDocumentElement(stringStream);
 		
 		battleMap = new HashMap<String, String>();
-		battleMap.put(OPP_MOVE_KEY, XMLUtils.getChildElementTextByTagName(battleElem, "opponentMove"));
-		battleMap.put(OPP_STRENGTH_KEY, XMLUtils.getChildElementTextByTagName(battleElem, "opponentStrength"));
+		String oppMove = XMLUtils.getChildElementTextByTagName(battleElem, "opponentMove");
+		String oppStrength = XMLUtils.getChildElementTextByTagName(battleElem, "opponentStrength");
+		String oppId = XMLUtils.getChildElementTextByTagName(battleElem, "opponentId");
+		if (oppMove.equals("null")) oppMove = null;
+		if (oppStrength.equals("null")) oppStrength = null;
+		if (oppId.equals("null")) oppId = null;
+		battleMap.put(OPP_MOVE_KEY, oppMove);
+		battleMap.put(OPP_STRENGTH_KEY, oppStrength);
+		battleMap.put(OPP_ID_KEY, oppId);
 		client.close();
 
 		return battleMap;
@@ -125,6 +140,26 @@ public class FickaServer {
 
 	}
 	
+	public List<String> getChallenges(String uid) throws IOException {
+		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		String url = urlFormat(INCOMING_CHALLENGES, uid);
+		HttpGet get = new HttpGet(url);
+		setCharEncoding(get);
+		HttpResponse resp = client.execute(get);
+		int status = resp.getStatusLine().getStatusCode();
+		client.close();
+		if (status != HttpURLConnection.HTTP_OK){
+			return null;
+		}
+		String response = responseToString(resp);
+		String[] challengeIds = response.equals("") ? new String[0] : response.split("\n");
+		List<String> challenges = new ArrayList<String>();
+		for (String challengeId : challengeIds) {
+			challenges.add(challengeId);
+		}
+		return challenges;
+	}
+	
 	public JSONArray applyFriendFilter(JSONArray allFriends) throws Exception {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
 
@@ -133,12 +168,12 @@ public class FickaServer {
 		setCharEncoding(post);
 		HttpResponse resp = client.execute(post);
 		int status = resp.getStatusLine().getStatusCode();
+		client.close();
 		if (status != HttpURLConnection.HTTP_OK) {
 			System.out.println("failed to get filtered friends from server");
 			return null;
 		}
 		String strResp = responseToString(resp);
-		client.close();
 		return new JSONArray(strResp);
 	}
 	
@@ -156,4 +191,21 @@ public class FickaServer {
 		}
 		return sb.toString();
 	}
+	
+	public String getNameForId(String uid) throws Exception {
+		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		String url = urlFormat(GRAPH_BASE_URL + "%s", uid);
+		HttpGet get = new HttpGet(url);
+		setCharEncoding(get);
+		HttpResponse resp = client.execute(get);
+		int status = resp.getStatusLine().getStatusCode();
+		client.close();
+		if (status != HttpURLConnection.HTTP_OK) {
+			System.out.println("failed to get basic info from fb");
+			return null;
+		}
+		JSONObject json = new JSONObject(responseToString(resp));
+		return json.getString("name");
+	}
+	
 }

@@ -31,6 +31,8 @@ public class Pet {
 	
 	private Set<PetListener> listeners;
 	
+	private int type = 1; // which pet (just matters for images
+	
 	public Pet(Attributes atts) {
 		condition = new Condition(atts);
 		isAwake = atts.isAwake;
@@ -45,6 +47,11 @@ public class Pet {
 				notifyListeners();
 			}
 		});
+	}
+	
+	public Pet(Attributes atts, int type) {
+		this(atts);
+		this.type = type;
 	}
 	
 	private void notifyListeners() {
@@ -101,6 +108,48 @@ public class Pet {
 	}
 	public boolean isTired() {
 		return condition.getHealth().isTired();
+	}
+	
+	public int getType() {
+		return type;
+	}
+	
+	private static final String PACKAGE_NAME = "com.game.fickapets";
+	private static final String DRAWABLE_DEFTYPE = "drawable";
+	
+	public int getStateImage(Context context) {
+		String str = "pet_";
+		str += type;
+		
+		if (!isAwake) {
+			str += "_asleep";
+		} else if (isTired()) {
+			str += "_tired";
+		} else {
+			str += "_awake";
+		}
+		
+		if (isHungry()) {
+			str += "_hungry";
+		} else if (isFull()) {
+			str += "_full";
+		} else {
+			str += "_normal";
+		}
+		
+		return getImage(context, str);
+	}
+	
+	public int getDefaultImage(Context context) {
+		return getImage(context, "pet_" + type + "_default");
+	}
+	
+	public int getSmallImage(Context context) {
+		return getImage(context, "pet_" + type + "_small");
+	}
+	
+	private int getImage(Context context, String name) {
+		return context.getResources().getIdentifier(name, DRAWABLE_DEFTYPE, PACKAGE_NAME);
 	}
 	
 }

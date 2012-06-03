@@ -35,6 +35,7 @@ public class PersistenceHandler {
 	private static final String TIREDNESS_KEY = "tirednes";
 	private static final String LASTUPDATE_KEY = "lastUpdate";
 	private static final String DEFAULTSET_KEY = "defaultsSet";
+	private static final String TYPE_KEY = "type";
 	
 	/* key values for USER_FILE */
 	private static final String ACCESS_TOKEN_KEY = "facebookAccessToken";
@@ -127,6 +128,7 @@ public class PersistenceHandler {
 		editor.putFloat(STRENGTH_KEY, (float) atts.strength);
 		editor.putFloat(TIREDNESS_KEY, (float) atts.tiredness);
 		editor.putLong(LASTUPDATE_KEY, atts.lastUpdate);
+		editor.putInt(TYPE_KEY, pet.getType());
 		editor.putBoolean(DEFAULTSET_KEY, true);
 		editor.commit();
 	}

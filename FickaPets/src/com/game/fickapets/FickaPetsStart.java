@@ -83,17 +83,7 @@ public class FickaPetsStart extends Activity {
     } */
 
 	private int getPetStateImageId(Pet pet) {
-		if (pet.isSleeping()) {
-			return R.drawable.pet_asleep;
-		} else if (pet.isHungry()) {
-			return R.drawable.pet_hungry;
-		} else if (pet.isFull()) {
-			return R.drawable.pet_full;
-		} else if (pet.isTired()) {
-			return R.drawable.pet_tired;
-		}else {
-			return R.drawable.pet_normal;
-		}
+		return pet.getStateImage(this);
 	}
 	
 	public void startChallengeNotificationService() {

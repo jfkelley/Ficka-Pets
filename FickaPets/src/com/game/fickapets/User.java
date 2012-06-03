@@ -46,6 +46,14 @@ public class User {
 		this.coins = coins;
 		userChanged();
 	}
+	
+	public void addCoins(int coins) {
+		setCoins(getCoins() + coins);
+	}
+	
+	public void addCoin() {
+		addCoins(1);
+	}
 
 	public List<Item> getInventory() {
 		return inventory;

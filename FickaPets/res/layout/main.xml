@@ -12,8 +12,7 @@
 	        android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="14dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/pet_normal" />
+            android:layout_marginTop="5dp" />
 		
 		<Button 
 		    android:id="@+id/feedButton"

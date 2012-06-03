@@ -100,27 +100,29 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050001;
         public static final int awake=0x7f050008;
-        public static final int battle=0x7f050012;
-        public static final int battleLabel=0x7f050013;
+        public static final int battle=0x7f050014;
+        public static final int battleLabel=0x7f050015;
         public static final int catchCoins=0x7f05000b;
         public static final int feed=0x7f050006;
-        public static final int findFriends=0x7f050014;
+        public static final int findFriends=0x7f050016;
         public static final int game=0x7f05000a;
         public static final int health=0x7f050003;
         public static final int hello=0x7f050000;
         public static final int hunger=0x7f050004;
-        public static final int itemShopLabel=0x7f050010;
-        public static final int loadingGame=0x7f050015;
+        public static final int itemShopLabel=0x7f050012;
+        public static final int loadingGame=0x7f050017;
+        public static final int newTTTGame=0x7f05000d;
         /**   Complaint messages for notifications 
          */
-        public static final int petNeedsFood=0x7f05000c;
-        public static final int petStarving=0x7f05000d;
-        public static final int petTired=0x7f05000e;
-        public static final int petVeryTired=0x7f05000f;
+        public static final int petNeedsFood=0x7f05000e;
+        public static final int petStarving=0x7f05000f;
+        public static final int petTired=0x7f050010;
+        public static final int petVeryTired=0x7f050011;
         public static final int reset=0x7f050009;
-        public static final int shop=0x7f050011;
+        public static final int shop=0x7f050013;
         public static final int sleep=0x7f050007;
         public static final int strength=0x7f050002;
+        public static final int ticTacToe=0x7f05000c;
         public static final int tiredness=0x7f050005;
     }
 }

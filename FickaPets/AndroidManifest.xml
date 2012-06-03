@@ -41,6 +41,10 @@
             android:name=".CatchCoins"
             android:label="@string/catchCoins" >
         </activity>
+        <activity
+            android:name=".TicTacToe"
+            android:label="@string/ticTacToe" >
+        </activity>
     </application>
 
 </manifest>

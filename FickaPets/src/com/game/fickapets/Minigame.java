@@ -10,6 +10,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 
 public abstract class Minigame extends Activity {
+	public static final String[] MINIGAME_NAMES = new String[]{"Coin Catch", "Tic-Tac-Toe"};
+	public static final Class<? extends Minigame>[] MINIGAME_CLASSES = new Class[]{CatchCoins.class, TicTacToe.class};
+	
 	private static final String STATE_FILE = "minigamesFile";
 	private static final int TRUE = 1;
 	private static final int FALSE = 0;

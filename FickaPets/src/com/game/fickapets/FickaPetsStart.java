@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,14 +24,9 @@ public class FickaPetsStart extends Activity {
 	AsyncTask<Pet, String, Void> updateLoop;
 	
 	
-	private static int pick_food = 1;
 	private static final int NO_FOOD = 0;
 	
-	private int pickFood() {
-		int returnVal = pick_food;
-		pick_food += 1;
-		return returnVal;
-	}
+	private static final int MINIGAME = 1;
 	
 	private void setSleepButton (Pet pet) {
 		Button sleepButton = (Button) findViewById(R.id.sleepButton);
@@ -83,17 +80,7 @@ public class FickaPetsStart extends Activity {
     } */
 
 	private int getPetStateImageId(Pet pet) {
-		if (pet.isSleeping()) {
-			return R.drawable.pet_asleep;
-		} else if (pet.isHungry()) {
-			return R.drawable.pet_hungry;
-		} else if (pet.isFull()) {
-			return R.drawable.pet_full;
-		} else if (pet.isTired()) {
-			return R.drawable.pet_tired;
-		}else {
-			return R.drawable.pet_normal;
-		}
+		return pet.getStateImage(this);
 	}
 	
 	public void startChallengeNotificationService() {
@@ -105,7 +92,9 @@ public class FickaPetsStart extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		User.theUser(this);
+		
 		initLayout (Pet.thePet(this));
 		
 		startChallengeNotificationService();
@@ -127,6 +116,7 @@ public class FickaPetsStart extends Activity {
 		
 		updateLoop = new MainThread(this).execute(Pet.thePet(this));
 	}
+
 	/* always called when activity leaves foreground so set up background service here */
 	public void onPause () {
 		super.onPause();
@@ -155,14 +145,33 @@ public class FickaPetsStart extends Activity {
 		System.out.println("destroy start");
 		super.onDestroy();
 	}
+	
+	public void gamePressed(View view) {
+		showDialog(MINIGAME);
+	}
     
     
 	public void feedPressed (View view) {
 		if (User.theUser(this).getUniqueFood().isEmpty()) {
 			showDialog(NO_FOOD);
 		} else {
-			/* returns unique id every time so onCreateDialog gets called every time */
-			showDialog(pickFood());
+			// Create and manually display the menu each time, instead of going through showDialog/onCreateDialog
+			// This fixes the problem with android showing the same food each time
+			final List<Food> foodInInventory = User.theUser(this).getUniqueFood();
+			String[] items = new String[foodInInventory.size()];
+			for (int i = 0; i < items.length; i++) {
+				items[i] = foodInInventory.get(i).getName();
+			}
+
+			AlertDialog pickFoodAlert = new AlertDialog.Builder(this)
+				.setTitle("Pick a food")
+				.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						User.theUser(FickaPetsStart.this).feedPet(Pet.thePet(FickaPetsStart.this), foodInInventory.get(item));
+					}
+				})
+				.create();
+			pickFoodAlert.show();
 		}
 	}
 	
@@ -195,7 +204,6 @@ public class FickaPetsStart extends Activity {
 		Intent intent = new Intent(FickaPetsStart.this, BattleListActivity.class);
 		startActivity(intent);
 	}
-
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -209,23 +217,19 @@ public class FickaPetsStart extends Activity {
 				})
 				.create();
 			return noFoodAlert;
-		/* if we hardcode id, onCreateDialog doesn't get called each time */
-		default:
-			final List<Food> foodInInventory = User.theUser(this).getUniqueFood();
-			String[] items = new String[foodInInventory.size()];
-			for (int i = 0; i < items.length; i++) {
-				items[i] = foodInInventory.get(i).getName();
-			}
-
-			AlertDialog pickFoodAlert = new AlertDialog.Builder(this)
-				.setTitle("Pick a food")
-				.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						User.theUser(FickaPetsStart.this).feedPet(Pet.thePet(FickaPetsStart.this), foodInInventory.get(item));
+		case MINIGAME:
+			AlertDialog pickGameAlert = new AlertDialog.Builder(this)
+				.setTitle("Pick a game")
+				.setItems(Minigame.MINIGAME_NAMES, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(FickaPetsStart.this, Minigame.MINIGAME_CLASSES[which]);
+						startActivity(intent);
 					}
 				})
 				.create();
-			return pickFoodAlert;
+			return pickGameAlert;
+		default:
+			return null;
 		}
 	}
 }

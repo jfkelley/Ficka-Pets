@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+INDEX VERSION 1.126+/home/joe/Ficka-Pets/.metadata/.plugins/org.eclipse.jdt.core
+=======
 INDEX VERSION 1.126+/Users/cmckenna/Developer/Ficka-Pets/.metadata/.plugins/org.eclipse.jdt.core
 2295232715.index
 4064295610.index
@@ -34,6 +37,7 @@ INDEX VERSION 1.126+/Users/cmckenna/Developer/Ficka-Pets/.metadata/.plugins/org.
 3735276047.index
 1722117628.index
 3004609673.index
+<<<<<<< HEAD
 2888355117.index
 3455360553.index
 2545238116.index
@@ -54,3 +58,7 @@ INDEX VERSION 1.126+/Users/cmckenna/Developer/Ficka-Pets/.metadata/.plugins/org.
 3266567714.index
 2597292076.index
 1916721542.index
+=======
+1630015437.index
+>>>>>>> da0e80257bfa4186b0a71a453ced0d8324390730
+>>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6

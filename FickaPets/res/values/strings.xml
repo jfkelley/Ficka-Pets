@@ -11,12 +11,20 @@
 	<string name="sleep">Put to Sleep</string>
 	<string name="awake">Wake Up</string>
 	<string name="reset">Reset</string>
+	<string name="game">Play Game</string>
+	<string name="catchCoins">Coin Catch</string>
+	<string name="ticTacToe">Tic-tac-toe</string>
+	<string name="newTTTGame">New Game</string>
+	<string name="choosePetTitle">Choose a Pet!</string>
+	<string name="choosePetDescription">Select a pet! Choose carefully, this cannot be undone!</string>
+	<string name="selectPetButton">Select</string>
 	
 	<!--  Complaint messages for notifications -->
 	<string name="petNeedsFood">Your pet needs food</string>
 	<string name="petStarving">Your pet is starving</string>
 	<string name="petTired">Your pet is tired</string>
 	<string name="petVeryTired">Your pet is sleep deprived</string>
+
 	<string name="itemShopLabel">FickaPets item shop</string>
 	<string name="shop">Shop</string>
 	<string name="battle">Battle</string>

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.Vector;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +35,7 @@ public class PersistenceHandler {
 	private static final String TIREDNESS_KEY = "tirednes";
 	private static final String LASTUPDATE_KEY = "lastUpdate";
 	private static final String DEFAULTSET_KEY = "defaultsSet";
+	private static final String TYPE_KEY = "type";
 	
 	/* key values for USER_FILE */
 	private static final String ACCESS_TOKEN_KEY = "facebookAccessToken";
@@ -90,21 +90,33 @@ public class PersistenceHandler {
 		atts.lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
 		return atts;
 	}
-	/* set the pet's values.  If it's the first time running, loads values from the default xml file, 
-	 * otherwise they're loaded from SharedPreferences
+	/* set the pet's values, loaded from SharedPreferences.
+	 * If no pet is saved, returns null instead
 	 */
-	public static Pet buildPet (Context context) {
-		Attributes atts;
-		Pet pet;
+	public static Pet loadSavedPet (Context context) {
 		SharedPreferences petState = context.getSharedPreferences(PET_FILE, 0);
 
 		if (petState.getBoolean(DEFAULTSET_KEY, false)) {
-			atts = getAttributesFromStoredState (petState);
-			
+			Attributes atts = getAttributesFromStoredState (petState);
+			int type = getTypeFromStoredState(petState);
+			System.out.println("loaded pet of type: " + type);
+			Pet pet = new Pet (atts, type);
+			return pet;
 		} else {
-			atts = getAttributesFromDefaults (context);
+			return null;
 		}
-		pet = new Pet (atts);
+	}
+	
+	private static int getTypeFromStoredState(SharedPreferences sharedPrefs) {
+		return sharedPrefs.getInt(TYPE_KEY, 0);
+	}
+
+
+
+
+	public static Pet buildNewPet (Context context, int chosenType) {
+		Attributes atts = getAttributesFromDefaults(context);
+		Pet pet = new Pet(atts, chosenType);
 		return pet;
 	}
 	
@@ -114,7 +126,7 @@ public class PersistenceHandler {
 		editor.putBoolean (DEFAULTSET_KEY, false);
 		editor.commit ();
 
-		return buildPet (context);
+		return loadSavedPet (context);
 		
 	}
 	
@@ -128,6 +140,7 @@ public class PersistenceHandler {
 		editor.putFloat(STRENGTH_KEY, (float) atts.strength);
 		editor.putFloat(TIREDNESS_KEY, (float) atts.tiredness);
 		editor.putLong(LASTUPDATE_KEY, atts.lastUpdate);
+		editor.putInt(TYPE_KEY, pet.getType());
 		editor.putBoolean(DEFAULTSET_KEY, true);
 		editor.commit();
 	}

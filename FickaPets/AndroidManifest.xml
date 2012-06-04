@@ -11,12 +11,16 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name=".FickaPetsStart"
+            android:name=".FickaPetsLaunch"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".FickaPetsStart"
+            android:label="@string/app_name" >
         </activity>
         <service android:name=".PetNotifier" android:exported="false" />
         <service android:name=".BattleNotifier" android:exported="false" />
@@ -35,6 +39,19 @@
         <activity
             android:name=".BattleListActivity"
             android:label="@string/battleLabel" >
+        </activity>
+        
+        <activity
+            android:name=".CatchCoins"
+            android:label="@string/catchCoins" >
+        </activity>
+        <activity
+            android:name=".TicTacToe"
+            android:label="@string/ticTacToe" >
+        </activity>
+        <activity
+            android:name=".ChoosePetActivity"
+            android:label="@string/choosePetTitle" >
         </activity>
     </application>
 

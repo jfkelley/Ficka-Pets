@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -89,12 +90,36 @@ public class BattleActivity extends Activity {
     }
     
 
-    
+    /* setup the battle layout */
     private void inflateBattleScene() {
 		setContentView(R.layout.battle);
     	setProgressBars(bState.myHealth, bState.opponentHealth);
+    	TextView opponentName = (TextView)findViewById(R.id.opponentBattleName);
+    	opponentName.setText(getFirstName(bState.opponentName));
+    	TextView myName = (TextView)findViewById(R.id.myBattleName);
+    	myName.setText("me");
     	buildMoveImages();
     }
+    /*
+    private int getMargin(RelativeLayout rootView) {
+    	int width = rootView.getWidth();
+    	return (int)(width / 4);
+    }*/
+    
+    /* this is called after we know layout dimensions - I'm using it to place the name textviews
+     */
+    /*
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+    	super.onWindowFocusChanged(hasFocus);
+    	TextView opponentName = (TextView)findViewById(R.id.opponentBattleName);
+    	int margin = getMargin((RelativeLayout)opponentName.getParent());
+    	RelativeLayout.LayoutParams opponentParams = (RelativeLayout.LayoutParams)opponentName.getLayoutParams();
+    	opponentParams.leftMargin(margin);
+    	
+    }*/
+    
+    
     
     private void startWaitingOnOppMove() {
     	pollOpponentMove = new PollOpponentMove();
@@ -103,8 +128,8 @@ public class BattleActivity extends Activity {
     }
     
     private void setProgressBars(Integer myBattleHealth, Integer opponentBattleHealth) {
-    	((ProgressBar)findViewById(R.id.myBattleHealth)).setProgress(myBattleHealth);
-    	((ProgressBar)findViewById(R.id.opponentBattleHealth)).setProgress(opponentBattleHealth);
+    	((ProgressBar)findViewById(R.id.myBattleHealthBar)).setProgress(myBattleHealth);
+    	((ProgressBar)findViewById(R.id.opponentBattleHealthBar)).setProgress(opponentBattleHealth);
     }
     
     /* here, we serialize battle into json and write it out to file */
@@ -190,8 +215,8 @@ public class BattleActivity extends Activity {
     	}
     }
     
-    private String getFirstName() {
-    	String[] names = bState.opponentName.split(" ");
+    private String getFirstName(String fullName) {
+    	String[] names = fullName.split(" ");
     	if (names.length > 0) {
     		return names[0];
     	}
@@ -206,7 +231,7 @@ public class BattleActivity extends Activity {
     	LayoutInflater inflater = getLayoutInflater();
     	LinearLayout newView = (LinearLayout) inflater.inflate(R.layout.waiting_layout, null, false);
     	TextView waitingText = (TextView)newView.getChildAt(0);
-    	waitingText.setText("Waiting on " + getFirstName() + "'s move");
+    	waitingText.setText("Waiting on " + getFirstName(bState.opponentName) + "'s move");
     	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
     	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
     	params.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -388,10 +413,10 @@ public class BattleActivity extends Activity {
     	int battleHealthDrop;
     	if (!iWonMove) {
     		battleHealthDrop = getBattleHealthDrop(damage, bState.myStartingStrength);
-        	battleHealth = ((ProgressBar) findViewById(R.id.myBattleHealth)).getProgress();
+        	battleHealth = ((ProgressBar) findViewById(R.id.myBattleHealthBar)).getProgress();
     	} else {
     		battleHealthDrop = getBattleHealthDrop(damage, bState.opponentStartingStrength);
-        	battleHealth = ((ProgressBar) findViewById(R.id.opponentBattleHealth)).getProgress();
+        	battleHealth = ((ProgressBar) findViewById(R.id.opponentBattleHealthBar)).getProgress();
     	}
     	int resultingHealth = battleHealth - battleHealthDrop;
     	if (resultingHealth < 0) resultingHealth = 0;
@@ -400,12 +425,12 @@ public class BattleActivity extends Activity {
     
     private void updateProgressBarAndHealth(boolean iWonMove, int newBattleHealth) {
     	if (!iWonMove) {
-    		int progressId = R.id.myBattleHealth;
+    		int progressId = R.id.myBattleHealthBar;
     		Integer oldBattleHealth = ((ProgressBar) findViewById(progressId)).getProgress();
     		new HealthDropAnimation().execute(newBattleHealth, oldBattleHealth, progressId);
     		bState.myHealth = newBattleHealth;
     	} else {
-    		Integer progressId = R.id.opponentBattleHealth;
+    		Integer progressId = R.id.opponentBattleHealthBar;
     		Integer oldBattleHealth = ((ProgressBar) findViewById(progressId)).getProgress();
     		new HealthDropAnimation().execute(newBattleHealth, oldBattleHealth, progressId);
     		bState.opponentHealth = newBattleHealth;

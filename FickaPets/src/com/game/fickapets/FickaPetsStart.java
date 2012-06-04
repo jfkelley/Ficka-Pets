@@ -130,9 +130,9 @@ public class FickaPetsStart extends Activity {
 	/* always called when activity leaves foreground so set up background service here */
 	public void onPause () {
 		super.onPause();
-		Vector<Complaint> complaints = Pet.thePet(this).getComplaints(this);
+		//Vector<Complaint> complaints = Pet.thePet(this).getComplaints(this);
 		Intent notificationService = new Intent(this, PetNotifier.class);
-		notificationService.putExtra("com.game.fickapets.complaints", complaints);
+		//notificationService.putExtra("com.game.fickapets.complaints", complaints);
 		startService(notificationService);
 		PersistenceHandler.saveState(this, User.theUser(this));
 	}

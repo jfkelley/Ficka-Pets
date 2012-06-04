@@ -1,60 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/battleLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/cat_front_small" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="54dp"
-        android:layout_marginLeft="36dp"
-        android:src="@drawable/cat_back_small" />
-
-    <ProgressBar
-        android:id="@+id/myBattleHealth"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
-        android:layout_marginLeft="50dp"
-        android:minWidth="150dp"
-        android:max="100"
-        android:progress="100"
-        android:layout_toRightOf="@+id/imageView1" />
+    android:layout_height="match_parent"
+    android:background="@drawable/battle_background" >
 
     <ProgressBar
         android:id="@+id/opponentBattleHealth"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_marginTop="35dp"
-        android:minWidth="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
         android:max="100"
-        android:progress="100"
-        android:layout_toLeftOf="@+id/myBattleHealth" />
+        android:minHeight="20dp"
+        android:maxHeight="20dp"
+        android:minWidth="150dp"
+        android:maxWidth="150dp"
+        android:progress="100" />
 
-    <ImageView
-        android:id="@+id/fightButton"
+    <ProgressBar
+        android:id="@+id/myBattleHealth"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/myBattleHealth"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginTop="22dp"
-        android:src="@drawable/sword"
-        android:onClick="onFightPressed" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:max="100"
+        android:minHeight="20dp"
+        android:maxHeight="20dp"
+        android:minWidth="150dp"
+        android:maxWidth="150dp"
+        android:progress="100" />
+
+    <ImageView
+        android:id="@+id/myPet"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/myBattleHealth"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="@string/myPet"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/pet_battle" />
+
+    <ImageView
+        android:id="@+id/oppPet"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/myPet"
+        android:contentDescription="@string/oppPet"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/pet_battle" />
+    
+    <ImageView
+        android:id="@+id/attack_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/myPet"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/attackButton"
+        android:onClick="onFightPressed"
+        android:src="@drawable/attack_button" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/attack_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+		<RelativeLayout
+		    android:layout_width="match_parent"
+   	 		android:layout_height="wrap_content" 
+   	 		android:gravity="bottom" >
+   	 			<LinearLayout 
+   	 			    android:id="@+id/myMoves"
+   	 			    android:layout_alignParentLeft="true"
+   	 			    android:orientation="vertical"
+   	 			    android:layout_width="wrap_content"
+   	 			    android:layout_height="match_parent">
+   	 			</LinearLayout>
+   	 			<LinearLayout 
+   	 			    android:id="@+id/oppMoves"
+   	 			    android:layout_alignParentRight="true"
+   	 			    android:orientation="vertical"
+   	 			    android:layout_width="wrap_content"
+   	 			    android:layout_height="match_parent" >
+   	 			    
+   	 			</LinearLayout>
+		</RelativeLayout>	
+    
+        <!--  <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:id="@+id/tableLayout" >
+	
+            <TableRow
+                android:id="@+id/tableRow1" >
+                <ImageView
+       			    android:src="@drawable/attack" />
+                <ImageView
+                    android:gravity="right"
+                    android:src="@drawable/magic" />
+       			    
+            </TableRow>
+
+        </TableLayout>-->
+        
+    </ScrollView>
 
 </RelativeLayout>

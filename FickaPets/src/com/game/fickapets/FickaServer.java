@@ -32,7 +32,7 @@ public class FickaServer {
 	public static final String OPP_STRENGTH_KEY = "opponentStrength";
 	public static final String OPP_ID_KEY = "opponentIdentifier";
 	
-	private static final String BASE_URL = "http://10.31.112.120:8888/";
+	private static final String BASE_URL = "http://10.31.112.21:8888/";
 	private static final String GRAPH_BASE_URL = "https://graph.facebook.com/";
 		
 	private static final String CREATE = BASE_URL + "create?uid1=%s&uid2=%s";
@@ -57,22 +57,28 @@ public class FickaServer {
 		return String.format(format, (Object[])strings);
 	}
 	
-	public String createGame(String myId, String theirId) throws IOException {
+	public String createGame(String myId, String theirId) {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		try {
 
-		String url = urlFormat(CREATE, myId, theirId);
+			String url = urlFormat(CREATE, myId, theirId);
 		
-		HttpGet get = new HttpGet(url);
+			HttpGet get = new HttpGet(url);
 
-		HttpResponse resp = client.execute(get);
+			HttpResponse resp = client.execute(get);
 
-		if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
-			client.close();
+			if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+				return null;
+			}
+			String battleId = responseToString(resp);
+			return battleId;
+		} catch(Exception ex) {
+			System.out.println("Failed to create game");
+			ex.printStackTrace();
 			return null;
+		} finally {
+			client.close();
 		}
-		client.close();
-		String battleId = responseToString(resp);
-		return battleId;
 	}
 
 	private HttpRequestBase setCharEncoding(HttpRequestBase req) {
@@ -80,106 +86,131 @@ public class FickaServer {
 		return req;
 	}
 	
-	public boolean sendMove(String move, String uid, String battleId, String strength) throws IOException {
+	public boolean sendMove(String move, String uid, String battleId, String strength) {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-
-		String url = urlFormat(SEND_MOVE, uid, battleId, move, strength);
-		HttpGet get = new HttpGet(url);
-		setCharEncoding(get);
-		HttpResponse resp = client.execute(get);
-		client.close();
+		try {
+			String url = urlFormat(SEND_MOVE, uid, battleId, move, strength);
+			HttpGet get = new HttpGet(url);
+			setCharEncoding(get);
+			HttpResponse resp = client.execute(get);
 		
-		if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+			if (resp.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
+				return false;
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
 			return false;
+		} finally {
+			client.close();
 		}
 		return true;
 	}
 	/* returns a map with opponentMove and opponentStrenth. */
 	public Map<String, String> getBattleData(String mId, String battleId) throws IOException {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-
-		HttpGet get;
-		InputStream stringStream;
-		Element battleElem;
-		Map<String, String> battleMap;
-		
-		String url = urlFormat(BATTLE_DATA, mId, battleId);
-		get = new HttpGet(url);
-		setCharEncoding(get);
-		String response = responseToString(client.execute(get));
-		stringStream = new ByteArrayInputStream(response.getBytes());
-		battleElem = XMLUtils.getDocumentElement(stringStream);
-		
-		battleMap = new HashMap<String, String>();
-		String oppMove = XMLUtils.getChildElementTextByTagName(battleElem, "opponentMove");
-		String oppStrength = XMLUtils.getChildElementTextByTagName(battleElem, "opponentStrength");
-		String oppId = XMLUtils.getChildElementTextByTagName(battleElem, "opponentId");
-		if (oppMove.equals("null")) oppMove = null;
-		if (oppStrength.equals("null")) oppStrength = null;
-		if (oppId.equals("null")) oppId = null;
-		battleMap.put(OPP_MOVE_KEY, oppMove);
-		battleMap.put(OPP_STRENGTH_KEY, oppStrength);
-		battleMap.put(OPP_ID_KEY, oppId);
-		client.close();
-
-		return battleMap;
-	}
-	
-	public void closeBattle(String bid, String uid) throws IOException {
-		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-
-		String url = urlFormat(CLOSE_BATTLE, uid, bid);
-		HttpGet get = new HttpGet(url);
-		setCharEncoding(get);
-		HttpResponse resp = client.execute(get);
-		int status = resp.getStatusLine().getStatusCode();
-		if (status != HttpURLConnection.HTTP_OK) {
-			//other guy probably already closed the battle.
-		}
-		client.close();
-
-	}
-	
-	public List<String> getChallenges(String uid) throws IOException {
-		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-		String url = urlFormat(INCOMING_CHALLENGES, uid);
-		HttpGet get = new HttpGet(url);
-		setCharEncoding(get);
-		HttpResponse resp = client.execute(get);
-		int status = resp.getStatusLine().getStatusCode();
-		client.close();
-		if (status != HttpURLConnection.HTTP_OK){
+		try {
+			HttpGet get;
+			InputStream stringStream;
+			Element battleElem;
+			Map<String, String> battleMap;
+			
+			String url = urlFormat(BATTLE_DATA, mId, battleId);
+			get = new HttpGet(url);
+			setCharEncoding(get);
+			String response = responseToString(client.execute(get));
+			stringStream = new ByteArrayInputStream(response.getBytes());
+			battleElem = XMLUtils.getDocumentElement(stringStream);
+			
+			battleMap = new HashMap<String, String>();
+			String oppMove = XMLUtils.getChildElementTextByTagName(battleElem, "opponentMove");
+			String oppStrength = XMLUtils.getChildElementTextByTagName(battleElem, "opponentStrength");
+			String oppId = XMLUtils.getChildElementTextByTagName(battleElem, "opponentId");
+			
+			if (oppMove.equals("null")) oppMove = null;
+			if (oppStrength.equals("null")) oppStrength = null;
+			if (oppId.equals("null")) oppId = null;
+			battleMap.put(OPP_MOVE_KEY, oppMove);
+			battleMap.put(OPP_STRENGTH_KEY, oppStrength);
+			battleMap.put(OPP_ID_KEY, oppId);
+			return battleMap;
+		} catch(Exception ex) {
+			ex.printStackTrace();
 			return null;
+		} finally {
+			client.close();
 		}
-		String response = responseToString(resp);
-		String[] challengeIds = response.equals("") ? new String[0] : response.split("\n");
-		List<String> challenges = new ArrayList<String>();
-		for (String challengeId : challengeIds) {
-			challenges.add(challengeId);
+	}
+	
+	public void closeBattle(String bid, String uid) {
+		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		try {
+			String url = urlFormat(CLOSE_BATTLE, uid, bid);
+			HttpGet get = new HttpGet(url);
+			setCharEncoding(get);
+			HttpResponse resp = client.execute(get);
+			int status = resp.getStatusLine().getStatusCode();
+			if (status != HttpURLConnection.HTTP_OK) {
+				//other guy probably already closed the battle.
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			client.close();
 		}
-		return challenges;
+	}
+	
+	public List<String> getChallenges(String uid) {
+		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		try {
+			String url = urlFormat(INCOMING_CHALLENGES, uid);
+			HttpGet get = new HttpGet(url);
+			setCharEncoding(get);
+			HttpResponse resp = client.execute(get);
+			int status = resp.getStatusLine().getStatusCode();
+			client.close();
+			if (status != HttpURLConnection.HTTP_OK){
+				return null;
+			}
+			String response = responseToString(resp);
+			String[] challengeIds = response.equals("") ? new String[0] : response.split("\n");
+			List<String> challenges = new ArrayList<String>();
+			for (String challengeId : challengeIds) {
+				challenges.add(challengeId);
+			}
+			return challenges;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return null;
+		} finally {
+			client.close();
+		}
 	}
 	
 	public JSONArray applyFriendFilter(JSONArray allFriends) throws Exception {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-
-		HttpPost post = new HttpPost(FIND_FRIENDS);
-		post.setEntity(new StringEntity(allFriends.toString()));
-		setCharEncoding(post);
-		HttpResponse resp = client.execute(post);
-		int status = resp.getStatusLine().getStatusCode();
-		client.close();
-		if (status != HttpURLConnection.HTTP_OK) {
-			System.out.println("failed to get filtered friends from server");
+		try {
+			HttpPost post = new HttpPost(FIND_FRIENDS);
+			post.setEntity(new StringEntity(allFriends.toString()));
+			setCharEncoding(post);
+			HttpResponse resp = client.execute(post);
+			int status = resp.getStatusLine().getStatusCode();
+			client.close();
+			if (status != HttpURLConnection.HTTP_OK) {
+				System.out.println("failed to get filtered friends from server");
+				return null;
+			}
+			String strResp = responseToString(resp);
+			return new JSONArray(strResp);
+		} catch(Exception ex) {
+			ex.printStackTrace();
 			return null;
+		} finally {
+			client.close();
 		}
-		String strResp = responseToString(resp);
-		return new JSONArray(strResp);
 	}
 	
 	
-	private String responseToString(HttpResponse resp) throws IOException {
-
+	private String responseToString(HttpResponse resp) throws Exception {
 		HttpEntity entity = resp.getEntity();
 		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
 		StringBuilder sb = new StringBuilder();
@@ -194,18 +225,25 @@ public class FickaServer {
 	
 	public String getNameForId(String uid) throws Exception {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
-		String url = urlFormat(GRAPH_BASE_URL + "%s", uid);
-		HttpGet get = new HttpGet(url);
-		setCharEncoding(get);
-		HttpResponse resp = client.execute(get);
-		int status = resp.getStatusLine().getStatusCode();
-		client.close();
-		if (status != HttpURLConnection.HTTP_OK) {
-			System.out.println("failed to get basic info from fb");
+		try {
+			String url = urlFormat(GRAPH_BASE_URL + "%s", uid);
+			HttpGet get = new HttpGet(url);
+			setCharEncoding(get);
+			HttpResponse resp = client.execute(get);
+			int status = resp.getStatusLine().getStatusCode();
+			client.close();
+			if (status != HttpURLConnection.HTTP_OK) {
+				System.out.println("failed to get basic info from fb");
+				return null;
+			}
+			JSONObject json = new JSONObject(responseToString(resp));
+			return json.getString("name");
+		} catch(Exception ex) {
+			ex.printStackTrace();
 			return null;
+		} finally {
+			client.close();
 		}
-		JSONObject json = new JSONObject(responseToString(resp));
-		return json.getString("name");
 	}
 	
 }

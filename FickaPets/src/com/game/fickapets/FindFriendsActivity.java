@@ -56,6 +56,7 @@ public class FindFriendsActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         imageViewHandler = new UrlImageViewHandler(this);
         friends = new Vector<FriendPhotoInfo>();
         
@@ -284,7 +285,7 @@ public class FindFriendsActivity extends ListActivity {
 		   
 		   String url = FACEBOOK_BASE_URL + friends.get(position).id + "/picture";
 		   
-		   imageViewHandler.setUrlDrawable(view, url, R.drawable.ic_launcher);
+		   imageViewHandler.setUrlDrawable(view, url, R.drawable.mystery);
 		   return view;
 	   }
    } 

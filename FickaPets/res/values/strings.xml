@@ -23,5 +23,15 @@
 	<string name="battleLabel">Battle</string>
 	<string name="findFriends">Find Friends to Battle</string>
 	<string name="loadingGame">Loading Battle</string>
-	
+	<string name="myPet">My Pet</string>
+	<string name="oppPet">Opponent Pet</string>
+	<string name="attackButton">Click To Attack</string>
+	<string name="newBattle">Press to Start New Battle</string>
+	<string name="gameStatus">Game Status</string>
+	<string name="userPhoto">Opponent</string>
+	<string name="currentBattles">Current Battles</string>
+	<string name="titleSeparator">Line Separating Title</string>
+	<string name="newBattleButtonText">+ New Battle</string>
+	<string name="period">.</string>
+	<string name="findFriend">Choose a friend to battle</string>
 </resources>

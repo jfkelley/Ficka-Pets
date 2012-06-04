@@ -38,13 +38,8 @@ public class UrlImageViewHandler {
 	 * for can change frequently
 	 */
 	private static Hashtable<TextView, String> pendingViews = new Hashtable<TextView, String>();
-	
-	
-	/* Values for in-memory cacheing of images */
-	private static int bytesInMemory;
-	private static Hashtable<String, BitmapDrawable> downloadedImages = new Hashtable<String, BitmapDrawable>();
-	private static Vector<CacheEntry> downloadedImageQueue = new Vector<CacheEntry>();
-	private static final int MAX_BYTES_IN_MEMORY = 3000000;
+	private static final int THUMBNAIL_IMG_WIDTH = 40;
+	private static final int THUMBNAIL_IMG_HEIGHT = 40;
 	
 	/* Values for file system cacheing of images */
 	private static Integer bytesOnDisk;
@@ -70,6 +65,10 @@ public class UrlImageViewHandler {
 	
 	
 	
+	
+	
+	
+	
 	public void setUrlDrawable(final TextView textView, final String url, final int defaultResource) {
 		if (url == null || url.equals("") || textView == null) {
 			return;
@@ -78,8 +77,8 @@ public class UrlImageViewHandler {
 		
 		if (imageIsCached(url)) {
 			BitmapDrawable image = getImageFromCache(url);
+			
 			if (image != null) {
-				//imageView.setImageDrawable(image);
 				textView.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
 				return;
 			}
@@ -102,37 +101,26 @@ public class UrlImageViewHandler {
 	}
 	
 	
-	private static boolean imageInMemory(String url) {
-		return downloadedImages.containsKey(url);
-	}
-	private static boolean imageOnDisk(String url) {
-		return files.contains(new CacheEntry(getFilenameForUrl(url), 0));
-	}
+	
 	private static boolean imageIsCached(String url) {
-		return (imageInMemory(url) || imageOnDisk(url));
+		return files.contains(new CacheEntry(getFilenameForUrl(url), 0));
 	}
 	
 	private static BitmapDrawable getImageFromCache(String url) {
 		BitmapDrawable image = null;
-		if (imageInMemory(url)) {
-			/* move to the back of array since we just accessed and doing LRU eviction */
-			CacheEntry entry = downloadedImageQueue.remove(downloadedImageQueue.indexOf(new CacheEntry(url, 0)));
-			downloadedImageQueue.add(entry);
-			
-			image = downloadedImages.get(url);
-		} else if (imageOnDisk(url)) {
+		if (imageIsCached(url)) {
 			String filename = getFilenameForUrl(url);
-			/* move to memory since we just accessed. Leave in file queue so it'll be deleted if and when its time comes*/
+			
+			/* take cacheentry from index and add to back of vector since we just accessed it */
 			CacheEntry entry = files.remove(files.indexOf(new CacheEntry(filename, 0)));
-			//files.add(entry);
+			files.add(entry);
 			
 			File file = context.getFileStreamPath(filename);
 			
 			if (file.exists()) {
 				try {
 					FileInputStream fis = context.openFileInput(filename);
-					image = new BitmapDrawable(mResources, BitmapFactory.decodeStream(fis));
-					cacheImage(image, url, entry.bytes);
+					image = new BitmapDrawable(mResources, Bitmap.createScaledBitmap(BitmapFactory.decodeStream(fis), THUMBNAIL_IMG_WIDTH, THUMBNAIL_IMG_HEIGHT, true));
 				} catch(Exception ex) {}
 			}
 		}
@@ -142,6 +130,7 @@ public class UrlImageViewHandler {
 	private class ImageDownloader extends AsyncTask<Object, Void, Bitmap> {
 		private TextView textView;
 		private String url;
+		
 		@Override
 		protected Bitmap doInBackground(Object...params) {
 			if (params.length >= 2) {
@@ -169,7 +158,7 @@ public class UrlImageViewHandler {
 				}
 				HttpEntity entity = response.getEntity();
 				InputStream is = entity.getContent();
-				final Bitmap bitmap = BitmapFactory.decodeStream(is);
+				final Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeStream(is), THUMBNAIL_IMG_WIDTH, THUMBNAIL_IMG_HEIGHT, true);
 				return bitmap;
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -178,7 +167,7 @@ public class UrlImageViewHandler {
 				client.close();
 			}
 		}
-		
+		/* it'd be way better if i had size of img after compression */
 		private int getBytesInBitmap(Bitmap bitmap) {
 			return bitmap.getRowBytes() * bitmap.getHeight();
 		}
@@ -254,15 +243,8 @@ public class UrlImageViewHandler {
 	}
 	
 	private static void cacheImage(BitmapDrawable image, String url, int bytes) {
-		downloadedImages.put(url, image);
 		CacheEntry entry = new CacheEntry(url, bytes);
-		downloadedImageQueue.add(entry);
-		bytesInMemory += bytes;
-		while (bytesInMemory > MAX_BYTES_IN_MEMORY) {
-			CacheEntry removedEntry = downloadedImageQueue.remove(0);
-			moveToFileSystem (removedEntry, downloadedImages.remove(removedEntry.name));
-			bytesInMemory -= removedEntry.bytes;
-		}
+		moveToFileSystem(entry, image);
 	}
 	
 	/* not sure what this does - just took it from the code I based this class on */

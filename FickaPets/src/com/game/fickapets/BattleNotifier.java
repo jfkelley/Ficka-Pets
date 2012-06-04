@@ -65,31 +65,34 @@ public class BattleNotifier extends IntentService {
 			currentBattles.clear();
 			List<BattleState> battles = PersistenceHandler.getBattles(this);
 			currentBattles = extractBattleIds(battles, currentBattles);
-			try {
-				challengeIds = fickaServer.getChallenges(myId);
-				if (challengeIds != null) {
-					for (String battleId : challengeIds) {
-						if (!currentBattles.contains(battleId)) {
-							Map<String, String> battleMap = fickaServer.getBattleData(myId, battleId);
-							String name = fickaServer.getNameForId(battleMap.get(FickaServer.OPP_ID_KEY));
-							Bundle battleBundle = new Bundle();
-							battleBundle.putString(BattleState.OPPONENT_ID, battleMap.get(FickaServer.OPP_ID_KEY));
-							battleBundle.putString(BattleState.OPPONENT_MOVE, battleMap.get(FickaServer.OPP_MOVE_KEY));
-							battleBundle.putString(BattleState.OPPONENT_STRENGTH, battleMap.get(FickaServer.OPP_STRENGTH_KEY));
-							battleBundle.putString(BattleState.OPPONENT_NAME, name);
-							battleBundle.putString(BattleState.MY_ID, myId);
-							battleBundle.putString(BattleState.BATTLE_ID, battleId);
-							BattleState thisBattle = new BattleState(this, battleBundle);
-							PersistenceHandler.saveBattle(this, thisBattle.toJSON());
-							sendChallengeNotification(name, thisBattle);
-						}
+			challengeIds = fickaServer.getChallenges(myId);
+			if (challengeIds != null) {
+				for (String battleId : challengeIds) {
+					if (!currentBattles.contains(battleId)) {
+						Map<String, String> battleMap = null;
+						String name = null;
+						try {
+							battleMap = fickaServer.getBattleData(myId, battleId);
+							name = fickaServer.getNameForId(battleMap.get(FickaServer.OPP_ID_KEY));
+						} catch(Exception ex) {}
+						if (battleMap == null || name == null) continue;
+						Bundle battleBundle = new Bundle();
+						battleBundle.putString(BattleState.OPPONENT_ID, battleMap.get(FickaServer.OPP_ID_KEY));
+						battleBundle.putString(BattleState.OPPONENT_MOVE, battleMap.get(FickaServer.OPP_MOVE_KEY));
+						battleBundle.putString(BattleState.OPPONENT_STRENGTH, battleMap.get(FickaServer.OPP_STRENGTH_KEY));
+						battleBundle.putString(BattleState.OPPONENT_NAME, name);
+						battleBundle.putString(BattleState.MY_ID, myId);
+						battleBundle.putString(BattleState.BATTLE_ID, battleId);
+						BattleState thisBattle = new BattleState(this, battleBundle);
+						PersistenceHandler.saveBattle(this, thisBattle.toJSON());
+						sendChallengeNotification(name, thisBattle);
 					}
 				}
-				Thread.sleep(7000);
-			} catch(Exception ex) {
-				System.out.println("Failed to get challenge");
-				ex.printStackTrace();
 			}
+			try {
+				Thread.sleep(7000);
+			} catch(InterruptedException ex) {}
+				
 		}
 	}
 	

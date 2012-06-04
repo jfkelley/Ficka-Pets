@@ -3,8 +3,6 @@ package com.game.fickapets;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 import android.app.Activity;
@@ -14,38 +12,41 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 public class BattleActivity extends Activity {
 	/* successful attacks to win if opponent has equal strength */
 	private static final double MOVES_TO_WIN = 4;
 	private static final int ATTACK_DIALOG = 0;
-	
+	private static final int SHOW_MOVE_DIALOG = 1;
+	private static final int SHOW_VICTOR_DIALOG = 2;
+	private static final int SHOW_GAMEOVER_DIALOG = 3;
+	private static final int CREATE_GAME_FAIL = 4;
+	private static final int SERVER_FAIL = 5;
 
-
-	/* magic is 1, water attack is 2, fire attack is 3.  1 beats 2, 2 beats 3, and 3 beats 1 */
+	/* evade beats attack, attack beats magic, and magic beats defend */
+	private static final int EVADE = 0;
+	private static final int ATTACK = 1;
+	private static final int MAGIC = 2;
 	
-	/* should never change throughout game */
-	/*private String opponentId;
-	private String opponentName;
-	private String myId;
-	private String battleId;
-	private Double myStartingStrength;
-	private Double opponentStartingStrength;*/
+	/* only used in gameOver dialog - set in gameOver() method */
+	private boolean iWonMove;
+	
 	BattleState bState;
 	
 	private PollOpponentMove pollOpponentMove;
 	private FickaServer server;
-	
-	/* change as game progresses */
-	/*private Integer myMove;
-	private Integer opponentMove;
-	private Integer myBattleHealth;
-	private Integer opponentBattleHealth;
-	private Integer numMovesPlayed; */
+
 	private boolean gameOver = false;
+	private boolean gameIsTie = false;
 	
 	
 	 
@@ -61,14 +62,23 @@ public class BattleActivity extends Activity {
     	if (bState.bid == null) {
     		new CreateGameTask().execute();
     	} else {
-    		setContentView(R.layout.battle);
-        	setProgressBars(bState.myHealth, bState.opponentHealth);
+    		inflateBattleScene();
+        	/*
+        	RelativeLayout rl = (RelativeLayout)findViewById(R.id.battleLayout);
+        	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        	params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
+        	ImageView img = new ImageView(this);
+        	img.setId(R.id.attack_button);
+        	img.setImageResource(R.drawable.attack_button);
+        	rl.addView(img);*/
+        	
     	}
-    	if (bState.myMove != null) {
+    	if (bState.getMyMove() != null) {
     		/* already made a move so view is invisible */
-    		findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+    		findViewById(R.id.attack_button).setVisibility(View.INVISIBLE);
     		
-    		if (bState.opponentMove == null) {
+    		if (bState.getOpponentMove() == null) {
     			startWaitingOnOppMove();
     		} else {
     			/* if we have opponent move, we also have opponent strength */
@@ -76,6 +86,14 @@ public class BattleActivity extends Activity {
     		}
     	}
 
+    }
+    
+
+    
+    private void inflateBattleScene() {
+		setContentView(R.layout.battle);
+    	setProgressBars(bState.myHealth, bState.opponentHealth);
+    	buildMoveImages();
     }
     
     private void startWaitingOnOppMove() {
@@ -112,31 +130,117 @@ public class BattleActivity extends Activity {
     }
     
 
-    
+    /* called when attack button is pressed */
     public void onFightPressed(View v) {
     	if (v.getVisibility() == View.VISIBLE) {
         	showDialog(ATTACK_DIALOG);
     	}
     }
     
+    private int imgIdForMove(int move) {
+    	switch(move) {
+    	case ATTACK:
+    		return R.drawable.attack;
+    	case EVADE:
+    		return R.drawable.defend;
+    	case MAGIC:
+    		return R.drawable.magic;
+    	default:
+    		return -1;
+    	}
+    }
+         
+    /* isMyMove false if it's opponent's move. My moves have even ids, opponent moves have odd ids */
+    private void addMoveToUI(Integer move, boolean isMyMove) {
+    	LinearLayout ll;
+    	if (isMyMove) {
+    		ll = (LinearLayout)findViewById(R.id.myMoves);
+    		
+    	} else {
+    		ll = (LinearLayout)findViewById(R.id.oppMoves);
+    	}
+    	ImageView newImg = new ImageView(this);
+		newImg.setImageResource(imgIdForMove(move));
+		//LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.android.widget.TableRow.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+		
+		ll.addView(newImg);
+		final ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
+		scrollView.post(new Runnable() {
+			public void run() {
+				scrollView.fullScroll(View.FOCUS_DOWN);
+			}
+		});
+    }
+    
+    private void buildMoveImages() {
+    	int index = 0;
+    	Integer myMove = bState.getMyMove(index);
+    	while (myMove != null) {
+    		addMoveToUI(myMove, true);
+    		index++;
+    		myMove = bState.getMyMove(index);
+    	}
+    	index = 0;
+    	Integer oppMove = bState.getOppMove(index);
+    	while (oppMove != null) {
+    		addMoveToUI(oppMove, false);
+    		index++;
+    		oppMove = bState.getOppMove(index);
+    	}
+    }
+    
+    private String getFirstName() {
+    	String[] names = bState.opponentName.split(" ");
+    	if (names.length > 0) {
+    		return names[0];
+    	}
+    	return "";
+    }
+    
+    private void displayWaiting() {
+    	ImageView attackBtn = (ImageView)findViewById(R.id.attack_button);
+    	RelativeLayout rl = (RelativeLayout)attackBtn.getParent();
+    	rl.removeView(attackBtn);
+    	
+    	LayoutInflater inflater = getLayoutInflater();
+    	LinearLayout newView = (LinearLayout) inflater.inflate(R.layout.waiting_layout, null, false);
+    	TextView waitingText = (TextView)newView.getChildAt(0);
+    	waitingText.setText("Waiting on " + getFirstName() + "'s move");
+    	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
+    	params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+    	rl.addView(newView, params);
+    }
+    
+    private void unDisplayWaiting() {
+    	LinearLayout waitingView = (LinearLayout)findViewById(R.id.waitingLayout);
+    	RelativeLayout rl = (RelativeLayout)waitingView.getParent();
+    	rl.removeView(waitingView);
+    	
+    	ImageView attackBtn = (ImageView)findViewById(R.id.attack_button);
+    	rl.addView(attackBtn);
+    }
+    
     protected Dialog onCreateDialog(int id) {
     	switch(id) {
     	case ATTACK_DIALOG:
     		final String[] moves = new String[3];
-    		/* I can't remember what moves we wanted to do */
-    		moves[0] = "Magic";
-    		moves[1] = "Water Attack";
-    		moves[2] = "Fire Attack";
+    		moves[0] = "Evade";
+    		moves[1] = "Attack";
+    		moves[2] = "Magic";
     		AlertDialog attackDialog = new AlertDialog.Builder(this)
 				.setTitle("Pick a move")
 				.setItems(moves, new OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						bState.myMove = item;
+						bState.setMyMove(item);
+						addMoveToUI(bState.getMyMove(), true);
 						/* checking again in case of double click on this dialog */
-						if (findViewById(R.id.fightButton).getVisibility() == View.VISIBLE) { 
-							findViewById(R.id.fightButton).setVisibility(View.INVISIBLE);
+						if (findViewById(R.id.attack_button).getVisibility() == View.VISIBLE) {
+							findViewById(R.id.attack_button).setVisibility(View.INVISIBLE);
+							displayWaiting();
 							new SendMoveTask().execute(bState.numMovesPlayed);
-							if (bState.opponentMove == null) {
+							if (bState.getOpponentMove() == null) {
 								startWaitingOnOppMove();
 							} else {
 								playMove();
@@ -147,12 +251,105 @@ public class BattleActivity extends Activity {
 				})
 				.create();
     		return attackDialog;
+    	case SHOW_MOVE_DIALOG:
+			AlertDialog moveDialog = new AlertDialog.Builder(this)
+				.setMessage("")
+				.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+				    	addMoveToUI(bState.getOpponentMove(), false);
+						continueMove1();
+					}
+				}).create();
+			return moveDialog;
+    	case SHOW_VICTOR_DIALOG:
+    		AlertDialog victorDialog = new AlertDialog.Builder(this)
+    			/* will set message in onPrepareDialog */
+				.setMessage("")
+				.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						continueMove2();
+					}
+				}).create();
+    		return victorDialog;
+    	case SHOW_GAMEOVER_DIALOG:
+    		String message;
+    		if (iWonMove) {
+    			message = "You Win!";
+    		} else {
+    			message = bState.opponentName + " has beaten you";
+    		}
+    		AlertDialog gameOverDialog = new AlertDialog.Builder(this)
+    			.setMessage(message)
+    			.setNeutralButton("Exit Battle", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					finish();
+    				}
+    			}).create();
+    		return gameOverDialog;
+    	case CREATE_GAME_FAIL:
+    		AlertDialog createGameFail = new AlertDialog.Builder(this)
+    			.setMessage("Failed to create new game. If network is connected, our server may be down")
+    			.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					finish();
+    				}
+    			}).create();
+    		return createGameFail;
+    	case SERVER_FAIL:
+    		AlertDialog serverFail = new AlertDialog.Builder(this)
+    			.setMessage("Cannot connect to server.  If you're connected to the Internet, our server may be down\nTry again later, and sorry for the inconvenience")
+    			.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int id) {
+    					finish();
+    				}
+    			}).create();
+    		return serverFail;
 		default:
 			return null;
     	}
     }
     
+    private String getNameOfMove(Integer move) {
+    	switch(move) {
+    	case EVADE:
+    		return "evade";
+    	case ATTACK:
+    		return "attack";
+    	case MAGIC:
+    		return "magic";
+    	default:
+    		return null;
+    	}
+    }
     
+    protected void onPrepareDialog(int id, Dialog d) {
+    	AlertDialog dialog = (AlertDialog)d;
+    	switch(id) {
+    	case SHOW_MOVE_DIALOG:
+    		dialog.setMessage(bState.opponentName + " used " + getNameOfMove(bState.getOpponentMove()));
+    		break;
+    	case SHOW_VICTOR_DIALOG:
+    		boolean iWin = getWinner(bState.getMyMove(), bState.getOpponentMove());
+    		if (iWin) {
+    			dialog.setMessage(getNameOfMove(bState.getMyMove()) + " beats " + getNameOfMove(bState.getOpponentMove()));
+    		} else {
+    			dialog.setMessage(getNameOfMove(bState.getOpponentMove()) + " beats " + getNameOfMove(bState.getMyMove()));
+    		}
+    		/* forgot to handle ties */
+    		if (bState.getMyMove().equals(bState.getOpponentMove())) {
+    			dialog.setMessage("Both pets damaged");
+    		}
+    		break;
+    	case SHOW_GAMEOVER_DIALOG:
+    		if (gameIsTie) {
+    			dialog.setMessage("Both pets passed out! Battle is a tie");
+    		}
+    		break;
+    	default:
+    		return;
+    	}
+    }
+
     
     /* returns true if myMove wins and false if opponentMove wins */
     private boolean getWinner(Integer myMove, Integer opponentMove) {
@@ -168,30 +365,21 @@ public class BattleActivity extends Activity {
     	double drop = (damage / startingStrength) * 100.0;
     	return (int) Math.ceil(drop);
     }
-    
-    private void gameOver(boolean iWin) {
-    	gameOver = true;
-    	if (iWin) {
-    		Toast.makeText(this, "You win!", Toast.LENGTH_LONG).show();
-    		/* adjust strength or whatever we do to reward victories here */
-    	} else {
-    		Toast.makeText(this, bState.opponentName + " has beaten you", Toast.LENGTH_LONG);
-    	}
+  
+    private void closeBattle() {
     	new Thread(new Runnable() {
     		public void run() {
-    			try {
-    				server.closeBattle(bState.bid, bState.myId);
-    			} catch(IOException ex) {
-    				System.out.println("failed to close battle");
-    				ex.printStackTrace();
-    			}
-    			runOnUiThread(new Runnable() {
-    				public void run() {
-    					finish();
-    				}
-    			});
+    			server.closeBattle(bState.bid, bState.myId);
     		}
     	}).start();
+    }
+    
+    private void gameOver(boolean iWonMove) {
+    	this.iWonMove = iWonMove;
+    	gameOver = true;
+    	showDialog(SHOW_GAMEOVER_DIALOG);
+
+    	closeBattle();
     }
     
     /* returns the loser's new battle health having lost this move */
@@ -210,22 +398,79 @@ public class BattleActivity extends Activity {
     	return resultingHealth;
     }
     
-    private void updateProgressBar(boolean iWonMove, int newBattleHealth) {
+    private void updateProgressBarAndHealth(boolean iWonMove, int newBattleHealth) {
     	if (!iWonMove) {
-    		((ProgressBar) findViewById(R.id.myBattleHealth)).setProgress(newBattleHealth);
+    		int progressId = R.id.myBattleHealth;
+    		Integer oldBattleHealth = ((ProgressBar) findViewById(progressId)).getProgress();
+    		new HealthDropAnimation().execute(newBattleHealth, oldBattleHealth, progressId);
     		bState.myHealth = newBattleHealth;
     	} else {
-    		((ProgressBar) findViewById(R.id.opponentBattleHealth)).setProgress(newBattleHealth);
+    		Integer progressId = R.id.opponentBattleHealth;
+    		Integer oldBattleHealth = ((ProgressBar) findViewById(progressId)).getProgress();
+    		new HealthDropAnimation().execute(newBattleHealth, oldBattleHealth, progressId);
     		bState.opponentHealth = newBattleHealth;
     	}
     }
     
-    private void animateMove(boolean iWonMove, Integer myMove, Integer opponentMove, double damage) {
-    	int battleHealth = getLoserBattleHealth(iWonMove, damage);
-    	updateProgressBar(iWonMove, battleHealth);
-    	if (battleHealth == 0) {
-    		gameOver(iWonMove);
+  
+    /* first alert dialog bounces to this next alert dialog, which bounces to continueMove2 which finishes up the move */
+    private void continueMove1() {
+    	showDialog(SHOW_VICTOR_DIALOG);
+    }
+    
+    /* finishes clean up and animation associated with move */
+    private void continueMove2() {
+    	boolean iWonMove = getWinner(bState.getMyMove(), bState.getOpponentMove());
+    	/* damage is proportional to victim's starting strength.  If damage is half victim's starting strength, 
+    	 * then victim loses half his life
+    	 */
+    	double damageToLoser;
+    	/* for ties */
+    	double damageToMe;
+    	double damageToOpp;
+    	
+
+    	
+    	if (bState.getMyMove().equals(bState.getOpponentMove())) {
+    		damageToMe = getDamageOnAttack(bState.opponentStartingStrength);
+    		damageToOpp = getDamageOnAttack(bState.myStartingStrength);
+    		int myBattleHealth = getLoserBattleHealth(false, damageToMe);
+    		int oppBattleHealth = getLoserBattleHealth(true, damageToOpp);
+    		updateProgressBarAndHealth(false, myBattleHealth);
+    		updateProgressBarAndHealth(true, oppBattleHealth);
+    		if (myBattleHealth == 0 && oppBattleHealth == 0) {
+    			gameIsTie = true;
+    			gameOver(true);	/* parameter doesn't matter - message will be changed in onPrepareDialog */
+    		} else if (myBattleHealth == 0) {
+    			gameOver(false);
+    		} else if (oppBattleHealth == 0) {
+    			gameOver(true);
+    		}
+    	} else {
+    		if (iWonMove) {
+        		/* attacker strength determines damage done to victim */
+        		damageToLoser = getDamageOnAttack(bState.myStartingStrength);
+        	} else {
+        		damageToLoser = getDamageOnAttack(bState.opponentStartingStrength);
+        	}
+    		int battleHealth = getLoserBattleHealth(iWonMove, damageToLoser);
+        	updateProgressBarAndHealth(iWonMove, battleHealth);
+        	if (battleHealth == 0) {
+        		gameOver(iWonMove);
+        	}
     	}
+    	
+    	
+    	
+    	/* setting fightButton to visible closes the loop.  When another move is selected
+    	 * we start waiting on opponent move again
+    	 */
+    	
+        findViewById(R.id.attack_button).setVisibility(View.VISIBLE);
+    	bState.setMyMove(null);
+    	bState.setOpponentMove(null);
+    	bState.numMovesPlayed = bState.numMovesPlayed + 1;
+    	Log.v("FickaPets", "num moves is now " + bState.numMovesPlayed.toString());
     }
     
     /* if this is called from PollOpponentMove, no need to put opponentMove in battle state since it's
@@ -233,30 +478,40 @@ public class BattleActivity extends Activity {
      * to clear it
      */
     private void playMove() {
-    	assert bState.myMove != null;
-    	boolean iWin = getWinner(bState.myMove, bState.opponentMove);
-    	/* damage is proportional to victim's starting strength.  If damage is half victim's starting strength, 
-    	 * then victim loses half his life
-    	 */
-    	double damageToLoser;
-    	if (iWin) {
-    		/* attacker strength determines damage done to victim */
-    		damageToLoser = getDamageOnAttack(bState.myStartingStrength);
-    	} else {
-    		damageToLoser = getDamageOnAttack(bState.opponentStartingStrength);
-    	}
-    	animateMove(iWin, bState.myMove, bState.opponentMove, damageToLoser);
-    	bState.myMove = null;
-    	bState.opponentMove = null;
-    	bState.numMovesPlayed = bState.numMovesPlayed + 1;
-    	/* setting fightButton to visible closes the loop.  When another move is selected
-    	 * we start waiting on opponent move again
-    	 */
-    	findViewById(R.id.fightButton).setVisibility(View.VISIBLE);
+    	assert bState.getMyMove() != null && bState.getOpponentMove() != null;
+    	showDialog(SHOW_MOVE_DIALOG);
     }
     
-    /* Background asynctasks for talking to server -------------------------------------------------------------------------------------*/
+    private class HealthDropAnimation extends AsyncTask<Integer, Integer, Void> {
+    	private Double velocity = 50.0; //health points per second
+    	
+		@Override
+		protected Void doInBackground(Integer... params) {
+			Integer newHealth = params[0];
+			Integer currentHealth = params[1];
+			Integer progressId = params[2];
+			while (currentHealth > newHealth) {
+				currentHealth -= 1;
+				publishProgress(currentHealth, progressId);
+				try {
+					Thread.sleep((long)(1000/velocity));
+				} catch(InterruptedException ex) {
+					System.out.println("Couldn't sleep");
+				}
+			}
+			return null;
+		}
+		
+		protected void onProgressUpdate(Integer...params) {
+			Integer health = params[0];
+			Integer progressId = params[1];
+    		((ProgressBar) findViewById(progressId)).setProgress(health);
+		}
+    }
     
+    
+    
+    /* Background asynctasks for talking to server -------------------------------------------------------------------------------------*/
 
     
 	private boolean battleCreated() {
@@ -266,9 +521,11 @@ public class BattleActivity extends Activity {
 		return true;
 	}
 	
-	private void waitUntilBattleCreated() throws InterruptedException {
+	private void waitUntilBattleCreated() {
 		while (!battleCreated()) {
-			Thread.sleep(2000);
+			try {
+				Thread.sleep(2000);
+			} catch(InterruptedException ex) {}
 		}
 	}
     
@@ -280,28 +537,36 @@ public class BattleActivity extends Activity {
 
 		@Override
 		protected String[] doInBackground(Void... params) {
+			/* possible to make move before server returned with battle id */
+			waitUntilBattleCreated();
+			Map<String, String> battleMap = null;
 			try {
-				/* possible to make move before server returned with battle id */
-				waitUntilBattleCreated();
-				Map<String, String> battleMap = server.getBattleData(bState.myId, bState.bid);
-				while (!isNewMove(battleMap)) {
-					if (isCancelled()) return null;
+				battleMap = server.getBattleData(bState.myId, bState.bid);
+			} catch(IOException ex) {}
+			while (!isNewMove(battleMap)) {
+				if (isCancelled()) return null;
+				try {
 					Thread.sleep(SECONDS_BETWEEN_POLL * 1000);
-					battleMap = server.getBattleData(bState.myId, bState.bid);
+				} catch(InterruptedException ex) { 
+					System.out.println("sleep got interrupted while waiting for opponent's move");
+					ex.printStackTrace();
 				}
-				String[] result = new String[2];
-				result[0] = battleMap.get(FickaServer.OPP_MOVE_KEY);
-				result[1] = battleMap.get(FickaServer.OPP_STRENGTH_KEY);
-				return result;
-			} catch(Exception ex) {
-				System.out.println("Couldn't get battle data");
-				ex.printStackTrace();
-				return null;
+				try {
+					battleMap = server.getBattleData(bState.myId, bState.bid);
+				} catch(IOException ex) {
+					System.out.println("failed to get data from server - waiting for opponent's move");
+					ex.printStackTrace();
+				}
 			}
+			Log.v("FickaPets", "done polling server for opponent move - got " + battleMap.get(FickaServer.OPP_MOVE_KEY));
+			String[] result = new String[2];
+			result[0] = battleMap.get(FickaServer.OPP_MOVE_KEY);
+			result[1] = battleMap.get(FickaServer.OPP_STRENGTH_KEY);
+			return result;
 		}
 		
 		private boolean isNewMove(Map<String, String> battleMap) {
-			if (battleMap.get(FickaServer.OPP_MOVE_KEY) != null) {
+			if (battleMap != null && battleMap.get(FickaServer.OPP_MOVE_KEY) != null) {
 				String encodedMoves = battleMap.get(FickaServer.OPP_MOVE_KEY);
 				String[] moves = encodedMoves.split(" ");
 				if (moves.length > bState.numMovesPlayed) {
@@ -313,6 +578,7 @@ public class BattleActivity extends Activity {
 		
 		/* oppMove should never be null when we get here */
 		private Integer getOpponentMove(String encodedMoves) {
+			Log.v("MOVES", encodedMoves);
 			String[] moves = encodedMoves.split(" ");
 			if (moves.length > bState.numMovesPlayed) {
 				return Integer.valueOf(moves[bState.numMovesPlayed]);
@@ -324,10 +590,11 @@ public class BattleActivity extends Activity {
 		protected void onPostExecute(String[] data) {
 			if (data == null) return;
 			Integer opponentMove = getOpponentMove(data[0]);
-			assert opponentMove != null;
 			Double opponentStrength = Double.valueOf(data[1]);
+			assert opponentMove != null && opponentStrength != null;
 			bState.opponentStartingStrength = opponentStrength;
-			bState.opponentMove = opponentMove;
+			bState.setOpponentMove(opponentMove);
+			unDisplayWaiting();
     		playMove();
 		}
     }
@@ -335,33 +602,40 @@ public class BattleActivity extends Activity {
     private class CreateGameTask extends AsyncTask<Void, Void, String> {
     	protected String doInBackground(Void...voids) {
     		String bid = null;
-    		try {
-    			bid = server.createGame(bState.myId, bState.opponentId);
-    		} catch(IOException ex) {
-    			System.out.println("failed to create game on server");
-    			ex.printStackTrace();
-    		}
+			bid = server.createGame(bState.myId, bState.opponentId);
     		return bid;
     	}
     	protected void onPostExecute(String bid) {
-    		setContentView(R.layout.battle);
-        	setProgressBars(bState.myHealth, bState.opponentHealth);
+    		if (bid == null) {
+    			showDialog(CREATE_GAME_FAIL);
+    			return;
+    		}
+    		inflateBattleScene();
     		bState.myStartingStrength = Pet.thePet(BattleActivity.this).getAttributes().strength;
     		bState.bid = bid;
     	}
     }
     /* sends move */
-    private class SendMoveTask extends AsyncTask<Integer, Void, Void> {
-    	protected Void doInBackground(Integer...integers) {
+    private class SendMoveTask extends AsyncTask<Integer, Void, Boolean> {
+    	protected Boolean doInBackground(Integer...integers) {
+    		Boolean sent = false;
     		try {
     			Integer numMovesPlayed = integers[0];
     			waitUntilBattleCreated();
-    			server.sendMove(numMovesPlayed.toString() + "_" + bState.myMove.toString(), bState.myId, bState.bid, bState.myStartingStrength.toString());
+    			sent = server.sendMove(numMovesPlayed.toString() + "_" + bState.getMyMove().toString(), bState.myId, bState.bid, bState.myStartingStrength.toString());
+    			showDialog(SERVER_FAIL);
+    			Log.v("FickaPets", "my move (" + bState.getMyMove().toString() + ") was sent successfully");
     		} catch(Exception ex) {
     			System.out.println("failed to send move");
     			ex.printStackTrace();
     		}
-			return null;
+			return sent;
+    	}
+    	
+    	protected void onPostExecute(Boolean sent) {
+    		if (!sent) {
+    			showDialog(SERVER_FAIL);
+    		}
     	}
     }
 }

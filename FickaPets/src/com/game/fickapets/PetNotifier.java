@@ -3,6 +3,7 @@ package com.game.fickapets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Vector;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -27,7 +28,7 @@ public class PetNotifier extends IntentService {
 	public int onStartCommand (Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		/* won't be recreated if killed */
-		return START_NOT_STICKY;
+		return START_STICKY;
 	}
 	
 	private void sendNotification (String title, String message) {
@@ -52,10 +53,10 @@ public class PetNotifier extends IntentService {
 	protected void onHandleIntent (Intent intent) {
 		/* looks like android ignores this as old API */
 		setForeground(true);
-		runInForeground();	
+		//runInForeground();	
 			
-		@SuppressWarnings("unchecked")
-		ArrayList<Complaint> complaints = (ArrayList<Complaint>) intent.getSerializableExtra("com.game.fickapets.complaints");
+		Vector<Complaint> complaints = Pet.thePet(this).getComplaints(this);
+		//ArrayList<Complaint> complaints = (ArrayList<Complaint>) intent.getSerializableExtra("com.game.fickapets.complaints");
 		
 		Collections.sort (complaints, new ComplaintsCompare());
 		while (complaints.size() > 0) {

@@ -1,20 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+ 	android:layout_width="fill_parent"
+ 	android:layout_height="fill_parent"
+ 	android:background="#CAE1E9"
+	android:layout_alignParentLeft="true"
+	android:layout_alignParentRight="true"
+	android:layout_alignParentTop="true" >
+  		<LinearLayout
+   	 		android:layout_width="match_parent"
+   	 		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+				<!--<ImageView
+       				android:layout_width="wrap_content"
+       				android:layout_height="wrap_content"
+       				android:layout_gravity="center_horizontal"
+        			android:src="@drawable/new_battle_button"
+        			android:contentDescription="@string/newBattle"
+        			android:onClick="onFindFriendsClicked"
+        			android:layout_marginTop="20dp"
+        			android:layout_marginBottom="10dp" /> -->
+        		<Button 
+        		    android:background="@drawable/battles_bg"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_gravity="center_horizontal"
+        		    android:layout_marginTop="20dp"
+        		    android:layout_marginBottom="10dp"
+        		    android:paddingTop="7dp"
+        		    android:paddingBottom="7dp"
+        		    android:onClick="onFindFriendsClicked"
+        		    style="@style/BattleListHeaderText"
+        		    android:text="@string/newBattleButtonText" />
+    			<LinearLayout
+    			    android:id="@+id/currentBattles"
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="wrap_content"
+    			    android:orientation="vertical"
+    			    android:background="@drawable/battles_bg"
+    			    android:gravity="center_horizontal"
+    			    android:layout_gravity="center_horizontal" >
+    			    <TextView 
+    			        android:layout_width="wrap_content"
+    					android:layout_height="wrap_content"
+    			        android:text="@string/currentBattles"
+    			        android:layout_gravity="left"
+    			        android:textSize="20.0sp"
+    			        android:typeface="serif"
+    			        android:textColor="#FFF6EF" />
+    			    <ImageView
+    			        android:layout_width="wrap_content"
+    			        android:layout_height="wrap_content"
+    			        android:src="@drawable/line"
+    			        android:layout_gravity="center_horizontal"
+    			        android:gravity="center_horizontal"
+    			        android:contentDescription="@string/titleSeparator" />
+    			</LinearLayout> 
 
-    <ListView
-        android:id="@+id/openBattleList"
-        android:layout_width="match_parent"
-        android:layout_height="270dp" >
-    </ListView>
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="174dp"
-        android:layout_height="56dp"
-        android:text="@string/findFriends"
-        android:onClick="onFindFriendsClicked" 
-        />
-
-</LinearLayout>
+		</LinearLayout>
+    
+</ScrollView>

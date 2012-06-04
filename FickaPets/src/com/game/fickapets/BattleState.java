@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class BattleState {
 	/* bundle keys */
@@ -22,9 +23,12 @@ public class BattleState {
 	public static final String MY_STRENGTH = "myStartingStrength";
 	public static final String OPPONENT_STRENGTH = "opponentStartingStrength";
 	
+	private static final String MY_MOVE_NULL = "myMoveIsNull";
+	private static final String OPP_MOVE_NULL = "opponentMoveIsNull";
+	
 	public String bid;
-	public Integer myMove;
-	public Integer opponentMove;
+	private String myMove;
+	private String opponentMove;
 	public Double myStartingStrength;
 	public Double opponentStartingStrength;
 	public String opponentName;				/* never null */
@@ -34,8 +38,86 @@ public class BattleState {
 	public String myId;						/* never null */
 	public Integer numMovesPlayed;
 	
+	private Boolean myMoveIsNull = false;
+	private Boolean oppMoveIsNull = false;
+	
 	public BattleState(Context context, Bundle bStateBundle) {
 		setStateWithBundle(context, bStateBundle);
+	}
+	
+	/* initializes BattleState object with contents of JSONObject */
+	public BattleState(Context context, JSONObject jsonObject) {
+		Intent intent = addExtrasToIntent(new Intent(), jsonObject);
+		setStateWithBundle(context, intent.getExtras());
+	}
+	
+	private Integer getMove(String moveStr) {
+		if (moveStr == null || moveStr.equals("")) return null;
+		String[] myMoves = moveStr.split(" ");
+		return Integer.valueOf(myMoves[myMoves.length-1]);
+	}
+	
+	public Integer getMyMove() {
+		if (myMoveIsNull) return null;
+		return getMove(myMove);
+	}
+	
+	private Integer getMove(int moveIndex, boolean fromMyMoves) {
+		String[] moves;
+		if (fromMyMoves) {
+			if (myMove == null || myMove.length() == 0) return null;
+			moves = myMove.split(" ");
+		} else {
+			if (opponentMove == null || opponentMove.length() == 0) return null;
+			moves = opponentMove.split(" ");
+		}
+		if (moveIndex >= numMovesPlayed || moveIndex >= moves.length) return null;
+		return Integer.valueOf(moves[moveIndex]);
+	}
+	
+	/* returns the move at moveIndex or null there haven't been that many moves */
+	public Integer getMyMove(int moveIndex) {
+		Integer move = getMove(moveIndex, true);
+		return move;
+	}
+	public Integer getOppMove(int moveIndex) {
+		return getMove(moveIndex, false);
+	}
+	
+	public void setMyMove(Integer myMove) {
+		if (myMove == null) {
+			myMoveIsNull = true;
+			return;
+		} else {
+			myMoveIsNull = false;
+			if (this.myMove == null || this.myMove.equals("")) {
+				this.myMove = myMove.toString();
+			} else {
+				this.myMove = this.myMove + " " + (myMove == null ? "null" : myMove.toString());
+			}
+		}
+
+	}
+	
+	public void setOpponentMove(Integer oppMove) {
+		if (oppMove == null) {
+			oppMoveIsNull = true;
+		} else {
+			oppMoveIsNull = false;
+			if (opponentMove == null || opponentMove.equals("")) {
+				opponentMove = oppMove.toString();
+			} else {
+				opponentMove = opponentMove + " " + oppMove.toString();
+			}
+		}
+	}
+	
+	public Integer getOpponentMove() {
+		Log.v("FickaPets", "opponent move str is: " + opponentMove);
+		if (oppMoveIsNull) return null;
+		Integer move = getMove(opponentMove);
+		Log.v("FickaPets", "opponent move returned as: " + move.toString());
+		return move;
 	}
 	
 	private void setStateWithBundle(Context context, Bundle bStateBundle) {
@@ -50,16 +132,23 @@ public class BattleState {
     	opponentHealth = getHealth(bStateBundle, BattleState.OPPONENT_HEALTH);
     	myStartingStrength = getMyStrength(context, bStateBundle.getString(MY_STRENGTH));
     	opponentStartingStrength = getOpponentStrength(bStateBundle.getString(OPPONENT_STRENGTH));
-    	opponentMove = getOppMove(bStateBundle);
+    	opponentMove = bStateBundle.getString(OPPONENT_MOVE);
+    	
+    	if (opponentMove == null || opponentMove.equals("")) {
+    		oppMoveIsNull = true;
+    	} else if (bStateBundle.getString(OPP_MOVE_NULL) != null && !bStateBundle.getString(OPP_MOVE_NULL).equals("")) {
+    		oppMoveIsNull = new Boolean(bStateBundle.getString(OPP_MOVE_NULL));
+    	}
     	bid = getBattleId(bStateBundle);
-    	myMove = getMyMove(bStateBundle);
+    	myMove = bStateBundle.getString(MY_MOVE);
+    	if (myMove == null || myMove.equals("")) {
+    		myMoveIsNull = true;
+    	} else if (bStateBundle.getString(MY_MOVE_NULL) != null) {
+    		myMoveIsNull = new Boolean(bStateBundle.getString(MY_MOVE_NULL));
+    	}
 	}
 	
-	/* initializes BattleState object with contents of JSONObject */
-	public BattleState(Context context, JSONObject jsonObject) {
-		Intent intent = addExtrasToIntent(new Intent(), jsonObject);
-		setStateWithBundle(context, intent.getExtras());
-	}
+	
 	
 	private Double getOpponentStrength(String opponentStrength) {
 		if (opponentStrength == null || opponentStrength.equals("")) return null;
@@ -89,7 +178,7 @@ public class BattleState {
 	private Integer getDefaultBattleHealth() {
 		return 100;
 	}
-	
+	/* 
 	private Integer getMyMove(Bundle bundle) {
     	String myMove = bundle.getString(BattleState.MY_MOVE);
     	if (myMove != null && !myMove.equals("")) {
@@ -97,7 +186,7 @@ public class BattleState {
     	} else {
     		return null;
     	}
-	}
+	} */
 	
 	private String getBattleId(Bundle bundle) {
     	String bid = bundle.getString(BattleState.BATTLE_ID);
@@ -115,6 +204,7 @@ public class BattleState {
     		return Double.valueOf(myStartingStrength);
     	}
 	}
+	/* 
 	private Integer getOppMove(Bundle bundle) {
 		String opponentMove = bundle.getString(BattleState.OPPONENT_MOVE);
 		if (opponentMove == null || opponentMove.equals("")) {
@@ -122,7 +212,8 @@ public class BattleState {
 		} else {
 			return Integer.valueOf(opponentMove);
 		}
-	}
+	} 
+	*/
 	
 	
 	
@@ -139,7 +230,9 @@ public class BattleState {
 			battle.put(OPPONENT_HEALTH, opponentHealth == null ? null : opponentHealth.toString());
 			battle.put(OPPONENT_ID, opponentId);
 			battle.put(MY_ID, myId);
-			battle.put(NUM_MOVES, numMovesPlayed == null ? null : numMovesPlayed.toString());	
+			battle.put(NUM_MOVES, numMovesPlayed == null ? null : numMovesPlayed.toString());
+			battle.put(MY_MOVE_NULL, toString(myMoveIsNull));
+			battle.put(OPP_MOVE_NULL, toString(oppMoveIsNull.toString()));
 			return battle;
 		} catch(Exception ex) {
 			System.out.println("failed to build json battle object");
@@ -163,6 +256,8 @@ public class BattleState {
 			intent.putExtra(OPPONENT_ID, battle.getString(OPPONENT_ID));
 			intent.putExtra(MY_ID, battle.getString(MY_ID));
 			intent.putExtra(NUM_MOVES, battle.optString(NUM_MOVES));
+			intent.putExtra(OPP_MOVE_NULL, battle.optString(OPP_MOVE_NULL));
+			intent.putExtra(MY_MOVE_NULL, battle.optString(MY_MOVE_NULL));
 			return intent;
 		} catch(Exception ex) {
 			System.out.println("failed to extract state from JSONObject");
@@ -175,21 +270,29 @@ public class BattleState {
 		return addExtrasToIntent(intent, toJSON());
 	}
 	
+	private String toString(Object o) {
+		if (o == null) return null;
+		return o.toString();
+	}
+	
 	public Bundle bundleUp() {
 	//	String myMove = this.myMove == null ? "" : this.myMove.toString();
 		//String opponentMove = this.opponentMove == null ? "" : this.opponentMove.toString();
 		Bundle bundle = new Bundle();
 		bundle.putString(BATTLE_ID, bid);
-		bundle.putString(MY_MOVE, myMove.toString());
-		bundle.putString(OPPONENT_MOVE, opponentMove.toString());
-		bundle.putString(MY_STRENGTH, myStartingStrength.toString());
-		bundle.putString(OPPONENT_STRENGTH, opponentStartingStrength.toString());
+		bundle.putString(MY_MOVE, toString(myMove));
+		bundle.putString(OPPONENT_MOVE, toString(opponentMove));
+		bundle.putString(MY_STRENGTH, toString(myStartingStrength));
+		bundle.putString(OPPONENT_STRENGTH, toString(opponentStartingStrength));
 		bundle.putString(OPPONENT_NAME, opponentName);
-		bundle.putString(MY_HEALTH, myHealth.toString());
-		bundle.putString(OPPONENT_HEALTH, opponentHealth.toString());
+		bundle.putString(MY_HEALTH, toString(myHealth));
+		bundle.putString(OPPONENT_HEALTH, toString(opponentHealth));
 		bundle.putString(OPPONENT_ID, opponentId);
 		bundle.putString(MY_ID, myId);
 		bundle.putInt(NUM_MOVES, numMovesPlayed);
+		
+		bundle.putString(MY_MOVE_NULL, toString(myMoveIsNull));
+		bundle.putString(OPP_MOVE_NULL, toString(oppMoveIsNull));
 		return bundle;
 	}
 	

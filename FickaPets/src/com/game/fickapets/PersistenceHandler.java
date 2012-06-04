@@ -213,8 +213,8 @@ public class PersistenceHandler {
 	
 	private static String encodeFileArr(Vector<CacheEntry> files) {
 		StringBuilder sb = new StringBuilder();
-		for (CacheEntry entry: files) {
-			String entryStr = entry.name + ":" + entry.bytes.toString() + "|";
+		for (CacheEntry entry : files) {
+			String entryStr = entry.name + ":" + entry.bytes.toString() + " ";
 			sb.append(entryStr);
 		}
 		sb = sb.deleteCharAt(sb.length()-1);
@@ -224,7 +224,7 @@ public class PersistenceHandler {
 	private static Vector<CacheEntry> decodeFileArr(String filesStr) {
 		Vector<CacheEntry> files = new Vector<CacheEntry>();
 		if (filesStr.equals("")) return files;
-		String[] entries = filesStr.split("|");
+		String[] entries = filesStr.split(" ");
 		for (String entryStr : entries) {
 			int delimiterIndex = entryStr.indexOf(":");
 			String filename = entryStr.substring(0, delimiterIndex);

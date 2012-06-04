@@ -1826,3 +1826,6 @@ Caused by: org.eclipse.core.internal.resources.ResourceException: Resource is ou
 	at org.eclipse.core.internal.resources.File.getContents(File.java:278)
 	at com.android.ide.eclipse.adt.io.IFileWrapper.getContents(IFileWrapper.java:49)
 	... 15 more
+
+!ENTRY com.google.gdt.eclipse.core 2 0 2012-06-04 00:36:31.052
+!MESSAGE Unable to connect to http://dl.google.com/eclipse/plugin/core/compositeArtifacts.xml.

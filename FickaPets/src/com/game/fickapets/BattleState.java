@@ -61,17 +61,19 @@ public class BattleState {
 		if (myMoveIsNull) return null;
 		return getMove(myMove);
 	}
-	
+	/* hides the opponent's move until the move has been played, but displays our own move after
+	 * we've chosen it - this is ued to build the move history in BattleActivity
+	 */
 	private Integer getMove(int moveIndex, boolean fromMyMoves) {
 		String[] moves;
 		if (fromMyMoves) {
 			if (myMove == null || myMove.length() == 0) return null;
 			moves = myMove.split(" ");
 		} else {
-			if (opponentMove == null || opponentMove.length() == 0) return null;
+			if (opponentMove == null || opponentMove.length() == 0 || moveIndex >= numMovesPlayed) return null;
 			moves = opponentMove.split(" ");
 		}
-		if (moveIndex >= numMovesPlayed || moveIndex >= moves.length) return null;
+		if (moveIndex >= moves.length) return null;
 		return Integer.valueOf(moves[moveIndex]);
 	}
 	
@@ -289,7 +291,7 @@ public class BattleState {
 		bundle.putString(OPPONENT_HEALTH, toString(opponentHealth));
 		bundle.putString(OPPONENT_ID, opponentId);
 		bundle.putString(MY_ID, myId);
-		bundle.putInt(NUM_MOVES, numMovesPlayed);
+		bundle.putString(NUM_MOVES, toString(numMovesPlayed));
 		
 		bundle.putString(MY_MOVE_NULL, toString(myMoveIsNull));
 		bundle.putString(OPP_MOVE_NULL, toString(oppMoveIsNull));

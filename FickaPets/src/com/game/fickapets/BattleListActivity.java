@@ -24,6 +24,15 @@ public class BattleListActivity extends Activity{
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		createDisplay();
+	}
+	
+	public void onResume() {
+		super.onResume();
+		createDisplay();
+	}
+	
+	private void createDisplay() {
 		setContentView(R.layout.battle_list);
 		imageViewHandler = new UrlImageViewHandler(this);
 		battleArr = PersistenceHandler.getBattles(this);

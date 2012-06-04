@@ -82,21 +82,12 @@
         android:layout_marginBottom="5dp"
         android:src="@drawable/pet_battle" />
     
-    <ImageView
-        android:id="@+id/attack_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/myPet"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/attackButton"
-        android:onClick="onFightPressed"
-        android:src="@drawable/attack_button" />
+
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/attack_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >

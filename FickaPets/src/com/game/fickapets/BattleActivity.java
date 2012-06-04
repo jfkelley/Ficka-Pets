@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -49,13 +48,16 @@ public class BattleActivity extends Activity {
 	private boolean gameOver = false;
 	private boolean gameIsTie = false;
 	
-	
+	private WaitingView waitingView;
+	private AttackButton attackButton;
 	 
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.on_progress);
     	
     	server = new FickaServer(this);
+    	waitingView = new WaitingView();
+    	attackButton = new AttackButton();
     	Bundle extras = getIntent().getExtras();
     	
     	/* empties bundle into battle state object */
@@ -73,20 +75,18 @@ public class BattleActivity extends Activity {
         	img.setId(R.id.attack_button);
         	img.setImageResource(R.drawable.attack_button);
         	rl.addView(img);*/
-        	
+    		if (bState.getMyMove() != null) {
+        		/* already made a move so view is invisible */
+        		attackButton.setInvisible();
+        		
+        		if (bState.getOpponentMove() == null) {
+        			startWaitingOnOppMove();
+        		} else {
+        			/* if we have opponent move, we also have opponent strength */
+        			playMove();
+        		}
+        	}
     	}
-    	if (bState.getMyMove() != null) {
-    		/* already made a move so view is invisible */
-    		findViewById(R.id.attack_button).setVisibility(View.INVISIBLE);
-    		
-    		if (bState.getOpponentMove() == null) {
-    			startWaitingOnOppMove();
-    		} else {
-    			/* if we have opponent move, we also have opponent strength */
-    			playMove();
-    		}
-    	}
-
     }
     
 
@@ -98,6 +98,7 @@ public class BattleActivity extends Activity {
     	opponentName.setText(getFirstName(bState.opponentName));
     	TextView myName = (TextView)findViewById(R.id.myBattleName);
     	myName.setText("me");
+    	attackButton.setVisible();
     	buildMoveImages();
     }
     /*
@@ -124,6 +125,7 @@ public class BattleActivity extends Activity {
     private void startWaitingOnOppMove() {
     	pollOpponentMove = new PollOpponentMove();
     	pollOpponentMove.execute();
+    	waitingView.addWaitingView();
     
     }
     
@@ -175,7 +177,6 @@ public class BattleActivity extends Activity {
     	}
     }
          
-    /* isMyMove false if it's opponent's move. My moves have even ids, opponent moves have odd ids */
     private void addMoveToUI(Integer move, boolean isMyMove) {
     	LinearLayout ll;
     	if (isMyMove) {
@@ -223,30 +224,6 @@ public class BattleActivity extends Activity {
     	return "";
     }
     
-    private void displayWaiting() {
-    	ImageView attackBtn = (ImageView)findViewById(R.id.attack_button);
-    	RelativeLayout rl = (RelativeLayout)attackBtn.getParent();
-    	rl.removeView(attackBtn);
-    	
-    	LayoutInflater inflater = getLayoutInflater();
-    	LinearLayout newView = (LinearLayout) inflater.inflate(R.layout.waiting_layout, null, false);
-    	TextView waitingText = (TextView)newView.getChildAt(0);
-    	waitingText.setText("Waiting on " + getFirstName(bState.opponentName) + "'s move");
-    	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-    	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
-    	params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-    	rl.addView(newView, params);
-    }
-    
-    private void unDisplayWaiting() {
-    	LinearLayout waitingView = (LinearLayout)findViewById(R.id.waitingLayout);
-    	RelativeLayout rl = (RelativeLayout)waitingView.getParent();
-    	rl.removeView(waitingView);
-    	
-    	ImageView attackBtn = (ImageView)findViewById(R.id.attack_button);
-    	rl.addView(attackBtn);
-    }
-    
     protected Dialog onCreateDialog(int id) {
     	switch(id) {
     	case ATTACK_DIALOG:
@@ -261,9 +238,8 @@ public class BattleActivity extends Activity {
 						bState.setMyMove(item);
 						addMoveToUI(bState.getMyMove(), true);
 						/* checking again in case of double click on this dialog */
-						if (findViewById(R.id.attack_button).getVisibility() == View.VISIBLE) {
-							findViewById(R.id.attack_button).setVisibility(View.INVISIBLE);
-							displayWaiting();
+						if (attackButton.isVisible()) {
+							waitingView.addWaitingView();
 							new SendMoveTask().execute(bState.numMovesPlayed);
 							if (bState.getOpponentMove() == null) {
 								startWaitingOnOppMove();
@@ -491,7 +467,7 @@ public class BattleActivity extends Activity {
     	 * we start waiting on opponent move again
     	 */
     	
-        findViewById(R.id.attack_button).setVisibility(View.VISIBLE);
+        attackButton.setVisible();
     	bState.setMyMove(null);
     	bState.setOpponentMove(null);
     	bState.numMovesPlayed = bState.numMovesPlayed + 1;
@@ -505,6 +481,111 @@ public class BattleActivity extends Activity {
     private void playMove() {
     	assert bState.getMyMove() != null && bState.getOpponentMove() != null;
     	showDialog(SHOW_MOVE_DIALOG);
+    }
+    
+    private class AttackButton {
+    	public static final int ATTACK_BTN_ID = R.id.attackButtonBattle;
+    	private void removeWaitingView() {
+    		View v = BattleActivity.this.findViewById(WaitingView.WAITING_VIEW_ID);
+    		if (v != null) {
+    			RelativeLayout rootView = (RelativeLayout)v.getParent();
+    			rootView.removeView(v);
+    		}
+    	}
+    	
+    	private void placeScrollView() {
+    		ScrollView scrollView = (ScrollView)BattleActivity.this.findViewById(R.id.scrollView);
+    		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scrollView.getLayoutParams();
+    		params.addRule(RelativeLayout.ABOVE, ATTACK_BTN_ID);
+    		scrollView.setLayoutParams(params);
+    	}
+    	private boolean buttonOnScreen() {
+    		return BattleActivity.this.findViewById(ATTACK_BTN_ID) != null;
+    	}
+    	private ImageView addAttackButtonToLayout() {
+    		if (buttonOnScreen()) {
+    			return (ImageView)BattleActivity.this.findViewById(ATTACK_BTN_ID);
+    		}
+    		ImageView btn = new ImageView(BattleActivity.this);
+    		btn.setImageResource(R.drawable.attack_button);
+    		btn.setId(ATTACK_BTN_ID);
+    		btn.setOnClickListener(new View.OnClickListener() {
+    			public void onClick(View v) {
+    				onFightPressed(v);
+    			}
+    		});
+    		RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    		btnParams.addRule(RelativeLayout.ABOVE, R.id.myPet);
+    		btnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+    		
+    		RelativeLayout rootView = (RelativeLayout)findViewById(R.id.battleLayout);
+    		rootView.addView(btn, btnParams);
+    		placeScrollView();
+    		return btn;
+    	}
+    	/* adds button to view if it doesn't already exist, otherwise returns existing button */
+    	private ImageView addAttackButton() {
+    		removeWaitingView();
+    		return addAttackButtonToLayout();
+    	}
+    	
+    	public void setVisible() {
+    		ImageView btn = addAttackButton();
+    		btn.setVisibility(ImageView.VISIBLE);
+    	}
+    	public void setInvisible() {
+    		ImageView btn = addAttackButton();
+    		btn.setVisibility(ImageView.INVISIBLE);
+    	}
+    	public boolean isVisible() {
+    		if (buttonOnScreen()) {
+    			ImageView btn = (ImageView)findViewById(ATTACK_BTN_ID);
+    			return btn.getVisibility() == ImageView.VISIBLE;
+    		}
+    		return false;
+    	}
+    }
+    
+    private class WaitingView {
+    	public static final int WAITING_VIEW_ID = R.id.waitingForBattleMoveLinLayout;
+    	
+    	public void addWaitingView() {
+    		removeAttackBtn();
+    		addWaitingViewToLayout();
+    	}
+    	
+    	private void removeAttackBtn() {
+    		View v = BattleActivity.this.findViewById(AttackButton.ATTACK_BTN_ID);
+    		if (v != null) {
+    			RelativeLayout rootView = (RelativeLayout)v.getParent();
+    			rootView.removeView(v);
+    		}
+    	}
+    	private void placeScrollView() {
+    		ScrollView scrollView = (ScrollView)BattleActivity.this.findViewById(R.id.scrollView);
+    		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scrollView.getLayoutParams();
+    		params.addRule(RelativeLayout.ABOVE, WAITING_VIEW_ID);
+    		scrollView.setLayoutParams(params);
+    	}
+    	private void addWaitingViewToLayout() {
+    		View v = BattleActivity.this.findViewById(WAITING_VIEW_ID);
+    		if (v != null) {
+    			return;
+    		}
+    		
+    		LayoutInflater inflater = getLayoutInflater();
+        	LinearLayout newView = (LinearLayout) inflater.inflate(R.layout.waiting_layout, null, false);
+        	newView.setId(WAITING_VIEW_ID);
+        	TextView waitingText = (TextView)newView.getChildAt(0);
+        	waitingText.setText("Waiting on " + getFirstName(bState.opponentName) + "'s move");
+        	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
+        	params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        	
+        	RelativeLayout rootView = (RelativeLayout)findViewById(R.id.battleLayout);
+        	rootView.addView(newView, params);
+        	placeScrollView();
+    	}
     }
     
     private class HealthDropAnimation extends AsyncTask<Integer, Integer, Void> {
@@ -619,7 +700,7 @@ public class BattleActivity extends Activity {
 			assert opponentMove != null && opponentStrength != null;
 			bState.opponentStartingStrength = opponentStrength;
 			bState.setOpponentMove(opponentMove);
-			unDisplayWaiting();
+			attackButton.setInvisible();
     		playMove();
 		}
     }

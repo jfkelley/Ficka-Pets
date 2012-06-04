@@ -100,7 +100,7 @@ public class BattleActivity extends Activity {
     	TextView opponentName = (TextView)findViewById(R.id.opponentBattleName);
     	opponentName.setText(getFirstName(bState.opponentName));
     	TextView myName = (TextView)findViewById(R.id.myBattleName);
-    	myName.setText("me");
+    	myName.setText("Me");
     	
     	ImageView myPet = (ImageView)findViewById(R.id.myPet);
     	//myPet.setImageResource();
@@ -603,7 +603,7 @@ public class BattleActivity extends Activity {
         	TextView waitingText = (TextView)newView.getChildAt(0);
         	waitingText.setText("Waiting on " + getFirstName(bState.opponentName) + "'s move");
         	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        	params.addRule(RelativeLayout.ABOVE, R.id.myPet);
+        	params.addRule(RelativeLayout.ABOVE, R.id.myBattleLinearLayout);
         	params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         	
         	RelativeLayout rootView = (RelativeLayout)findViewById(R.id.battleLayout);

@@ -60,10 +60,16 @@ public class FindFriendsActivity extends Activity {
 	private JSONObject facebookFriendsJson;
 	private String mFacebookId;
 	
+	private void setProgressLayout() {
+		setContentView(R.layout.on_progress);
+		TextView textView = (TextView)findViewById(R.id.progressLayoutText);
+		textView.setText("Loading facebook friends");
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        setProgressLayout();
         imageViewHandler = new UrlImageViewHandler(this);
         friends = new Vector<FriendInfo>();
         
@@ -147,6 +153,9 @@ public class FindFriendsActivity extends Activity {
     		if (facebookFriendsJson != null) {
     			new FickaServerFilter().execute(facebookFriendsJson);
     		}
+    		/* battleNotifier can run for the first time - just got id */
+    		Intent battleNotifier = new Intent(this, BattleNotifier.class);
+    		startService(battleNotifier);
     		
     	}
     	tryToRegister(this.mFacebookId);

@@ -99,11 +99,12 @@ public final class R {
         public static final int opponentBattleHealthBar=0x7f050006;
         public static final int opponentBattleName=0x7f050007;
         public static final int petImageView=0x7f050014;
+        public static final int progressLayoutText=0x7f050026;
         public static final int resetButton=0x7f050017;
         public static final int scrollView=0x7f05000c;
         public static final int shopButton=0x7f050018;
-        public static final int shopLinearLayout=0x7f050026;
-        public static final int shopTotalCoins=0x7f050027;
+        public static final int shopLinearLayout=0x7f050027;
+        public static final int shopTotalCoins=0x7f050028;
         public static final int sleepButton=0x7f050016;
         public static final int startTime=0x7f050023;
         public static final int strengthEditable=0x7f05001c;
@@ -111,11 +112,11 @@ public final class R {
         public static final int tiredEditable=0x7f050022;
         public static final int tiredPermanent=0x7f050021;
         public static final int waitingForBattleMoveLinLayout=0x7f050001;
-        public static final int waitingLayout=0x7f050028;
-        public static final int waitingText0=0x7f050029;
-        public static final int waitingText1=0x7f05002a;
-        public static final int waitingText2=0x7f05002b;
-        public static final int waitingText3=0x7f05002c;
+        public static final int waitingLayout=0x7f050029;
+        public static final int waitingText0=0x7f05002a;
+        public static final int waitingText1=0x7f05002b;
+        public static final int waitingText2=0x7f05002c;
+        public static final int waitingText3=0x7f05002d;
     }
     public static final class layout {
         public static final int active_battle_row=0x7f030000;

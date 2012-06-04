@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<workbench progressCount="32" version="2.0">
+<workbench progressCount="33" version="2.0">
 <workbenchAdvisor/>
-<window height="746" width="1280" x="1331" y="47">
-=======
-<workbench progressCount="15" version="2.0">
-<workbenchAdvisor/>
-<window height="768" width="1024" x="65" y="24">
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
+<window height="746" width="1280" x="40" y="39">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
 </perspectiveBar>
 <coolbarLayout>
 <coolItem id="group.file" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="132" y="30"/>
-<coolItem id="com.google.gdt.eclipse.suite.GDTPulldownToolbar" itemType="typeToolBarContribution" x="48" y="30"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="106" y="22"/>
+<coolItem id="com.google.gdt.eclipse.suite.GDTPulldownToolbar" itemType="typeToolBarContribution" x="40" y="22"/>
 <coolItem id="additions" itemType="typeGroupMarker"/>
-<<<<<<< HEAD
 <coolItem id="adt.actionSet.avdManager" itemType="typeToolBarContribution" x="54" y="22"/>
 <coolItem id="adt.actionSet.lint" itemType="typeToolBarContribution" x="40" y="22"/>
 <coolItem id="adt.actionSet.wizards" itemType="typeToolBarContribution" x="76" y="22"/>
@@ -28,29 +21,22 @@
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="62" y="22"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="62" y="22"/>
 <coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="54" y="22"/>
-=======
-<coolItem id="adt.actionSet.avdManager" itemType="typeToolBarContribution" x="68" y="30"/>
-<coolItem id="adt.actionSet.lint" itemType="typeToolBarContribution" x="48" y="30"/>
-<coolItem id="adt.actionSet.wizards" itemType="typeToolBarContribution" x="96" y="30"/>
-<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="120" y="30"/>
-<coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
-<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="232" y="30"/>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="98" y="22"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="54" y="22"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="152" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.browser.editor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="com.google.gwt.eclipse.core.editors.gwtJavaEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
-<page aggregateWorkingSetId="Aggregate for window 1338608744197" focus="true" label="Workspace - Java">
+<page aggregateWorkingSetId="Aggregate for window 1335376960010" focus="true" label="Workspace - Java">
 <editors>
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<<<<<<< HEAD
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
@@ -62,63 +48,89 @@
 <part id="7"/>
 <part id="8"/>
 <part id="9"/>
+<part id="10"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
+<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle.xml" partName="battle.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/layout/battle.xml" title="battle.xml" tooltip="FickaPets/res/layout/battle.xml" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/layout/battle.xml"/>
+</editor>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FickaPetsStart.java" partName="FickaPetsStart.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/FickaPetsStart.java" title="FickaPetsStart.java" tooltip="FickaPets/src/com/game/fickapets/FickaPetsStart.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/FickaPetsStart.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4046" selectionTopPixel="1602"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="1728"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleActivity.java" partName="BattleActivity.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleActivity.java" title="BattleActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleActivity.java" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleActivity.java" partName="BattleActivity.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleActivity.java" title="BattleActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleActivity.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/BattleActivity.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7842" selectionTopPixel="3044"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="22805" selectionTopPixel="9132"/>
+</editor>
+<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="styles.xml" partName="styles.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/values/styles.xml" title="styles.xml" tooltip="FickaPets/res/values/styles.xml" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/values/styles.xml"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleListActivity.java" partName="BattleListActivity.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleListActivity.java" title="BattleListActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleListActivity.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/BattleListActivity.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5154" selectionTopPixel="1980"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleState.java" partName="BattleState.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleState.java" title="BattleState.java" tooltip="FickaPets/src/com/game/fickapets/BattleState.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/BattleState.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2439" selectionTopPixel="738"/>
+</editor>
+<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="ids.xml" partName="ids.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/values/ids.xml" title="ids.xml" tooltip="FickaPets/res/values/ids.xml" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/values/ids.xml"/>
 </editor>
 <editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="waiting_layout.xml" partName="waiting_layout.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/layout/waiting_layout.xml" title="waiting_layout.xml" tooltip="FickaPets/res/layout/waiting_layout.xml" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/layout/waiting_layout.xml"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PetNotifier.java" partName="PetNotifier.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/PetNotifier.java" title="PetNotifier.java" tooltip="FickaPets/src/com/game/fickapets/PetNotifier.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/PetNotifier.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="790" selectionTopPixel="163"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FickaServer.java" partName="FickaServer.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/FickaServer.java" title="FickaServer.java" tooltip="FickaPets/src/com/game/fickapets/FickaServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/FickaServer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3168" selectionTopPixel="945"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleListActivity.java" partName="BattleListActivity.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleListActivity.java" title="BattleListActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleListActivity.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/BattleListActivity.java"/>
-<editorState selectionHorizontalPixel="21" selectionLength="75" selectionOffset="1354" selectionTopPixel="101"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleNotifier.java" partName="BattleNotifier.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/BattleNotifier.java" title="BattleNotifier.java" tooltip="FickaPets/src/com/game/fickapets/BattleNotifier.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/BattleNotifier.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1961" selectionTopPixel="463"/>
 </editor>
-<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle.xml" partName="battle.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/layout/battle.xml" title="battle.xml" tooltip="FickaPets/res/layout/battle.xml" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/layout/battle.xml"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FindFriendsActivity.java" partName="FindFriendsActivity.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/src/com/game/fickapets/FindFriendsActivity.java" title="FindFriendsActivity.java" tooltip="FickaPets/src/com/game/fickapets/FindFriendsActivity.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/src/com/game/fickapets/FindFriendsActivity.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="1664"/>
 </editor>
-<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="styles.xml" partName="styles.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/values/styles.xml" title="styles.xml" tooltip="FickaPets/res/values/styles.xml" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/values/styles.xml"/>
-</editor>
-<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="styles.xml" partName="styles.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/values/styles.xml" title="styles.xml" tooltip="FickaPets/res/values/styles.xml" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/values/styles.xml"/>
-</editor>
-<editor id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle_list.xml" partName="battle_list.xml" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPets/res/layout/battle_list.xml" title="battle_list.xml" tooltip="FickaPets/res/layout/battle_list.xml" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPets/res/layout/battle_list.xml"/>
-</editor>
-<editor activePart="true" focus="true" id="com.google.gwt.eclipse.core.editors.gwtJavaEditor" name="Battle.java" partName="Battle.java" path="/Users/cmckenna/Developer/Ficka-Pets/FickaPetsServer/src/com/server/fickapets/Battle.java" title="Battle.java" tooltip="FickaPetsServer/src/com/server/fickapets/Battle.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/FickaPetsServer/src/com/server/fickapets/Battle.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="811" selectionTopPixel="0"/>
-</editor>
-=======
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
-</folder>
-</info>
-</editorArea>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 </editors>
 <views>
+<view id="org.eclipse.jdt.junit.ResultView" partName="JUnit">
+<viewState failuresOnly="false" layout="1" orientation="2" ratio="500" scroll="false" time="true"/>
+</view>
+<view id="org.eclipse.debug.ui.DebugView" partName="Debug">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.VariableView" partName="Variables">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.BreakpointView" partName="Breakpoints">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.TaskList" partName="Tasks">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tasks">
+<columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="300" org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.priorityField="30" org.eclipse.ui.ide.resourceField="90"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.completionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.priorityField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.descriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
+<viewState/>
+</view>
+<view id="com.android.ide.eclipse.ddms.views.LogCatView" partName="LogCat">
+<viewState/>
+</view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<<<<<<< HEAD
 <expanded>
-<category IMemento.internal.id="Errors"/>
+<category IMemento.internal.id="Warnings (13 items)"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
-=======
-<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="105" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -160,7 +172,6 @@
 </customFilters>
 </viewState>
 </view>
-<<<<<<< HEAD
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaration">
 <viewState/>
 </view>
@@ -170,15 +181,8 @@
 <view id="com.google.gwt.eclipse.DevModeView" partName="Development Mode">
 <viewState/>
 </view>
-=======
-<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
-<viewState/>
-</view>
-<view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
-<view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -193,7 +197,6 @@
 <alwaysOnActionSet id="adt.actionSet.refactorings"/>
 <alwaysOnActionSet id="adt.actionSet.avdManager"/>
 <alwaysOnActionSet id="adt.actionSet.lint"/>
-<alwaysOnActionSet id="com.google.gdt.eclipse.core.actionSet"/>
 <alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
 <alwaysOnActionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
 <alwaysOnActionSet id="org.eclipse.jdt.ui.JavaElementCreationActionSet"/>
@@ -201,6 +204,7 @@
 <alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
 <alwaysOnActionSet id="org.eclipse.jdt.debug.ui.JDTDebugActionSet"/>
 <alwaysOnActionSet id="org.eclipse.jdt.junit.JUnitActionSet"/>
+<alwaysOnActionSet id="com.google.gdt.eclipse.core.actionSet"/>
 <show_view_action id="org.eclipse.jdt.ui.PackageExplorer"/>
 <show_view_action id="org.eclipse.jdt.ui.TypeHierarchy"/>
 <show_view_action id="org.eclipse.jdt.ui.SourceView"/>
@@ -230,25 +234,28 @@
 <new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
 <new_wizard_action id="com.android.ide.eclipse.adt.project.NewProjectWizard"/>
 <new_wizard_action id="com.android.ide.eclipse.editors.wizards.NewXmlFileWizard"/>
+<new_wizard_action id="org.eclipse.jdt.junit.wizards.NewTestCaseCreationWizard"/>
 <new_wizard_action id="com.google.gdt.eclipse.suite.wizards.newProjectWizard"/>
-<new_wizard_action id="com.google.gwt.eclipse.core.newEntryPointWizard"/>
-<new_wizard_action id="com.google.gwt.eclipse.core.newHostPageWizard"/>
 <new_wizard_action id="com.google.gwt.eclipse.core.newModuleWizard"/>
+<new_wizard_action id="com.google.gwt.eclipse.core.newHostPageWizard"/>
+<new_wizard_action id="com.google.gwt.eclipse.core.newEntryPointWizard"/>
 <new_wizard_action id="com.google.gwt.eclipse.core.newClientBundleWizard"/>
 <new_wizard_action id="com.google.gwt.eclipse.core.newUiBinderWizard"/>
-<new_wizard_action id="org.eclipse.jdt.junit.wizards.NewTestCaseCreationWizard"/>
 <perspective_action id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
 <perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
 <perspective_action id="com.android.ide.eclipse.ddms.Perspective"/>
 <perspective_action id="com.android.ide.eclipse.hierarchyviewer.PixelPerfectPespective"/>
 <perspective_action id="com.android.ide.eclipse.hierarchyviewer.TreeViewPerspective"/>
-<perspective_action id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
-<view id="org.eclipse.jdt.ui.PackageExplorer"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.jdt.ui.SourceView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="com.android.ide.eclipse.ddms.views.LogCatView"/>
+<view id="com.google.gwt.eclipse.DevModeView"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<view id="org.eclipse.jdt.junit.ResultView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
 <layout>
@@ -256,50 +263,47 @@
 <info folder="true" part="left">
 <folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.jdt.junit.ResultView" label="JUnit"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
-<page content="org.eclipse.jdt.junit.ResultView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.7495069" ratioLeft="760" ratioRight="254" relationship="2" relative="left">
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@564a5320" ratio="0.75" ratioLeft="762" ratioRight="254" relationship="2" relative="left">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<<<<<<< HEAD
 <info part="org.eclipse.ui.editorss" ratio="0.2001576" ratioLeft="254" ratioRight="1015" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.7807808" ratioLeft="520" ratioRight="146" relationship="4" relative="org.eclipse.ui.editorss">
-=======
-<info part="org.eclipse.ui.editorss" ratio="0.2495069" ratioLeft="253" ratioRight="761" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.74882996" ratioLeft="480" ratioRight="161" relationship="4" relative="org.eclipse.ui.editorss">
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
-<folder activePageID="org.eclipse.ui.views.ProblemView" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
+<page content="com.google.gwt.eclipse.DevModeView" label="Development Mode"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
-<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
-<page content="com.google.gwt.eclipse.DevModeView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
 </presentation>
 </folder>
 </info>
-<<<<<<< HEAD
 <info folder="true" part="right" ratio="0.7549407" ratioLeft="764" ratioRight="248" relationship="2" relative="org.eclipse.ui.editorss">
-=======
-<info folder="true" part="right" ratio="0.74901444" ratioLeft="570" ratioRight="191" relationship="2" relative="org.eclipse.ui.editorss">
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 <folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.ui.texteditor.TemplatesView" label="LabelNotFound"/>
@@ -312,7 +316,6 @@
 </mainWindow>
 </layout>
 </perspective>
-<<<<<<< HEAD
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.debug.internal.ui.DebugPerspectiveFactory" id="org.eclipse.debug.ui.DebugPerspective" label="Debug"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -362,51 +365,70 @@
 <view id="org.eclipse.debug.ui.DebugView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.7497929" ratioLeft="905" ratioRight="302" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.7497929" ratioLeft="905" ratioRight="302" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.75" ratioLeft="426" ratioRight="142" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.75" ratioLeft="426" ratioRight="142" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.PropertySheet" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@10388161" ratio="0.49958575" ratioLeft="603" ratioRight="604" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">&#x0A;<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">&#x0A;<page content="com.google.gwt.eclipse.DevModeView" label="Development Mode"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@10388161" ratio="0.49958575" ratioLeft="603" ratioRight="604" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">
+<folder activePageID="com.android.ide.eclipse.ddms.views.LogCatView" appearance="2" expanded="2">
+<page content="com.google.gwt.eclipse.DevModeView" label="Development Mode"/>
 <page content="org.eclipse.jdt.junit.ResultView" label="JUnit"/>
 <page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 </presentation>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.4947589" ratioLeft="236" ratioRight="241" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.7497929" ratioLeft="905" ratioRight="302" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.7497929" ratioLeft="905" ratioRight="302" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.49958575" ratioLeft="603" ratioRight="604" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.49958575" ratioLeft="603" ratioRight="604" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
@@ -419,150 +441,176 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/FickaPets/src/com/game/fickapets/BattleActivity.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" path="/FickaPets/res/layout/waiting_layout.xml"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/FickaPets/src/com/game/fickapets/BattleListActivity.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" path="/FickaPets/res/layout/battle.xml"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" path="/FickaPets/res/values/styles.xml"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" path="/FickaPets/res/layout/battle_list.xml"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.google.gwt.eclipse.core.editors.gwtJavaEditor" path="/FickaPetsServer/src/com/server/fickapets/Battle.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/FickaPets/src/com/game/fickapets/FickaServer.java"/>
 </editors>
-<item historyLabel="BattleListActivity.java" index="2">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7148" y="0"/>
-</item>
-<item historyLabel="BattleListActivity.java" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6577" y="0"/>
-</item>
-<item historyLabel="BattleListActivity.java" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7148" y="0"/>
-</item>
-<item historyLabel="BattleListActivity.java" index="2">
-<position info="not_deleted" x="1354" y="75"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7148" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6713" y="0"/>
-</item>
-<item historyLabel="battle.xml" index="3"/>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7057" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7146" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7177" y="0"/>
-</item>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7177" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6773" y="0"/>
+<position info="not_deleted" x="22647" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
 <position/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22767" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22811" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22883" y="0"/>
+</item>
+<item historyLabel="FickaServer.java" index="1">
+<position info="not_deleted" x="3168" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="25204" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23067" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23095" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23132" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23095" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23132" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23095" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23132" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23095" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23328" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22647" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
 <position/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6842" y="0"/>
+<position info="not_deleted" x="22767" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6845" y="0"/>
+<position info="not_deleted" x="22811" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6211" y="0"/>
+<position info="not_deleted" x="10006" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6227" y="0"/>
+<position info="not_deleted" x="25204" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6266" y="0"/>
+<position info="not_deleted" x="23031" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6294" y="0"/>
+<position info="not_deleted" x="23067" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6318" y="0"/>
+<position info="not_deleted" x="23231" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6178" y="0"/>
-</item>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="styles.xml" index="4"/>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="styles.xml" index="4"/>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="styles.xml" index="4"/>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="battle_list.xml" index="5"/>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6178" y="0"/>
+<position info="not_deleted" x="23328" y="0"/>
 </item>
 <item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6895" y="0"/>
-</item>
-<item historyLabel="waiting_layout.xml" index="1"/>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="6895" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7482" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7341" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7374" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7420" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7482" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7480" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="7482" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="13628" y="13"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="15498" y="0"/>
-</item>
-<item historyLabel="BattleActivity.java" index="0">
-<position info="not_deleted" x="19790" y="0"/>
-</item>
-<item active="true" historyLabel="Battle.java" index="6">
 <position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23067" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23231" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23328" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="23031" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22615" y="0"/>
+</item>
+<item historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22669" y="0"/>
+</item>
+<item active="true" historyLabel="BattleActivity.java" index="0">
+<position info="not_deleted" x="22736" y="0"/>
 </item>
 </navigationHistory>
-=======
-</perspectives>
-<workingSets/>
-<navigationHistory/>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.ConsoleFolderView"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="org.eclipse.ui.editorss"/>
+<trimItem IMemento.internal.id="right"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.ViewStack@10388161"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.ToolsFolderView"/>
+<trimItem IMemento.internal.id="org.eclipse.debug.internal.ui.OutlineFolderView"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
@@ -571,37 +619,37 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
-<<<<<<< HEAD
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.google.gwt.eclipse.core.editors.gwtJavaEditor" name="Battle.java" tooltip="FickaPetsServer/src/com/server/fickapets/Battle.java">
-<persistable path="/FickaPetsServer/src/com/server/fickapets/Battle.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FindFriendsActivity.java" tooltip="FickaPets/src/com/game/fickapets/FindFriendsActivity.java">
+<persistable path="/FickaPets/src/com/game/fickapets/FindFriendsActivity.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle_list.xml" tooltip="FickaPets/res/layout/battle_list.xml">
-<persistable path="/FickaPets/res/layout/battle_list.xml"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleNotifier.java" tooltip="FickaPets/src/com/game/fickapets/BattleNotifier.java">
+<persistable path="/FickaPets/src/com/game/fickapets/BattleNotifier.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="styles.xml" tooltip="FickaPets/res/values/styles.xml">
-<persistable path="/FickaPets/res/values/styles.xml"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle.xml" tooltip="FickaPets/res/layout/battle.xml">
-<persistable path="/FickaPets/res/layout/battle.xml"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleListActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleListActivity.java">
-<persistable path="/FickaPets/src/com/game/fickapets/BattleListActivity.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PetNotifier.java" tooltip="FickaPets/src/com/game/fickapets/PetNotifier.java">
-<persistable path="/FickaPets/src/com/game/fickapets/PetNotifier.java"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="strings.xml" tooltip="FickaPets/res/values/strings.xml">
-<persistable path="/FickaPets/res/values/strings.xml"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FickaServer.java" tooltip="FickaPets/src/com/game/fickapets/FickaServer.java">
+<persistable path="/FickaPets/src/com/game/fickapets/FickaServer.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="waiting_layout.xml" tooltip="FickaPets/res/layout/waiting_layout.xml">
 <persistable path="/FickaPets/res/layout/waiting_layout.xml"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="attack_layer_list.xml" tooltip="FickaPets/res/drawable/attack_layer_list.xml">
-<persistable path="/FickaPets/res/drawable/attack_layer_list.xml"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="ids.xml" tooltip="FickaPets/res/values/ids.xml">
+<persistable path="/FickaPets/res/values/ids.xml"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleState.java" tooltip="FickaPets/src/com/game/fickapets/BattleState.java">
+<persistable path="/FickaPets/src/com/game/fickapets/BattleState.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle_list.xml" tooltip="FickaPets/res/layout/battle_list.xml">
+<persistable path="/FickaPets/res/layout/battle_list.xml"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleListActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleListActivity.java">
+<persistable path="/FickaPets/src/com/game/fickapets/BattleListActivity.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="styles.xml" tooltip="FickaPets/res/values/styles.xml">
+<persistable path="/FickaPets/res/values/styles.xml"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleActivity.java" tooltip="FickaPets/src/com/game/fickapets/BattleActivity.java">
 <persistable path="/FickaPets/src/com/game/fickapets/BattleActivity.java"/>
@@ -609,20 +657,17 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FickaPetsStart.java" tooltip="FickaPets/src/com/game/fickapets/FickaPetsStart.java">
 <persistable path="/FickaPets/src/com/game/fickapets/FickaPetsStart.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Health.java" tooltip="FickaPets/src/com/game/fickapets/Health.java">
-<persistable path="/FickaPets/src/com/game/fickapets/Health.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="battle.xml" tooltip="FickaPets/res/layout/battle.xml">
+<persistable path="/FickaPets/res/layout/battle.xml"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Pet.java" tooltip="FickaPets/src/com/game/fickapets/Pet.java">
-<persistable path="/FickaPets/src/com/game/fickapets/Pet.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="strings.xml" tooltip="FickaPets/res/values/strings.xml">
+<persistable path="/FickaPets/res/values/strings.xml"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BattleNotifier.java" tooltip="FickaPets/src/com/game/fickapets/BattleNotifier.java">
-<persistable path="/FickaPets/src/com/game/fickapets/BattleNotifier.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.manifest.ManifestEditor" name="AndroidManifest.xml" tooltip="FickaPets/AndroidManifest.xml">
+<persistable path="/FickaPets/AndroidManifest.xml"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.CommonXmlEditor" name="on_progress.xml" tooltip="FickaPets/res/layout/on_progress.xml">
-<persistable path="/FickaPets/res/layout/on_progress.xml"/>
+<file factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" name="Double.class" tooltip="java.lang.Double">
+<persistable org.eclipse.jdt.ui.ClassFileIdentifier="=FickaPets/\/Users\/cmckenna\/Developer\/android-sdk-macosx\/platforms\/android-10\/android.jar&lt;java.lang(Double.class"/>
 </file>
 </mruList>
-=======
-<mruList/>
->>>>>>> 883235b30eb05aeecf4a14ee77614d51d62c74a6
 </workbench>

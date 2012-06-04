@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 
 
+import java.util.Vector;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -485,8 +486,9 @@ public class BattleActivity extends Activity {
     
     private class AttackButton {
     	public static final int ATTACK_BTN_ID = R.id.attackButtonBattle;
-    	private void removeWaitingView() {
-    		View v = BattleActivity.this.findViewById(WaitingView.WAITING_VIEW_ID);
+    	
+    	private void removeAttackBtn() {
+    		View v = BattleActivity.this.findViewById(AttackButton.ATTACK_BTN_ID);
     		if (v != null) {
     			RelativeLayout rootView = (RelativeLayout)v.getParent();
     			rootView.removeView(v);
@@ -525,7 +527,7 @@ public class BattleActivity extends Activity {
     	}
     	/* adds button to view if it doesn't already exist, otherwise returns existing button */
     	private ImageView addAttackButton() {
-    		removeWaitingView();
+    		waitingView.removeWaitingView();
     		return addAttackButtonToLayout();
     	}
     	
@@ -548,19 +550,21 @@ public class BattleActivity extends Activity {
     
     private class WaitingView {
     	public static final int WAITING_VIEW_ID = R.id.waitingForBattleMoveLinLayout;
+    	private AsyncTask<Void, TextView,Void> waitingAnimation;
     	
     	public void addWaitingView() {
-    		removeAttackBtn();
+    		attackButton.removeAttackBtn();
     		addWaitingViewToLayout();
     	}
-    	
-    	private void removeAttackBtn() {
-    		View v = BattleActivity.this.findViewById(AttackButton.ATTACK_BTN_ID);
+    	private void removeWaitingView() {
+    		View v = BattleActivity.this.findViewById(WaitingView.WAITING_VIEW_ID);
     		if (v != null) {
+    			waitingAnimation.cancel(true);
     			RelativeLayout rootView = (RelativeLayout)v.getParent();
     			rootView.removeView(v);
     		}
     	}
+    	
     	private void placeScrollView() {
     		ScrollView scrollView = (ScrollView)BattleActivity.this.findViewById(R.id.scrollView);
     		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scrollView.getLayoutParams();
@@ -585,8 +589,85 @@ public class BattleActivity extends Activity {
         	RelativeLayout rootView = (RelativeLayout)findViewById(R.id.battleLayout);
         	rootView.addView(newView, params);
         	placeScrollView();
+        	waitingAnimation = new WaitingAnimation().execute();
+    	}
+    	
+    	public boolean waitingViewOnScreen() {
+    		return BattleActivity.this.findViewById(WAITING_VIEW_ID) != null;
+    	}
+    	
+    	private class WaitingAnimation extends AsyncTask<Void, TextView, Void> {
+    		private Vector<TextView> dots;
+    		private int index = 0;
+    		int UICount = 0;
+    		private boolean setup = true;
+    		public WaitingAnimation() {
+    			super();
+    			dots = new Vector<TextView>();
+    			index = 0;
+    		}
+    		
+    		private void setupAnimation() {
+    			TextView firstDot = null;
+    			TextView secondDot = null;
+    			TextView thirdDot = null;
+    			while (firstDot == null || secondDot == null || thirdDot == null) {
+    				firstDot = (TextView)BattleActivity.this.findViewById(R.id.waitingText1);
+    				secondDot = (TextView)BattleActivity.this.findViewById(R.id.waitingText2);
+    				thirdDot = (TextView)BattleActivity.this.findViewById(R.id.waitingText3);
+    			}
+    			dots.add(firstDot);
+    			dots.add(secondDot);
+    			dots.add(thirdDot);
+    		}
+    		private TextView getNextDot() {
+    			if (index >= dots.size()) {
+    				index = 0;
+    			}
+    			TextView dot = dots.get(index);
+    			index++;
+    			return dot;
+    		}
+    		
+    		protected Void doInBackground(Void... voids){
+    			setupAnimation();
+    			//publishProgress(dots.get(0), dots.get(1), dots.get(2));
+    			int count = 0;
+    			TextView dot = null;
+    			while (!isCancelled()) {
+    				if (count >= 3) {
+    					count = 0;
+    				} else {
+    					dot = getNextDot();
+    					count++;
+    				}
+    				publishProgress(dot);
+    				try {
+    					Thread.sleep(500);
+    				} catch(InterruptedException ex) {}
+    			}
+    			
+    			return null;
+    		}
+    		protected void onProgressUpdate(TextView... textViews) {
+    			TextView thisDot = textViews[0];
+    			if (waitingViewOnScreen()) {
+    				if (UICount >= 3) {
+    					for (TextView dot : dots) {
+    						dot.setVisibility(TextView.INVISIBLE);
+    					}
+    					UICount = 0;
+    				} else {
+    					thisDot.setVisibility(TextView.VISIBLE);
+    					UICount++;
+    				}
+    			}
+    			
+    		}
+    		
     	}
     }
+    
     
     private class HealthDropAnimation extends AsyncTask<Integer, Integer, Void> {
     	private Double velocity = 50.0; //health points per second

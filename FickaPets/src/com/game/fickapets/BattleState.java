@@ -22,6 +22,7 @@ public class BattleState {
 	public static final String MOVES_PLAYED = "numMovesPlayed";
 	public static final String MY_STRENGTH = "myStartingStrength";
 	public static final String OPPONENT_STRENGTH = "opponentStartingStrength";
+	public static final String PET_IMG_NAME = "petImageFilename";
 	
 	private static final String MY_MOVE_NULL = "myMoveIsNull";
 	private static final String OPP_MOVE_NULL = "opponentMoveIsNull";
@@ -36,6 +37,7 @@ public class BattleState {
 	public Integer opponentHealth;			/* battle health always starts at 100 */
 	public String opponentId;				/* never null */
 	public String myId;						/* never null */
+	public String petImgName;				/* never null */
 	public Integer numMovesPlayed;
 	
 	private Boolean myMoveIsNull = false;
@@ -123,10 +125,11 @@ public class BattleState {
 	}
 	
 	private void setStateWithBundle(Context context, Bundle bStateBundle) {
-		/* these three values are always set in bundle */
+		/* these four values are always set in bundle */
     	opponentId = bStateBundle.getString(BattleState.OPPONENT_ID);
     	opponentName = bStateBundle.getString(BattleState.OPPONENT_NAME);
     	myId = bStateBundle.getString(BattleState.MY_ID);
+    	petImgName = bStateBundle.getString(BattleState.PET_IMG_NAME);
     	
     	/* the rest of these may not be set in bundle */
     	numMovesPlayed = getMovesPlayed(bStateBundle);
@@ -235,6 +238,7 @@ public class BattleState {
 			battle.put(NUM_MOVES, numMovesPlayed == null ? null : numMovesPlayed.toString());
 			battle.put(MY_MOVE_NULL, toString(myMoveIsNull));
 			battle.put(OPP_MOVE_NULL, toString(oppMoveIsNull.toString()));
+			battle.put(PET_IMG_NAME, petImgName);
 			return battle;
 		} catch(Exception ex) {
 			System.out.println("failed to build json battle object");
@@ -260,6 +264,7 @@ public class BattleState {
 			intent.putExtra(NUM_MOVES, battle.optString(NUM_MOVES));
 			intent.putExtra(OPP_MOVE_NULL, battle.optString(OPP_MOVE_NULL));
 			intent.putExtra(MY_MOVE_NULL, battle.optString(MY_MOVE_NULL));
+			intent.putExtra(PET_IMG_NAME, battle.getString(PET_IMG_NAME));
 			return intent;
 		} catch(Exception ex) {
 			System.out.println("failed to extract state from JSONObject");
@@ -292,6 +297,7 @@ public class BattleState {
 		bundle.putString(OPPONENT_ID, opponentId);
 		bundle.putString(MY_ID, myId);
 		bundle.putString(NUM_MOVES, toString(numMovesPlayed));
+		bundle.putString(PET_IMG_NAME, petImgName);
 		
 		bundle.putString(MY_MOVE_NULL, toString(myMoveIsNull));
 		bundle.putString(OPP_MOVE_NULL, toString(oppMoveIsNull));

@@ -11,6 +11,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,7 +101,25 @@ public class BattleActivity extends Activity {
     	opponentName.setText(getFirstName(bState.opponentName));
     	TextView myName = (TextView)findViewById(R.id.myBattleName);
     	myName.setText("me");
+    	
+    	ImageView myPet = (ImageView)findViewById(R.id.myPet);
+    	//myPet.setImageResource();
+    	//Bitmap.createScaledBitmap(src, dstWidth, dstHeight, filter)BitmapFactory.decodeResource(getResources(), Pet.thePet(this).getStateImage(this));
+    	myPet.setImageResource(Pet.thePet(this).getStateImage(this));
+    	//RelativeLayout.LayoutParams myPetParams = (RelativeLayout.LayoutParams)myPet.getLayoutParams();
+    	//myPetParams.width = 163;
+    	//myPet.setLayoutParams(myPetParams);
+    	
+    	ImageView oppPet = (ImageView)findViewById(R.id.oppPet);
+    	//oppPet.setImageResource(R.drawable.pet_battle);
+    	oppPet.setImageResource(Pet.getImage(this, bState.petImgName));
+    	//RelativeLayout.LayoutParams oppPetParams = (RelativeLayout.LayoutParams)oppPet.getLayoutParams();
+    	//oppPetParams.width = 163;
+    	//oppPet.setLayoutParams(oppPetParams);
+    	
     	attackButton.setVisible();
+    	
+
     	buildMoveImages();
     }
     /*
@@ -517,7 +537,7 @@ public class BattleActivity extends Activity {
     			}
     		});
     		RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-    		btnParams.addRule(RelativeLayout.ABOVE, R.id.myPet);
+    		btnParams.addRule(RelativeLayout.ABOVE, R.id.myBattleLinearLayout);
     		btnParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
     		
     		RelativeLayout rootView = (RelativeLayout)findViewById(R.id.battleLayout);
@@ -600,7 +620,6 @@ public class BattleActivity extends Activity {
     		private Vector<TextView> dots;
     		private int index = 0;
     		int UICount = 0;
-    		private boolean setup = true;
     		public WaitingAnimation() {
     			super();
     			dots = new Vector<TextView>();

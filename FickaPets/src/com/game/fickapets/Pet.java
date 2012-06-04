@@ -147,6 +147,10 @@ public class Pet {
 		return getImage(context, str);
 	}
 	
+	public String getDefaultImageName() {
+		return "pet_" + type + "_default";
+	}
+	
 	public int getDefaultImage(Context context) {
 		return getImage(context, "pet_" + type + "_default");
 	}
@@ -155,7 +159,7 @@ public class Pet {
 		return getImage(context, "pet_" + type + "_small");
 	}
 	
-	private int getImage(Context context, String name) {
+	public static int getImage(Context context, String name) {
 		return context.getResources().getIdentifier(name, DRAWABLE_DEFTYPE, PACKAGE_NAME);
 	}
 	

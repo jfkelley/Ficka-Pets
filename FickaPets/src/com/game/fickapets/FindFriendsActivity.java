@@ -23,19 +23,26 @@ import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TableRow.LayoutParams;
 
-public class FindFriendsActivity extends ListActivity {
+public class FindFriendsActivity extends Activity {
 	private static final String GET_MY_DATA = "me.data";
 	private static final String GET_FRIENDS_DATA = "friends.data";
 	private static final String GET_DATA_FOR_PHOTOS = "data for photos";
@@ -48,7 +55,7 @@ public class FindFriendsActivity extends ListActivity {
 	private Facebook facebook = new Facebook("439484749410212");
 
 	/* this has the url and name of each person displayed */
-	private Vector<FriendPhotoInfo> friends;
+	private Vector<FriendInfo> friends;
 	
 	private JSONObject facebookFriendsJson;
 	private String mFacebookId;
@@ -58,7 +65,7 @@ public class FindFriendsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         
         imageViewHandler = new UrlImageViewHandler(this);
-        friends = new Vector<FriendPhotoInfo>();
+        friends = new Vector<FriendInfo>();
         
 	    String accessToken = PersistenceHandler.facebookAccessToken(this);
 	    long expires = PersistenceHandler.facebookTokenExpiration(this);
@@ -90,16 +97,18 @@ public class FindFriendsActivity extends ListActivity {
     }
     
     private void fetchData() {
+    	
+    	
     	AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
     	
 		/* remove this comment and comment out GET_DATA_FOR_PHOTOS to run friend filter */
-		//runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
+		runner.request("me/friends", new FacebookDataListener(), GET_FRIENDS_DATA);
 		
 		runner.request("me", new FacebookDataListener(), GET_MY_DATA);
 		
 		// Comment this out and uncomment GET_FRIENDS_DATA
 		//to run friend filter.  This just fetches first NUM_PHOTOS friends returned from facebook
-		runner.request("me/friends", new FacebookDataListener(), GET_DATA_FOR_PHOTOS);
+		//runner.request("me/friends", new FacebookDataListener(), GET_DATA_FOR_PHOTOS);
     }
     
     /* runs in UI thread */
@@ -113,6 +122,22 @@ public class FindFriendsActivity extends ListActivity {
     	
     }
     
+    private void tryToRegister(final String uid) {
+    	if (!PersistenceHandler.iAmRegistered(this)) {
+    		final FickaServer server = new FickaServer(this);
+        	final String pet = Pet.thePet(this).getDefaultImageName();
+
+    		new Thread(new Runnable() {
+    			public void run() {
+    				boolean success = server.getMeRegistered(uid, pet);
+    				if (success) {
+    					PersistenceHandler.confirmUserRegistered(FindFriendsActivity.this);
+    				}
+    			}
+    		}).start();
+    	}
+    }
+    
     /* runs in UI thread. I want facebook id before we start putting friends in view so it's there
      * before user can move to battle activity */
     private void gotMyId(String mFacebookId) {
@@ -122,26 +147,28 @@ public class FindFriendsActivity extends ListActivity {
     		if (facebookFriendsJson != null) {
     			new FickaServerFilter().execute(facebookFriendsJson);
     		}
+    		
     	}
+    	tryToRegister(this.mFacebookId);
     }
     /* runs in UI thread */
     private void gotFriendsIdsForPhotos(JSONArray friendArr) {
-		/* this list doesn't do anything.  Haven't been able to get listview working without this thing */
-		ArrayList<String> list = new ArrayList<String>();
     	try {
     		for (int i = 0; i < NUM_PHOTOS && i < friendArr.length(); i++) {
-    			String id = friendArr.getJSONObject(i).getString("id");
-    			String name = friendArr.getJSONObject(i).getString("name");
-    			friends.add(new FriendPhotoInfo(name, id));
-    			list.add(id);
+    			JSONObject friend = friendArr.getJSONObject(i);
+    			String id = friend.getString("id");
+    			String name = friend.getString("name");
+    			String pet = friend.getString("pet");
+    			friends.add(new FriendInfo(name, id, pet));
     			String url = FACEBOOK_BASE_URL + id + "/picture";
     			imageViewHandler.preLoadUrl(url);
     		}
+    		renderLayout(friends);
     	} catch(Exception ex) {
     		ex.printStackTrace();
     		return;
     	}
-    	setListAdapter(new FriendArrayAdapter(this, list));
+    	
     }
     
     
@@ -244,6 +271,8 @@ public class FindFriendsActivity extends ListActivity {
     		} catch(Exception ex) {
     			System.out.println("failed to flatten array");
     			ex.printStackTrace();
+    		} finally {
+    			client.close();
     		}
     		return flattenedArr;
     	}
@@ -265,8 +294,41 @@ public class FindFriendsActivity extends ListActivity {
     	}
     }
     
+    private void renderLayout(List<FriendInfo> friends) {
+    	setContentView(R.layout.find_friends);
+    	
+    	LinearLayout ll = (LinearLayout)findViewById(R.id.friendsList);
+		for (int i = 0; i < friends.size(); i++) {
+			FriendInfo friendInfo = friends.get(i);
+			TextView friendRow = new TextView(this);
+			friendRow.setGravity(Gravity.LEFT);
+			friendRow.setTextColor(Color.rgb(255, 246, 239));
+			String text = friendInfo.name + "\n" + "Start Battling!";
+			friendRow.setText(text);
+			friendRow.setOnClickListener(new ClickListener(i));
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			params.setMargins(0, 5, 0, 0);
+			params.gravity = Gravity.LEFT;
+			String url = FACEBOOK_BASE_URL + friendInfo.id + "/picture";
+			imageViewHandler.setUrlDrawable(friendRow, url, R.drawable.mystery);
+			
+			ll.addView(friendRow, params);
+		}
+		if (friends.size() == 0) {
+			TextView noFriends = new TextView(this);
+			noFriends.setGravity(Gravity.LEFT);
+			noFriends.setTextColor(Color.rgb(255, 246, 239));
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			params.setMargins(0, 5, 0, 0);
+			noFriends.setText("None of your friends currently play FickaPets");
+			ll.addView(noFriends, params);
+		}
+    }
+    
+    
+    
   
-   private class FriendArrayAdapter extends ArrayAdapter<String> {
+ /*  private class FriendArrayAdapter {
 	   public FriendArrayAdapter(Context context, List<String> list) {
 		   super (context, 0, list);
 	   }
@@ -279,7 +341,7 @@ public class FindFriendsActivity extends ListActivity {
 		   }
 		   view.setCompoundDrawablePadding(10);
 		   
-		   /* this'll eventually be a spannable string. No time for that now */
+
 		   String text = friends.get(position).name + "\n" + "Start Battling!";
 		   view.setText(text);
 		   
@@ -289,21 +351,35 @@ public class FindFriendsActivity extends ListActivity {
 		   return view;
 	   }
    } 
-   @Override
-   public void onListItemClick(ListView lv, View view, int position, long id) {
-	   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
-	   intent.putExtra(BattleState.OPPONENT_NAME,friends.get(position).name);
-	   intent.putExtra(BattleState.OPPONENT_ID, friends.get(position).id);
-	   intent.putExtra(BattleState.MY_ID, mFacebookId);
-	   startActivity(intent);
+   */
+    
+   private class ClickListener implements OnClickListener {
+	   private int index;
+    	
+	   public ClickListener(int index) {
+		   this.index = index;
+	   }
+    	
+	   @Override
+	   public void onClick(View v) {
+		   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
+		   intent.putExtra(BattleState.OPPONENT_NAME, friends.get(index).name);
+		   intent.putExtra(BattleState.OPPONENT_ID, friends.get(index).id);
+		   intent.putExtra(BattleState.MY_ID, mFacebookId);
+		   intent.putExtra(BattleState.PET_IMG_NAME, friends.get(index).pet);
+		   startActivity(intent);
+	   }
    }
+ 
    
-   private class FriendPhotoInfo {
+   private class FriendInfo {
 	   String name;
 	   String id;
-	   public FriendPhotoInfo(String name, String id) {
+	   String pet;
+	   public FriendInfo(String name, String id, String pet) {
 		   this.name = name;
 		   this.id = id;
+		   this.pet = pet;
 	   }
    }
 }

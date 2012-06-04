@@ -35,23 +35,24 @@ public class BattleServlet extends HttpServlet {
 		} else if (action.equals("/battledata")) {
 			battleData(resp, req.getParameter("uid"), req.getParameter("bid"));
 		} else if (action.equals("/registeruser")) {
-			registerUser(resp, req.getParameter("id"));
+			registerUser(resp, req.getParameter("id"), req.getParameter("pet"));
 		} else if (action.equals("/findfriends")) {
 			String content = streamToString(req.getInputStream());
 			findFriends(resp, content);
 		} 
 	}
 	
-	private void registerUser(HttpServletResponse resp, String id) throws IOException {
+	private void registerUser(HttpServletResponse resp, String id, String pet) throws IOException {
 		if (checkNonNullParams(resp, id)) return;
-		User.create(id);
+		User.create(id, pet);
 		resp.setStatus(200);
 	}
 	
 	private static class Friend {
 		private String name;
 		private String id;
-		public Friend(String name, String id){
+		private String pet;
+		public Friend(String name, String id, String pet){
 			this.name = name; this.id = id;
 		}
 	}
@@ -73,7 +74,8 @@ public class BattleServlet extends HttpServlet {
 	private static final String NAME_PATTERN = "\"name\":\\s*\"([^\"]+)\"";
 	private static final String ID_PATTERN = "\"id\":\\s*\"([^\"]+)\"";
 	
-	private static final Pattern JSON_FRIEND_PATTERN = Pattern.compile(NAME_PATTERN + "\\s*,\\s*" + ID_PATTERN);
+	private static final Pattern JSON_FRIEND_PATTERN = Pattern.compile(ID_PATTERN + "\\s*,\\s*" + NAME_PATTERN);
+	//private static final Pattern JSON_FRIEND_PATTERN = Pattern.compile(NAME_PATTERN + "\\s*,\\s*" + ID_PATTERN);
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
@@ -94,9 +96,10 @@ public class BattleServlet extends HttpServlet {
 		Matcher m = JSON_FRIEND_PATTERN.matcher(data);
 		List<Friend> friends = new ArrayList<Friend>();
 		while (m.find()) {
-			String name = m.group(1);
-			String friendId = m.group(2);
-			friends.add(new Friend(name, friendId));
+			String friendId = m.group(1);
+			String name = m.group(2);
+
+			friends.add(new Friend(name, friendId, null));
 		}
 		return friends;
 	}
@@ -106,10 +109,17 @@ public class BattleServlet extends HttpServlet {
 		for (Friend f : allFriends) {
 			ids.add(f.id);
 		}
-		List<String> keep = User.filterNonexisting(ids);
+		List<UserAtts> keep = User.filterNonexisting(ids);
 		List<Friend> usingApp = new ArrayList<Friend>();
+		
 		for (Friend f : allFriends) {
-			if (keep.contains(f.id)) usingApp.add(f);
+			UserAtts cmpAtts = new UserAtts(f.id, "");
+			int index = keep.indexOf(cmpAtts);
+			if (index != -1) {
+				UserAtts atts = keep.get(index);
+				f.pet = atts.pet;
+				usingApp.add(f);
+			}
 		}
 		return usingApp;
 	}
@@ -119,7 +129,7 @@ public class BattleServlet extends HttpServlet {
 		sb.append("[\n");
 		for (int i = 0; i < friends.size(); i++) {
 			Friend f = friends.get(i);
-			sb.append(String.format("\t{\n\t\t\"name\": \"%s\",\n\t\t\"id\": \"%s\"\n\t}", f.name, f.id));
+			sb.append(String.format("\t{\n\t\t\"name\": \"%s\",\n\t\t\"id\": \"%s\",\n\t\t\"pet\": \"%s\"\n\t}", f.name, f.id, f.pet));
 			if (i != friends.size() - 1) sb.append(",");
 			sb.append("\n");
 		}

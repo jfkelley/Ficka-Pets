@@ -12,10 +12,12 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 public class User {
 	public static final String ENTITY_KIND = "user";
 	private static final String USER_ID_PROPERTY = "uid";
+	private static final String PET_IMG_PROPERTY = "pet";
 	
-	public static void create(String id) {
+	public static void create(String id, String pet) {
 		Entity entity = new Entity(ENTITY_KIND);
 		entity.setProperty(USER_ID_PROPERTY, id);
+		entity.setProperty(PET_IMG_PROPERTY, pet);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		datastore.put(entity);
 	}
@@ -26,13 +28,16 @@ public class User {
 		return datastore.prepare(query).asIterator().hasNext();
 	}
 	
-	public static List<String> filterNonexisting(List<String> ids) {
-		if (ids.isEmpty()) { return new ArrayList<String>(); }
+	public static List<UserAtts> filterNonexisting(List<String> ids) {
+		if (ids.isEmpty()) { return new ArrayList<UserAtts>(); }
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query(ENTITY_KIND).addFilter(USER_ID_PROPERTY, FilterOperator.IN, ids);
-		List<String> found = new ArrayList<String>();
+		List<UserAtts> found = new ArrayList<UserAtts>();
 		for (Entity entity : datastore.prepare(query).asIterable()) {
-			found.add((String) entity.getProperty(USER_ID_PROPERTY));
+			UserAtts atts = new UserAtts();
+			atts.uid = (String)entity.getProperty(USER_ID_PROPERTY);
+			atts.pet = (String)entity.getProperty(PET_IMG_PROPERTY);
+			found.add(atts);
 		}
 		return found;
 	}

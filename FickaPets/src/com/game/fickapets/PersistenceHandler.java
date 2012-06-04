@@ -43,6 +43,7 @@ public class PersistenceHandler {
 	private static final String COINS_KEY = "coins";
 	private static final String INVENTORY_KEY = "inventory";
 	private static final String FACEBOOK_ID_KEY = "facebookId";
+	private static final String IS_REGISTERED_KEY = "userIsRegistered";
 	
 	/* key values for CACHE_FILE */
 	private static final String FILE_QUEUE_KEY = "filesOnDisk";
@@ -223,6 +224,17 @@ public class PersistenceHandler {
 		SharedPreferences facebookPrefs = context.getSharedPreferences(USER_FILE, 0);
 		return facebookPrefs.getString(FACEBOOK_ID_KEY, null);
 	}
+	public static void confirmUserRegistered(Context context) {
+		SharedPreferences registerPrefs = context.getSharedPreferences(USER_FILE, 0);
+		SharedPreferences.Editor editor = registerPrefs.edit();
+		editor.putBoolean(IS_REGISTERED_KEY, true);
+		editor.commit();
+	}
+	public static boolean iAmRegistered(Context context) {
+		SharedPreferences registerPrefs = context.getSharedPreferences(USER_FILE, 0);
+		return registerPrefs.getBoolean(IS_REGISTERED_KEY, false);
+	}
+	
 	
 	private static String encodeFileArr(Vector<CacheEntry> files) {
 		StringBuilder sb = new StringBuilder();

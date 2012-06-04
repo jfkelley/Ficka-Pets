@@ -41,6 +41,8 @@ public class FickaServer {
 	private static final String CLOSE_BATTLE = BASE_URL + "closebattle?uid=%s&bid=%s";
 	private static final String FIND_FRIENDS = BASE_URL + "findfriends";
 	private static final String INCOMING_CHALLENGES = BASE_URL + "incomingchallenges?uid=%s";
+	private static final String REGISTER_USER = BASE_URL + "registeruser?id=%s&pet=%s";
+	private static final String FACEBOOK_USER_DATA = GRAPH_BASE_URL + "%s";
 	
 	Context context;
 	public FickaServer(Context context) {
@@ -226,7 +228,7 @@ public class FickaServer {
 	public String getNameForId(String uid) throws Exception {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
 		try {
-			String url = urlFormat(GRAPH_BASE_URL + "%s", uid);
+			String url = urlFormat(FACEBOOK_USER_DATA, uid);
 			HttpGet get = new HttpGet(url);
 			setCharEncoding(get);
 			HttpResponse resp = client.execute(get);
@@ -244,6 +246,26 @@ public class FickaServer {
 		} finally {
 			client.close();
 		}
+	}
+	
+	public boolean getMeRegistered(String uid, String pet) {
+		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
+		try {
+			String url = urlFormat(REGISTER_USER, uid, pet);
+			HttpGet get = new HttpGet(url);
+			setCharEncoding(get);
+			HttpResponse resp = client.execute(get);
+			int status = resp.getStatusLine().getStatusCode();
+			if (status != HttpURLConnection.HTTP_OK){
+				return false;
+			}
+		} catch(IOException ex) {
+			ex.printStackTrace();
+			return false;
+		} finally {
+			client.close();
+		}
+		return true;
 	}
 	
 }

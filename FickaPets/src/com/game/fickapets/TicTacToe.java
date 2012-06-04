@@ -16,12 +16,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 public class TicTacToe extends Minigame {
 
@@ -61,6 +56,10 @@ public class TicTacToe extends Minigame {
 							if (!state.isOver()) {
 								state.makeMove(getStrength());
 								view.invalidate();
+							} else {
+								if (state.getWinner() == 1) {
+									User.theUser(TicTacToe.this).addCoins(getCoinReward());
+								}
 							}
 							return true;
 						} else {
@@ -84,6 +83,16 @@ public class TicTacToe extends Minigame {
 		case 2: return 0.8;
 		case 3: return 0.95;
 		default: return 1.0;
+		}
+	}
+	
+	private int getCoinReward() {
+		switch(difficulty) {
+		case 0: return 2;
+		case 1: return 5;
+		case 2: return 10;
+		case 3: return 100;
+		default: return 0;
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import android.content.Context;
+import android.content.Intent;
 
 
 
@@ -14,8 +15,14 @@ public class Pet {
 	private static Context lastContext;
 	public static Pet thePet(Context context) {
 		if (thePet == null) {
-			thePet = PersistenceHandler.buildPet(context);
+			thePet = PersistenceHandler.loadSavedPet(context);
 		}
+		/*
+		while ((thePet = PersistenceHandler.loadSavedPet(context)) == null) {
+			Intent intent = new Intent(context, ChoosePetActivity.class);
+			context.startActivity(intent);
+		}
+		*/
 		lastContext = context;
 		return thePet;
 	}

@@ -15,6 +15,9 @@
 	<string name="catchCoins">Coin Catch</string>
 	<string name="ticTacToe">Tic-tac-toe</string>
 	<string name="newTTTGame">New Game</string>
+	<string name="choosePetTitle">Choose a Pet!</string>
+	<string name="choosePetDescription">Select a pet! Choose carefully, this cannot be undone!</string>
+	<string name="selectPetButton">Select</string>
 	
 	<!--  Complaint messages for notifications -->
 	<string name="petNeedsFood">Your pet needs food</string>

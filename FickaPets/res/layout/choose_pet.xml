@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1.0">
+    
+    <TextView  
+    	android:layout_width="fill_parent" 
+    	android:layout_height="0dip"
+    	android:layout_weight="0.1" 
+    	android:gravity="center_vertical|center_horizontal"
+    	android:text="@string/choosePetDescription" />
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+    	android:layout_weight="0.3"
+    	android:weightSum="1.0"  >
+	    <ImageView
+	        android:layout_width="0dip"
+	        android:layout_weight="0.8"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/pet_0_default" />
+	    <Button
+        	android:id="@+id/choosePet0"
+        	android:layout_width="wrap_content"
+        	android:layout_weight="0.2"
+        	android:layout_height="wrap_content"
+        	android:text="@string/selectPetButton"
+        	android:onClick="choosePet"
+        	android:tag="0" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+    	android:layout_weight="0.3"
+    	android:weightSum="1.0" >
+	    <ImageView
+	        android:layout_width="0dip"
+	        android:layout_weight="0.8"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/pet_1_default" />
+	    <Button
+        	android:id="@+id/choosePet1"
+        	android:layout_width="wrap_content"
+        	android:layout_weight="0.2"
+        	android:layout_height="wrap_content"
+        	android:text="@string/selectPetButton"
+        	android:onClick="choosePet"
+        	android:tag="1" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+    	android:layout_weight="0.3"
+    	android:weightSum="1.0" >
+	    <ImageView
+	        android:layout_width="0dip"
+	        android:layout_weight="0.8"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/pet_2_default" />
+	    <Button
+        	android:id="@+id/choosePet2"
+        	android:layout_width="wrap_content"
+        	android:layout_weight="0.2"
+        	android:layout_height="wrap_content"
+        	android:text="@string/selectPetButton"
+        	android:onClick="choosePet"
+        	android:tag="2" />
+    </LinearLayout>
+	    
+</LinearLayout>

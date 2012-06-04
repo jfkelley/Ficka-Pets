@@ -92,7 +92,9 @@ public class FickaPetsStart extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		User.theUser(this);
+		
 		initLayout (Pet.thePet(this));
 		
 		startChallengeNotificationService();
@@ -114,6 +116,7 @@ public class FickaPetsStart extends Activity {
 		
 		updateLoop = new MainThread(this).execute(Pet.thePet(this));
 	}
+
 	/* always called when activity leaves foreground so set up background service here */
 	public void onPause () {
 		super.onPause();

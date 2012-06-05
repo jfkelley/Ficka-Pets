@@ -24,6 +24,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -60,16 +61,14 @@ public class FindFriendsActivity extends Activity {
 	private JSONObject facebookFriendsJson;
 	private String mFacebookId;
 	
-	private void setProgressLayout() {
-		setContentView(R.layout.on_progress);
-		TextView textView = (TextView)findViewById(R.id.progressLayoutText);
-		textView.setText("Loading facebook friends");
-	}
+	private boolean registerFailed = false;
+	
+
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setProgressLayout();
         imageViewHandler = new UrlImageViewHandler(this);
         friends = new Vector<FriendInfo>();
         
@@ -101,10 +100,13 @@ public class FindFriendsActivity extends Activity {
 
 		
     }
-    
+	private void setLoadFriendsLayout() {
+		setContentView(R.layout.on_progress);
+		TextView textView = (TextView)findViewById(R.id.progressLayoutText);
+		textView.setText("Loading facebook friends");
+	}
     private void fetchData() {
-    	
-    	
+        setLoadFriendsLayout();
     	AsyncFacebookRunner runner = new AsyncFacebookRunner(facebook);
     	
 		/* remove this comment and comment out GET_DATA_FOR_PHOTOS to run friend filter */
@@ -138,6 +140,9 @@ public class FindFriendsActivity extends Activity {
     				boolean success = server.getMeRegistered(uid, pet);
     				if (success) {
     					PersistenceHandler.confirmUserRegistered(FindFriendsActivity.this);
+    				} else {
+    					registerFailed = true;
+    					showDialog(NetworkErrorDialog.SERVER_FAIL);
     				}
     			}
     		}).start();
@@ -215,9 +220,15 @@ public class FindFriendsActivity extends Activity {
         					gotFriendsIds(json);
         				}
         			};
-        			/* only run since there aren't any friends on server currently */
     			} else if (responseType.equals(GET_DATA_FOR_PHOTOS)) {
     				final JSONArray data = json.getJSONArray("data");
+    				while (!registerFailed && !PersistenceHandler.iAmRegistered(FindFriendsActivity.this)) {
+    					try {
+    						Thread.sleep(50);
+    					} catch(InterruptedException ex) {}
+    				}
+    				/* the dialog will exit activity - but I don't think this thread will be shut down on its own */
+    				if (registerFailed) return;
     				methodToRun = new Runnable() {
     					public void run() {
     						gotFriendsIdsForPhotos(data);
@@ -233,10 +244,22 @@ public class FindFriendsActivity extends Activity {
     		}
     	}
     	public void onFacebookError(FacebookError fbe, Object state) {
-    		
+    		Runnable methodToRun = new Runnable() {
+    			public void run() {
+    				showDialog(NetworkErrorDialog.FACEBOOK_SERVER_FAIL);
+    			}
+    		};
+    		runOnUiThread(methodToRun);
     	}
     	public void onFileNotFoundException(FileNotFoundException ex, Object state) {}
-    	public void onIOException (IOException ex, Object state) {}
+    	public void onIOException (IOException ex, Object state) {
+    		Runnable methodToRun = new Runnable() {
+    			public void run() {
+    				showDialog(NetworkErrorDialog.FACEBOOK_NETWORK_ERROR);
+    			}
+    		};
+    		runOnUiThread(methodToRun);
+    	}
     	public void onMalformedURLException(MalformedURLException ex, Object state) {
     		
     	}
@@ -299,7 +322,18 @@ public class FindFriendsActivity extends Activity {
     	}
     	
     	protected void onPostExecute(JSONArray filteredFriends) {
-    		gotFriendsIdsForPhotos(filteredFriends);
+    		if (filteredFriends == null) {
+    			showDialog(NetworkErrorDialog.SERVER_FAIL);
+    		} else {
+    			gotFriendsIdsForPhotos(filteredFriends);
+    		}
+    	}
+    }
+    
+    protected Dialog onCreateDialog(int id) {
+    	switch(id) {
+    	default:
+    		return NetworkErrorDialog.createDialog(this, id);
     	}
     }
     

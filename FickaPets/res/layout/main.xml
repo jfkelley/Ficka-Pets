@@ -1,172 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:background="#334a53" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.48" >
-        
-        <ImageView
-	        android:id="@+id/petImageView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="100dp"
-	        android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginTop="5dp" />
-		
-		<Button 
-		    android:id="@+id/feedButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/petImageView"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="3dp"
-		    android:text="@string/feed"
-		    android:onClick="feedPressed" />
-		
-		<Button 
-		    android:id="@+id/sleepButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/feedButton"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="3dp"
-		    android:onClick="sleepPressed" />
-		<Button
-		    android:id="@+id/resetButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/sleepButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/reset"
-		    android:layout_marginTop="3dp"
-		    android:onClick="resetPressed" />
-		
-		<Button
-		    android:id="@+id/shopButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/resetButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/shop"
-		    android:layout_marginTop="3dp"
-		    android:onClick="shopPressed" />
-		<Button
-		    android:id="@+id/battleButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/shopButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/battle"
-		    android:layout_marginTop="3dp"
-		    android:onClick="battlePressed" />
-		<Button
-		    android:id="@+id/gameButton"
-		    android:layout_height="40dp"
-		    android:layout_width="fill_parent"
-		    android:layout_below="@+id/battleButton"
-		    android:layout_centerHorizontal="true"
-		    android:text="@string/game"
-		    android:layout_marginTop="3dp"
-		    android:onClick="gamePressed" />
-		
-		<TextView
-            android:id="@+id/strengthPermanent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/battleButton"
-            android:layout_below="@+id/gameButton"
-            android:layout_marginTop="5dp"
-            android:text="@string/strength"
-            android:ems="8" />
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1" 
+		android:background="#537903">
+		<ImageView
+			android:src="@drawable/main_background"
+			android:layout_gravity="top|fill_horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:scaleType="fitXY" />
+		<ImageView
+			android:id="@+id/petImageView"
+			android:layout_gravity="center"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+	</FrameLayout>
 
-        <TextView
-            android:id="@+id/strengthEditable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/strengthPermanent"
-            android:layout_alignBottom="@+id/strengthPermanent"
-            android:layout_toLeftOf="@+id/strengthPermanent"
-            android:layout_alignParentRight="true"
-            android:ems="8" />
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="65dp"
+		android:layout_gravity="center_horizontal"
+		android:orientation="horizontal" >
+			<ImageView
+				android:src="@drawable/food_button"
+				android:onClick="feedPressed"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			android:scaleType="fitXY"  />
+			<ImageView
+				android:id="@+id/sleepButton"
+				android:src="@drawable/sleep_button"
+				android:onClick="sleepPressed"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			android:scaleType="fitXY"  />
+			<ImageView
+				android:src="@drawable/shop_button"
+				android:onClick="shopPressed"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			android:scaleType="fitXY"  />
+			<ImageView
+				android:src="@drawable/games_button"
+				android:onClick="gamePressed"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			android:scaleType="fitXY"  />
+			<ImageView
+				android:src="@drawable/battle_button"
+				android:onClick="battlePressed"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+			android:scaleType="fitXY"  />
+	</LinearLayout>
 
-        <TextView
-            android:id="@+id/healthPermanent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/strengthPermanent"
-            android:layout_below="@+id/strengthPermanent"
-            android:layout_marginTop="5dp"
-            android:ems="8"
-            android:text="@string/health" />
-        
-		<TextView
-		    android:id="@+id/healthEditable"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_toLeftOf="@+id/healthPermanent"
-		    android:layout_alignBaseline="@+id/healthPermanent"
-		    android:layout_alignBottom="@+id/healthPermanent"
-		    android:layout_alignParentRight="true" 
-		    android:ems="8" />
-		
-		<TextView
-            android:id="@+id/hungerPermanent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/healthPermanent"
-            android:layout_below="@+id/healthPermanent"
-            android:layout_marginTop="5dp"
-            android:ems="8"
-            android:text="@string/hunger" />
-        
-		<TextView
-		    android:id="@+id/hungerEditable"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_toLeftOf="@id/hungerPermanent"
-		    android:layout_alignBaseline="@id/hungerPermanent"
-		    android:layout_alignBottom="@id/hungerPermanent"
-		    android:layout_alignParentRight="true" 
-		    android:ems="8" />
-		
-		
-		<TextView
-            android:id="@+id/tiredPermanent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/hungerPermanent"
-            android:layout_below="@+id/hungerPermanent"
-            android:layout_marginTop="5dp"
-            android:ems="8"
-            android:text="@string/tiredness" /> 
-		<TextView
-		    android:id="@+id/tiredEditable"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_toLeftOf="@+id/tiredPermanent"
-		    android:layout_alignBaseline="@+id/tiredPermanent"
-		    android:layout_alignBottom="@+id/tiredPermanent"
-		    android:layout_alignParentRight="true" 
-		    android:ems="8" />
-		
-		<TextView
-		    android:id="@+id/startTime"
-		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/tiredEditable"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="5dp"
-		    android:ems="8"
-		    />
-		<TextView
-		    android:id="@+id/endTime"
-		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-		    android:layout_below="@+id/startTime"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="5dp"
-		    android:ems="8"
-		    />
-
-    </RelativeLayout>
+</LinearLayout>

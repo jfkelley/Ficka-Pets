@@ -81,6 +81,7 @@ public class BattleNotifier extends IntentService {
 						battleBundle.putString(BattleState.OPPONENT_MOVE, battleMap.get(FickaServer.OPP_MOVE_KEY));
 						battleBundle.putString(BattleState.OPPONENT_STRENGTH, battleMap.get(FickaServer.OPP_STRENGTH_KEY));
 						battleBundle.putString(BattleState.OPPONENT_NAME, name);
+						battleBundle.putString(BattleState.PET_IMG_NAME, battleMap.get(FickaServer.OPP_PET_KEY));
 						battleBundle.putString(BattleState.MY_ID, myId);
 						battleBundle.putString(BattleState.BATTLE_ID, battleId);
 						BattleState thisBattle = new BattleState(this, battleBundle);

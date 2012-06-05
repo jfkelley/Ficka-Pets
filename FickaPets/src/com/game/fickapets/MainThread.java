@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.os.AsyncTask;
-import android.widget.TextView;
 
 public class MainThread extends AsyncTask<Pet, String, Void> {
 	FickaPetsStart ficka;
@@ -17,6 +16,12 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
 	 * Also sends the data passed to publishProgress
 	 */
 	protected void onProgressUpdate(String ... strings) {
+		System.out.println("Strength: " + strings[0]);
+		System.out.println("Health: " + strings[1]);
+		System.out.println("Hunger: " + strings[2]);
+		System.out.println("Tiredness: " + strings[3]);
+		
+		/*
     	TextView strength = (TextView) ficka.findViewById(R.id.strengthEditable);
     	strength.setText(strings[0]);
     	
@@ -28,14 +33,20 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
     	
     	TextView tiredness = (TextView) ficka.findViewById(R.id.tiredEditable);
     	tiredness.setText(strings[3]);
+    	*/
     	
     	Calendar cal = Calendar.getInstance(TimeZone.getDefault());
     	Integer startHour = cal.get(Calendar.HOUR_OF_DAY);
     	Integer startMinute = cal.get(Calendar.MINUTE);
     	Integer second = cal.get(Calendar.SECOND);
     	String currentTime = "H: " + startHour.toString() + "  M: " + startMinute.toString() + "  S: " + second.toString();
+    	
+    	System.out.println("Current time: " + currentTime);
+    	
+    	/*
     	TextView now = (TextView) ficka.findViewById(R.id.endTime);
     	now.setText(currentTime);
+    	*/
 
 	}
 	/* 

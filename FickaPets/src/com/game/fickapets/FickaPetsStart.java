@@ -1,9 +1,6 @@
 package com.game.fickapets;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,11 +10,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class FickaPetsStart extends Activity {
 
@@ -29,11 +23,11 @@ public class FickaPetsStart extends Activity {
 	private static final int MINIGAME = 1;
 	
 	private void setSleepButton (Pet pet) {
-		Button sleepButton = (Button) findViewById(R.id.sleepButton);
+		ImageView sleepButton = (ImageView) findViewById(R.id.sleepButton);
 		if (pet.isSleeping()) {
-			sleepButton.setText(R.string.awake);
+			sleepButton.setImageResource(R.drawable.wake_button);
 		} else {
-			sleepButton.setText(R.string.sleep);
+			sleepButton.setImageResource(R.drawable.sleep_button);
 		}
 	}
 
@@ -98,15 +92,6 @@ public class FickaPetsStart extends Activity {
 		initLayout (Pet.thePet(this));
 		
 		startChallengeNotificationService();
-
-		Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-		Integer startHour = cal.get(Calendar.HOUR_OF_DAY);
-		Integer startMinute = cal.get(Calendar.MINUTE);
-		Integer second = cal.get(Calendar.SECOND);
-		String startTime = "H: " + startHour.toString() + "  M: " + startMinute.toString() + "  S: " + second.toString();
-
-		TextView start = (TextView) findViewById (R.id.startTime);
-		start.setText(startTime);
 
 		Pet.thePet(this).addListener(new PetListener(){
 			public void petChanged() {
@@ -177,12 +162,12 @@ public class FickaPetsStart extends Activity {
 	
 	public void sleepPressed (View view) {
 		Pet pet = Pet.thePet(this);
-		Button sleepButton = (Button) findViewById (R.id.sleepButton);
+		ImageView sleepButton = (ImageView) findViewById (R.id.sleepButton);
 		if (pet.isSleeping ()) {
-			sleepButton.setText (R.string.sleep);
+			sleepButton.setImageResource (R.drawable.sleep_button);
 			pet.wakeUp ();
 		} else {
-			sleepButton.setText (R.string.awake);
+			sleepButton.setImageResource (R.drawable.wake_button);
 			pet.putToSleep ();
 		}
 	}

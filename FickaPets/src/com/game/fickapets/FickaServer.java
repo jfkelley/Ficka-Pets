@@ -33,7 +33,7 @@ public class FickaServer {
 	public static final String OPP_ID_KEY = "opponentIdentifier";
 	public static final String OPP_PET_KEY = "opponentPetFilename";
 	
-	private static final String BASE_URL = "http://fickapets.appspot.com/";
+	private static final String BASE_URL = "http://10.31.113.94:8888/";//"http://fickapets.appspot.com/";
 	private static final String GRAPH_BASE_URL = "https://graph.facebook.com/";
 		
 	private static final String CREATE = BASE_URL + "create?uid1=%s&pet1=%s&uid2=%s&pet2=%s";

@@ -25,7 +25,7 @@ public class BattleServlet extends HttpServlet {
 	public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String action = req.getRequestURI().toLowerCase();
 		if (action.equals("/create")) {
-			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"));
+			createBattle(resp, req.getParameter("uid1"), req.getParameter("uid2"), req.getParameter("pet1"), req.getParameter("pet2"));
 		} else if (action.equals("/sendmove")) {
 			doMove(resp, req.getParameter("uid"), req.getParameter("bid"), req.getParameter("move"), Double.parseDouble(req.getParameter("strength")));
 		} else if (action.equals("/openbattles") || action.equals("/outgoingchallenges") || action.equals("/incomingchallenges")) {
@@ -205,9 +205,9 @@ public class BattleServlet extends HttpServlet {
 		}
 	}
 
-	private void createBattle(HttpServletResponse resp, String uid1, String uid2) throws IOException {
-		if (checkNonNullParams(resp, uid1, uid2)) return;
-		Battle b = new Battle(uid1, uid2);
+	private void createBattle(HttpServletResponse resp, String uid1, String uid2, String pet1, String pet2) throws IOException {
+		if (checkNonNullParams(resp, uid1, uid2, pet1, pet2)) return;
+		Battle b = new Battle(uid1, uid2, pet1, pet2);
 		b.save();
 		resp.setStatus(200);
 		resp.getWriter().write(b.getId());

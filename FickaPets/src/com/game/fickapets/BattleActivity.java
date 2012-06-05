@@ -32,8 +32,6 @@ public class BattleActivity extends Activity {
 	private static final int SHOW_MOVE_DIALOG = 1;
 	private static final int SHOW_VICTOR_DIALOG = 2;
 	private static final int SHOW_GAMEOVER_DIALOG = 3;
-	private static final int CREATE_GAME_FAIL = 4;
-	private static final int SERVER_FAIL = 5;
 
 	/* evade beats attack, attack beats magic, and magic beats defend */
 	private static final int EVADE = 0;
@@ -308,26 +306,9 @@ public class BattleActivity extends Activity {
     				}
     			}).create();
     		return gameOverDialog;
-    	case CREATE_GAME_FAIL:
-    		AlertDialog createGameFail = new AlertDialog.Builder(this)
-    			.setMessage("Failed to create new game. If network is connected, our server may be down")
-    			.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
-    				public void onClick(DialogInterface dialog, int id) {
-    					finish();
-    				}
-    			}).create();
-    		return createGameFail;
-    	case SERVER_FAIL:
-    		AlertDialog serverFail = new AlertDialog.Builder(this)
-    			.setMessage("Cannot connect to server.  If you're connected to the Internet, our server may be down\nTry again later, and sorry for the inconvenience")
-    			.setNeutralButton("Continue", new DialogInterface.OnClickListener() {
-    				public void onClick(DialogInterface dialog, int id) {
-    					finish();
-    				}
-    			}).create();
-    		return serverFail;
+    	
 		default:
-			return null;
+			return NetworkErrorDialog.createDialog(this, id);
     	}
     }
     
@@ -808,12 +789,12 @@ public class BattleActivity extends Activity {
     private class CreateGameTask extends AsyncTask<Void, Void, String> {
     	protected String doInBackground(Void...voids) {
     		String bid = null;
-			bid = server.createGame(bState.myId, bState.opponentId);
+			bid = server.createGame(bState.myId, Pet.thePet(BattleActivity.this).getDefaultImageName(), bState.opponentId, bState.petImgName);
     		return bid;
     	}
     	protected void onPostExecute(String bid) {
     		if (bid == null) {
-    			showDialog(CREATE_GAME_FAIL);
+    			showDialog(NetworkErrorDialog.CREATE_GAME_FAIL);
     			return;
     		}
     		inflateBattleScene();
@@ -829,8 +810,6 @@ public class BattleActivity extends Activity {
     			Integer numMovesPlayed = integers[0];
     			waitUntilBattleCreated();
     			sent = server.sendMove(numMovesPlayed.toString() + "_" + bState.getMyMove().toString(), bState.myId, bState.bid, bState.myStartingStrength.toString());
-    			showDialog(SERVER_FAIL);
-    			Log.v("FickaPets", "my move (" + bState.getMyMove().toString() + ") was sent successfully");
     		} catch(Exception ex) {
     			System.out.println("failed to send move");
     			ex.printStackTrace();
@@ -840,7 +819,7 @@ public class BattleActivity extends Activity {
     	
     	protected void onPostExecute(Boolean sent) {
     		if (!sent) {
-    			showDialog(SERVER_FAIL);
+    			showDialog(NetworkErrorDialog.SERVER_FAIL);
     		}
     	}
     }

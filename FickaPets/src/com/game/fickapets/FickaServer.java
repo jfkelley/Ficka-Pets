@@ -31,11 +31,12 @@ public class FickaServer {
 	public static final String OPP_MOVE_KEY = "opponentmove";
 	public static final String OPP_STRENGTH_KEY = "opponentStrength";
 	public static final String OPP_ID_KEY = "opponentIdentifier";
+	public static final String OPP_PET_KEY = "opponentPetFilename";
 	
 	private static final String BASE_URL = "http://10.31.112.21:8888/";
 	private static final String GRAPH_BASE_URL = "https://graph.facebook.com/";
 		
-	private static final String CREATE = BASE_URL + "create?uid1=%s&uid2=%s";
+	private static final String CREATE = BASE_URL + "create?uid1=%s&pet1=%s&uid2=%s&pet2=%s";
 	private static final String SEND_MOVE = BASE_URL + "sendmove?uid=%s&bid=%s&move=%s&strength=%s";
 	private static final String BATTLE_DATA = BASE_URL + "battledata?uid=%s&bid=%s";
 	private static final String CLOSE_BATTLE = BASE_URL + "closebattle?uid=%s&bid=%s";
@@ -59,11 +60,11 @@ public class FickaServer {
 		return String.format(format, (Object[])strings);
 	}
 	
-	public String createGame(String myId, String theirId) {
+	public String createGame(String myId, String myPet, String theirId, String theirPet) {
 		AndroidHttpClient client = AndroidHttpClient.newInstance(context.getPackageName());
 		try {
 
-			String url = urlFormat(CREATE, myId, theirId);
+			String url = urlFormat(CREATE, myId, myPet, theirId, theirPet);
 		
 			HttpGet get = new HttpGet(url);
 
@@ -127,13 +128,15 @@ public class FickaServer {
 			String oppMove = XMLUtils.getChildElementTextByTagName(battleElem, "opponentMove");
 			String oppStrength = XMLUtils.getChildElementTextByTagName(battleElem, "opponentStrength");
 			String oppId = XMLUtils.getChildElementTextByTagName(battleElem, "opponentId");
-			
+			String oppPet = XMLUtils.getChildElementTextByTagName(battleElem, "opponentPet");
 			if (oppMove.equals("null")) oppMove = null;
 			if (oppStrength.equals("null")) oppStrength = null;
 			if (oppId.equals("null")) oppId = null;
+			if (oppPet.equals("null")) oppPet = null;
 			battleMap.put(OPP_MOVE_KEY, oppMove);
 			battleMap.put(OPP_STRENGTH_KEY, oppStrength);
 			battleMap.put(OPP_ID_KEY, oppId);
+			battleMap.put(OPP_PET_KEY, oppPet);
 			return battleMap;
 		} catch(Exception ex) {
 			ex.printStackTrace();

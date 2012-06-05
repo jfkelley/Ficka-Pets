@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="243" key="DIALOG_WIDTH"/>
 		<item value="93" key="DIALOG_Y_ORIGIN"/>
-		<item value="379" key="DIALOG_HEIGHT"/>
 		<item value="1020" key="DIALOG_X_ORIGIN"/>
+		<item value="379" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="myBattleHealth" key="selection"/>
+		<item value="me&quot;" key="selection"/>
 		<list key="findhistory">
-			<item value="myBattleHealth"/>
-			<item value="parent"/>
-			<item value="bitmapDrawable"/>
-			<item value="activeBattl"/>
-			<item value="activeBattleRow"/>
-			<item value="oppMoveIsNull"/>
-			<item value="setOpponentMove"/>
-			<item value="bState.setMyMove"/>
+			<item value="me&quot;"/>
+			<item value="me"/>
+			<item value="inflate"/>
+			<item value="pet_battle"/>
+			<item value="render"/>
+			<item value="FriendPhoto"/>
+			<item value="applyFriend"/>
+			<item value="confirm"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

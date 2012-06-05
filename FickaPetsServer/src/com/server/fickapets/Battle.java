@@ -18,12 +18,14 @@ public class Battle {
 
 	private final String user1, user2;
 	private String move1, move2;
+	private String pet1, pet2;
 	private double strength1, strength2;
 	private boolean closed1, closed2;
 	private Entity entity;
 
-	public Battle(String user1, String user2) {
+	public Battle(String user1, String user2, String pet1, String pet2) {
 		this.user1 = user1; this.user2 = user2;
+		this.pet1 = pet1; this.pet2 = pet2;
 		closed1 = false; closed2 = false;
 		move1 = null; move2 = null;
 		entity = new Entity(ENTITY_KIND);
@@ -34,6 +36,8 @@ public class Battle {
 		Map<String, Object> map = entity.getProperties();
 		user1 = (String)map.get("user1");
 		user2 = (String)map.get("user2");
+		pet1 = (String)map.get("pet1");
+		pet2 = (String)map.get("pet2");
 		move1 = (String)map.get("move1");
 		move2 = (String)map.get("move2");
 		closed1 = (Boolean)map.get("closed1");
@@ -46,6 +50,8 @@ public class Battle {
 	private void fillEntityProperties() {
 		entity.setProperty("user1", user1);
 		entity.setProperty("user2", user2);
+		entity.setProperty("pet1", pet1);
+		entity.setProperty("pet2", pet2);
 		entity.setProperty("move1", move1);
 		entity.setProperty("move2", move2);
 		entity.setProperty("closed1", closed1);
@@ -119,14 +125,16 @@ public class Battle {
 	}
 	
 	public String getXMLDataForUser(String uid) {
-		String theirId, myMove, theirMove;
+		String theirId, myMove, theirMove, theirPet;
 		double myStrength, theirStrength;
 		if (user1.equals(uid)) {
 			theirId = user2;
+			theirPet = pet2;
 			myMove = move1; theirMove = move2;
 			myStrength = strength1; theirStrength = strength2;
 		} else if (user2.equals(uid)) {
 			theirId = user1;
+			theirPet = pet1;
 			myMove = move2; theirMove = move1;
 			myStrength = strength2; theirStrength = strength1;
 		} else {
@@ -136,6 +144,7 @@ public class Battle {
 			"<battle>\n" +
 				"\t<opponentId>" + theirId + "</opponentId>\n" +
 				"\t<userStrength>" + myStrength + "</userStrength>\n" +
+				"\t<opponentPet>" + theirPet + "</opponentPet>\n" + 
 				"\t<opponentStrength>" + theirStrength + "</opponentStrength>\n" +
 				"\t<userMove>" + myMove + "</userMove>\n" +
 				"\t<opponentMove>" + theirMove + "</opponentMove>\n" +

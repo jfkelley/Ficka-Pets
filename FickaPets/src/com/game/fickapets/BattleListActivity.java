@@ -136,16 +136,6 @@ public class BattleListActivity extends Activity{
 		LinearLayout parent = (LinearLayout) ll.getParent();
 		return (int)(parent.getWidth() * 0.85);
 	}
-	/* again, not sure how to get array adapter to work without this list - returns a list of strings that is the same size as the listview */
-	/*
-	private List<String> fillList(List<BattleState> battleArr) {
-		List<String> list = new ArrayList<String>();
-		for (int i = 0; i < battleArr.size(); i++) {
-			list.add("string");
-		}
-		return list;
-	}
-	 */
 	
 	private class ClickListener implements OnClickListener {
 		private int index;
@@ -165,31 +155,5 @@ public class BattleListActivity extends Activity{
 		Intent intent = new Intent(BattleListActivity.this, FindFriendsActivity.class);
 		startActivity(intent);
 	}
-	/*
-	private class BattleAdapter extends ArrayAdapter<String> {
-		public BattleAdapter(Context context, List<String> list) {
-			super(context, 0, list);
-		}
-		
-		public View getView(int position, View convertView, ViewGroup group) {
-			try {
-				TextView textView = (TextView) convertView;
-				if (textView == null) {
-					textView = new TextView(BattleListActivity.this);
-				}
-				textView.setCompoundDrawablePadding(10);
-				JSONObject thisBattle = battleArr.get(position).toJSON();
-				String text = "Continue battle with " + thisBattle.getString(BattleState.OPPONENT_NAME);
-				textView.setText(text);
-				imageViewHandler.setUrlDrawable(textView, url, R.drawable.ic_launcher);
-				return textView;
-			} catch(JSONException ex) {
-				System.out.println("Failed at pulling battle data from json array");
-				ex.printStackTrace();
-				return null;
-			}
-		}
-	}
-	*/
 	
 }

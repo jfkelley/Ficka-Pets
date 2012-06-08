@@ -76,6 +76,8 @@ public final class R {
         public static final int yellow_dot=0x7f02003e;
     }
     public static final class id {
+        public static final int TTTCoinText=0x7f05001a;
+        public static final int TTTView=0x7f05001b;
         public static final int activeBattleRow=0x7f050002;
         /**  ids for views added programmatically 
          */
@@ -104,11 +106,11 @@ public final class R {
         public static final int shopTotalCoins=0x7f050019;
         public static final int sleepButton=0x7f050015;
         public static final int waitingForBattleMoveLinLayout=0x7f050001;
-        public static final int waitingLayout=0x7f05001a;
-        public static final int waitingText0=0x7f05001b;
-        public static final int waitingText1=0x7f05001c;
-        public static final int waitingText2=0x7f05001d;
-        public static final int waitingText3=0x7f05001e;
+        public static final int waitingLayout=0x7f05001c;
+        public static final int waitingText0=0x7f05001d;
+        public static final int waitingText1=0x7f05001e;
+        public static final int waitingText2=0x7f05001f;
+        public static final int waitingText3=0x7f050020;
     }
     public static final class layout {
         public static final int active_battle_row=0x7f030000;
@@ -119,7 +121,8 @@ public final class R {
         public static final int main=0x7f030005;
         public static final int on_progress=0x7f030006;
         public static final int shop=0x7f030007;
-        public static final int waiting_layout=0x7f030008;
+        public static final int ttt=0x7f030008;
+        public static final int waiting_layout=0x7f030009;
     }
     public static final class raw {
         public static final int items=0x7f040000;

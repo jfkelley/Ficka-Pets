@@ -32,14 +32,15 @@ public class ItemManager {
 		for (Element itemElement : XMLUtils.getElementsByTagName(itemsElement, "Item")) {
 			String id = XMLUtils.getChildElementTextByTagName(itemElement, "id");
 			String name = XMLUtils.getChildElementTextByTagName(itemElement, "name");
-			String imageLocation = XMLUtils.getChildElementTextByTagName(itemElement, "image");
+			String image = XMLUtils.getChildElementTextByTagName(itemElement, "image");
 			int price = Integer.valueOf(XMLUtils.getChildElementTextByTagName(itemElement, "price"));
+			String prefix = XMLUtils.getChildElementTextByTagName(itemElement, "prefix");
 			Item item;
 			
 			String type = itemElement.getAttributes().getNamedItem("type").getNodeValue();
 			if (type.equals("food")) {
 				int health = Integer.valueOf(XMLUtils.getChildElementTextByTagName(itemElement, "health"));
-				item = new Food(id, name, imageLocation, price, health);
+				item = new Food(id, name, image, prefix, price, health);
 			} else {
 				System.err.println("unknown item type in items.xml");
 				item = null;
@@ -63,4 +64,5 @@ public class ItemManager {
 		if (items.isEmpty()) readItems(context);
 		return items.get(id);
 	}
+
 }

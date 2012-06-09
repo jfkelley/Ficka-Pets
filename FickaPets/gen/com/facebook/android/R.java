@@ -83,12 +83,13 @@ public final class R {
          */
         public static final int attackButtonBattle=0x7f050000;
         public static final int battleLayout=0x7f050003;
-        public static final int battleProgressBar=0x7f050016;
+        public static final int battleProgressBar=0x7f050018;
         public static final int choosePet0=0x7f050010;
         public static final int choosePet1=0x7f050011;
         public static final int choosePet2=0x7f050012;
         public static final int currentBattles=0x7f05000f;
         public static final int friendsList=0x7f050013;
+        public static final int itemList=0x7f050015;
         public static final int myBattleHealthBar=0x7f05000a;
         public static final int myBattleLinearLayout=0x7f050008;
         public static final int myBattleName=0x7f05000b;
@@ -99,12 +100,11 @@ public final class R {
         public static final int oppPet=0x7f050005;
         public static final int opponentBattleHealthBar=0x7f050006;
         public static final int opponentBattleName=0x7f050007;
-        public static final int petImageView=0x7f050014;
-        public static final int progressLayoutText=0x7f050017;
+        public static final int petImageView=0x7f050016;
+        public static final int progressLayoutText=0x7f050019;
         public static final int scrollView=0x7f05000c;
-        public static final int shopLinearLayout=0x7f050018;
-        public static final int shopTotalCoins=0x7f050019;
-        public static final int sleepButton=0x7f050015;
+        public static final int shopTotalCoins=0x7f050014;
+        public static final int sleepButton=0x7f050017;
         public static final int waitingForBattleMoveLinLayout=0x7f050001;
         public static final int waitingLayout=0x7f05001c;
         public static final int waitingText0=0x7f05001d;
@@ -118,11 +118,12 @@ public final class R {
         public static final int battle_list=0x7f030002;
         public static final int choose_pet=0x7f030003;
         public static final int find_friends=0x7f030004;
-        public static final int main=0x7f030005;
-        public static final int on_progress=0x7f030006;
-        public static final int shop=0x7f030007;
-        public static final int ttt=0x7f030008;
-        public static final int waiting_layout=0x7f030009;
+        public static final int item_row=0x7f030005;
+        public static final int item_shop=0x7f030006;
+        public static final int main=0x7f030007;
+        public static final int on_progress=0x7f030008;
+        public static final int ttt=0x7f030009;
+        public static final int waiting_layout=0x7f03000a;
     }
     public static final class raw {
         public static final int items=0x7f040000;

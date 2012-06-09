@@ -5,11 +5,13 @@ public class Item {
 	private final String displayName;
 	private final String image;
 	private final int price;
-	public Item(String id, String image, String name, int price) {
+	private final String prefix;
+	public Item(String id, String name, String image, String prefix, int price) {
 		this.id = id;
 		this.displayName = name;
 		this.image = image;
 		this.price = price;
+		this.prefix = prefix;
 	}
 	
 	public String getId() { return id; }
@@ -40,6 +42,14 @@ public class Item {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getGrammaticalName() {
+		if (prefix.trim().equals("")) {
+			return displayName;
+		} else {
+			return prefix + displayName;
+		}
 	}
 	
 }

@@ -154,8 +154,8 @@ public class BattleActivity extends Activity {
     }
     
     /* here, we serialize battle into json and write it out to file */
-    public void onDestroy() {
-    	super.onDestroy();
+    public void onPause() {
+    	super.onPause();
     	if (pollOpponentMove != null) pollOpponentMove.cancel(true);
     	if (!gameOver && bState.bid != null) {
     		PersistenceHandler.saveBattle(this, bState.toJSON());
@@ -164,7 +164,6 @@ public class BattleActivity extends Activity {
     		PersistenceHandler.removeBattle(this, bState.bid);
     	}
     }
-   
     
     /* returns the damage done to victim.  The victim's starting strength is treated as life and after
      * attacker wins a move, the victim's life goes down by the damage returned here.  If this returns 50 and

@@ -61,21 +61,12 @@ public class BattleListActivity extends Activity{
 			ImageView rowImageView = (ImageView)newRow.getChildAt(1);
 			rowTextView.setCompoundDrawablePadding(IMAGE_PADDING);
 			String url = FindFriendsActivity.FACEBOOK_BASE_URL + activeBattle.opponentId + "/picture";
-			String oppName = getDisplayName(activeBattle);
 			int defaultPhoto = R.drawable.mystery;
-			if (activeBattle.getOpponentMove() != null) {
-				rowTextView.setText("vs " + oppName + "\npicked a move");
-				imageViewHandler.setUrlDrawable(rowTextView, url, defaultPhoto);
-				rowImageView.setImageResource(R.drawable.green_dot);
-			} else if (activeBattle.getMyMove() != null) {
-				rowTextView.setText("vs " + oppName + "\nWaiting for their move");
-				imageViewHandler.setUrlDrawable(rowTextView, url, defaultPhoto);
-				rowImageView.setImageResource(R.drawable.yellow_dot);
-			} else {
-				rowTextView.setText("vs " + oppName + "\nMake your move");
-				imageViewHandler.setUrlDrawable(rowTextView, url, defaultPhoto);
-				rowImageView.setImageResource(R.drawable.green_dot);
-			}
+			
+			rowTextView.setText(BattleState.getBattleStateMessage(activeBattle));
+			imageViewHandler.setUrlDrawable(rowTextView, url, defaultPhoto);
+			rowImageView.setImageResource(BattleState.getStateImageIconId(activeBattle));
+			
 			ll.addView(newRow);
 		} 	
 		if (battleArr.size() == 0) {
@@ -109,9 +100,6 @@ public class BattleListActivity extends Activity{
 		LinearLayout.LayoutParams llParams = (LinearLayout.LayoutParams)ll.getLayoutParams();
 		llParams.width = listWidth;
 		ll.setLayoutParams(llParams);
-
-		
-		
 	}
 	
 	private void setTitleSeparatorWidth(LinearLayout ll, int llWidth) {

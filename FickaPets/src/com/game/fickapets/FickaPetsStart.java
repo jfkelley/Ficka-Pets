@@ -37,7 +37,7 @@ public class FickaPetsStart extends Activity {
 		setPetStateImage(pet);
 	}
 	
-	
+	/* is there a reason for the background thread? */
     private void setPetStateImage(final Pet pet) {
     	// Use an AsyncTask in case we get called from a different thread.
     	AsyncTask<Object, Object, Integer> task = new AsyncTask<Object, Object, Integer>(){

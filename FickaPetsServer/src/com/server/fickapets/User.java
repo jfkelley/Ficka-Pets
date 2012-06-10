@@ -1,6 +1,7 @@
 package com.server.fickapets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -15,17 +16,33 @@ public class User {
 	private static final String PET_IMG_PROPERTY = "pet";
 	
 	public static void create(String id, String pet) {
-		Entity entity = new Entity(ENTITY_KIND);
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Entity entity = findById(id);
+		if (entity == null) {
+			entity = new Entity(ENTITY_KIND);
+		}
 		entity.setProperty(USER_ID_PROPERTY, id);
 		entity.setProperty(PET_IMG_PROPERTY, pet);
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		datastore.put(entity);
 	}
 	
-	public static boolean exists(String id) {
+	private static Entity findById(String id) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query query = new Query(ENTITY_KIND).addFilter(USER_ID_PROPERTY, FilterOperator.EQUAL, id);
-		return datastore.prepare(query).asIterator().hasNext();
+		Iterator<Entity> iter = datastore.prepare(query).asIterator();
+		if (iter.hasNext()) {
+			return iter.next();
+		} else {
+			return null;
+		}
+	}
+	
+	public static boolean exists(String id) {
+		Entity entityWithId = findById(id);
+		if (entityWithId == null) {
+			return false;
+		}
+		return true;
 	}
 	
 	public static List<UserAtts> filterNonexisting(List<String> ids) {

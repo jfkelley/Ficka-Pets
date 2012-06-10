@@ -123,6 +123,28 @@ public class BattleState {
 		Log.v("FickaPets", "opponent move returned as: " + move.toString());
 		return move;
 	}
+		
+	
+	public static String getBattleStateMessage(BattleState battle) {
+		if (battle.getOpponentMove() != null) {
+			return "vs " + battle.opponentName + "\npicked a move";
+		} else if (battle.getMyMove() != null) {
+			return "vs " + battle.opponentName + "\nWaiting for their move";
+		} else {
+			return "vs " + battle.opponentName + "\nMake your move";
+		}
+	}
+	
+	public static int getStateImageIconId(BattleState battle) {
+		if (battle.getOpponentMove() != null) {
+			return R.drawable.green_dot;
+		} else if (battle.getMyMove() != null) {
+			return R.drawable.yellow_dot;
+		} else {
+			return R.drawable.green_dot;
+		}
+	}
+
 	
 	private void setStateWithBundle(Context context, Bundle bStateBundle) {
 		/* these four values are always set in bundle */

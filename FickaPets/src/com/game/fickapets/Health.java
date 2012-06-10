@@ -46,7 +46,7 @@ public class Health {
 	 */
 	private double hungerEffectOnHealth (double hoursSinceUpdate, boolean isAwake) {
 		double currentHunger = hunger.getHunger();
-		double splitTime = hoursSinceUpdate;	/* time until equation changes to reflect absolute value or extreme hunger rate */
+		double splitTime = hoursSinceUpdate;
 		double effect = 0;
 		
 		if (currentHunger < hotSpot) {

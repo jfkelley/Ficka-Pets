@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.http.HttpResponse;
@@ -30,9 +32,15 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class FindFriendsActivity extends Activity {
@@ -40,7 +48,7 @@ public class FindFriendsActivity extends Activity {
 	private static final String GET_FRIENDS_DATA = "friends.data";
 	private static final String GET_DATA_FOR_PHOTOS = "data for photos";
 	private static final int NUM_PHOTOS = 5;						/* num photos taken from unfiltered friends list */
-	
+	Map<String, BattleState> currentBattles;
 
 	public static final String FACEBOOK_BASE_URL = "https://graph.facebook.com/";
 	private UrlImageViewHandler imageViewHandler;
@@ -63,7 +71,7 @@ public class FindFriendsActivity extends Activity {
         super.onCreate(savedInstanceState);
         imageViewHandler = new UrlImageViewHandler(this);
         friends = new Vector<FriendInfo>();
-        
+        currentBattles = new HashMap<String, BattleState>();
 	    String accessToken = PersistenceHandler.facebookAccessToken(this);
 	    long expires = PersistenceHandler.facebookTokenExpiration(this);
 	    if (accessToken != null) {
@@ -342,23 +350,44 @@ public class FindFriendsActivity extends Activity {
     
     private void renderLayout(List<FriendInfo> friends) {
     	setContentView(R.layout.find_friends);
-    	
+    	List<BattleState> battleList = PersistenceHandler.getBattles(this);
+    	for (BattleState battle : battleList) {
+    		this.currentBattles.put(battle.opponentId, battle);
+    	}
     	LinearLayout ll = (LinearLayout)findViewById(R.id.friendsList);
+    	
+		LayoutInflater inflater = getLayoutInflater();
 		for (int i = 0; i < friends.size(); i++) {
 			FriendInfo friendInfo = friends.get(i);
-			TextView friendRow = new TextView(this);
-			friendRow.setGravity(Gravity.LEFT);
-			friendRow.setTextColor(Color.rgb(255, 246, 239));
-			String text = friendInfo.name + "\n" + "Start Battling!";
-			friendRow.setText(text);
-			friendRow.setOnClickListener(new ClickListener(i));
+			
+			RelativeLayout newRow = null;
+			try {
+				newRow = (RelativeLayout) inflater.inflate(R.layout.active_battle_row, null, false);
+			} catch(InflateException ex) {
+				ex.printStackTrace();
+				return;
+			}
+			
+			
+			TextView textView = (TextView)newRow.getChildAt(0);
+			textView.setTextColor(Color.rgb(255, 246, 239));
+			String text;
+			if (!currentBattles.containsKey(friendInfo.id)){
+				text = friendInfo.name + "\nStart Battling!";
+			} else {
+				BattleState battle = currentBattles.get(friendInfo.id);
+				text = BattleState.getBattleStateMessage(battle);
+			}
+			textView.setText(text);
+			textView.setCompoundDrawablePadding(5);
+			newRow.setOnClickListener(new ClickListener(i));
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			params.setMargins(0, 5, 0, 0);
 			params.gravity = Gravity.LEFT;
 			String url = FACEBOOK_BASE_URL + friendInfo.id + "/picture";
-			imageViewHandler.setUrlDrawable(friendRow, url, R.drawable.mystery);
-			
-			ll.addView(friendRow, params);
+			imageViewHandler.setUrlDrawable(textView, url, R.drawable.mystery);
+
+			ll.addView(newRow, params);
 		}
 		if (friends.size() == 0) {
 			TextView noFriends = new TextView(this);
@@ -371,7 +400,7 @@ public class FindFriendsActivity extends Activity {
 		}
     }
     
-    
+
     
   
  /*  private class FriendArrayAdapter {
@@ -409,10 +438,16 @@ public class FindFriendsActivity extends Activity {
 	   @Override
 	   public void onClick(View v) {
 		   Intent intent = new Intent(FindFriendsActivity.this, BattleActivity.class);
-		   intent.putExtra(BattleState.OPPONENT_NAME, friends.get(index).name);
-		   intent.putExtra(BattleState.OPPONENT_ID, friends.get(index).id);
-		   intent.putExtra(BattleState.MY_ID, mFacebookId);
-		   intent.putExtra(BattleState.PET_IMG_NAME, friends.get(index).pet);
+		   FriendInfo friendInfo  = friends.get(index);
+		   if (!currentBattles.containsKey(friendInfo.id)) {
+			   intent.putExtra(BattleState.OPPONENT_NAME, friends.get(index).name);
+			   intent.putExtra(BattleState.OPPONENT_ID, friends.get(index).id);
+			   intent.putExtra(BattleState.MY_ID, mFacebookId);
+			   intent.putExtra(BattleState.PET_IMG_NAME, friends.get(index).pet);
+		   } else {
+			   BattleState thisBattle = currentBattles.get(friendInfo.id);
+			   intent = thisBattle.addStateToIntent(intent);
+		   }
 		   startActivity(intent);
 	   }
    }

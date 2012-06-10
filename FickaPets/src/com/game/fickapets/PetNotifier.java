@@ -1,6 +1,5 @@
 package com.game.fickapets;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -12,10 +11,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 
 public class PetNotifier extends IntentService {
 	public static int FOREGROUND_NOTIFICATION = 480210;
+	private static String TAG = "PetNotifier.java";
 	public PetNotifier () {
 		super("NotificationService");
 	}
@@ -60,13 +61,17 @@ public class PetNotifier extends IntentService {
 		
 		Collections.sort (complaints, new ComplaintsCompare());
 		while (complaints.size() > 0) {
+			Complaint complaint = complaints.get(0);
+			long complaintId = PersistenceHandler.getComplaintId(this, complaint.getComplaintType());
 			try {
-				Thread.sleep (Utility.hoursToMillis (complaints.get (0).hoursBeforeComplaint));
-			} catch (Exception ex) {
-				System.out.println ("Couldn't put Notifier service to sleep");
-				ex.printStackTrace ();
+				Thread.sleep (Utility.hoursToMillis (complaint.hoursBeforeComplaint));
+			} catch (InterruptedException ex) {
+				Log.e(TAG, "Thread sleep was interrupted");
+				continue;
 			}
-			sendNotification ("FickaPets", complaints.get(0).complaint);
+			if (PersistenceHandler.tryConfirmComplaintSent(this, complaint.getComplaintType(), complaintId)) {
+				sendNotification ("FickaPets", complaint.complaint);
+			}
 			complaints.remove (0);
 		}
 	}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+ 	android:layout_width="fill_parent"
+ 	android:layout_height="fill_parent"
+ 	android:background="#CAE1E9"
+	android:layout_alignParentLeft="true"
+	android:layout_alignParentRight="true"
+	android:layout_alignParentTop="true" >
+  		<LinearLayout
+   	 		android:layout_width="match_parent"
+   	 		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+        		<TextView 
+        		    android:id="@+id/shopTotalCoins"
+        		    android:background="@drawable/battles_bg"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_gravity="center_horizontal"
+        		    android:layout_marginTop="20dp"
+        		    android:layout_marginBottom="10dp"
+        		    android:paddingTop="7dp"
+        		    android:paddingBottom="7dp"
+        		    style="@style/BattleListHeaderText"
+        		    android:text="Item Shop (you have -1 coins)" />
+    			<LinearLayout
+    			    android:id="@+id/itemList"
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="wrap_content"
+    			    android:orientation="vertical"
+    			    android:background="@drawable/battles_bg"
+    			    android:gravity="center_horizontal"
+    			    android:layout_gravity="center_horizontal" >
+    			    <TextView 
+    			        android:layout_width="wrap_content"
+    					android:layout_height="wrap_content"
+    			        android:text="Available Items"
+    			        android:layout_gravity="left"
+    			        android:textSize="20.0sp"
+    			        android:typeface="serif"
+    			        android:textColor="#FFF6EF" />
+    			    <ImageView
+    			        android:layout_width="wrap_content"
+    			        android:layout_height="wrap_content"
+    			        android:src="@drawable/line"
+    			        android:layout_gravity="center_horizontal"
+    			        android:gravity="center_horizontal"
+    			        android:contentDescription="@string/titleSeparator" />
+    			</LinearLayout> 
+
+		</LinearLayout>
+    
+</ScrollView>

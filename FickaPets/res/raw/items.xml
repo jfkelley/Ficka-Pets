@@ -2,6 +2,7 @@
 <Items>
     <Item type="food">
         <id>apple</id>
+        <prefix>an </prefix>
         <name>Apple</name>
         <image>apple</image>
         <price>20</price>
@@ -9,6 +10,7 @@
     </Item>
     <Item type="food">
         <id>banana</id>
+        <prefix> </prefix>
         <name>Bananas</name>
         <image>banana</image>
         <price>15</price>

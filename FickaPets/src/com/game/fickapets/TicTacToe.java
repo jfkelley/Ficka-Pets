@@ -5,45 +5,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.TextView;
 
-public class TicTacToe extends Minigame {
-
-	@Override
-	public String getName() {
-		return getResources().getString(R.string.ticTacToe);
-	}
-
-	@Override
-	public String getInstructions() {
-		return "";
-	}
+public class TicTacToe extends Activity {
+	
+	public static final String NAME = "Tic-Tac-Toe";
+	public static final String INSTRUCTIONS = "Take turns with the computer to place symbols on the grid. First to connect three in a row wins! Play higher difficulty for more coins.";
 
 	private static final int CHOOSE_DIFFICULTY = 0;
 
 	private int difficulty = 0;
+	
+	private TTTState state;
+	private TTTView view;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final TTTState state = new TTTState();
-		final TTTView view = new TTTView(this, state);
+		
+		setContentView(R.layout.ttt);
+		
+		updateCoinText();
+		
+		state = new TTTState();
+		view = (TTTView)findViewById(R.id.TTTView);
+		view.setState(state);
 		view.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
 					if (state.isOver()) {
-						state.reset();
-						view.invalidate();
+						resetGame(null);
 						return true;
 					}
 					if (state.currentPlayer == 1) {
@@ -59,6 +57,7 @@ public class TicTacToe extends Minigame {
 							} else {
 								if (state.getWinner() == 1) {
 									User.theUser(TicTacToe.this).addCoins(getCoinReward());
+									updateCoinText();
 								}
 							}
 							return true;
@@ -71,9 +70,17 @@ public class TicTacToe extends Minigame {
 			}
 		});
 
-		setContentView(view);
-
 		showDialog(CHOOSE_DIFFICULTY);
+	}
+	
+	public void resetGame(View ignored) {
+		state.reset();
+		view.invalidate();
+	}
+	
+	private void updateCoinText() {
+		TextView text = (TextView)findViewById(R.id.TTTCoinText);
+		text.setText("Coins: " + User.theUser(this).getCoins());
 	}
 
 	private double getStrength() {
@@ -114,82 +121,9 @@ public class TicTacToe extends Minigame {
 		}
 	}
 
-	private static class TTTView extends View {
-
-		private static final int MARGIN = 20;
-		private static final int LINE_WIDTH = 10;
-
-		private float squareSize;
-
-		private final TTTState state;
-
-		public TTTView(Context context, TTTState state) {
-			super(context);
-			this.state = state;
-			setBackgroundColor(Color.BLACK);
-		}
-
-		@Override
-		protected void onDraw(Canvas canvas) {
-			Paint paint = new Paint();
-			paint.setColor(Color.rgb(240, 240, 255));
-			squareSize = (float)((getWidth() - 2 * LINE_WIDTH - 2 * MARGIN) / 3.0);
-			int x1 = (int)Math.round(MARGIN + squareSize);
-			int x2 = (int)Math.round(MARGIN + squareSize * 2 + LINE_WIDTH);
-			int y1 = (int)Math.round(MARGIN + squareSize);
-			int y2 = (int)Math.round(MARGIN + squareSize * 2 + LINE_WIDTH);
-			canvas.drawRect(x1, MARGIN, x1 + LINE_WIDTH, getHeight() - MARGIN, paint);
-			canvas.drawRect(x2, MARGIN, x2 + LINE_WIDTH, getHeight() - MARGIN, paint);
-			canvas.drawRect(MARGIN, y1, getWidth() - MARGIN, y1 + LINE_WIDTH, paint);
-			canvas.drawRect(MARGIN, y2, getWidth() - MARGIN, y2 + LINE_WIDTH, paint);
-
-			for (int r = 0; r < state.board.length; r++) {
-				for (int c = 0; c < state.board[r].length; c++) {
-					if (state.board[r][c] == 1) {
-						drawX(MARGIN * 2 + r * (squareSize + LINE_WIDTH), MARGIN * 2 + c * (squareSize + LINE_WIDTH), squareSize - MARGIN*2, squareSize - MARGIN*2, canvas);
-					} else if (state.board[r][c] == -1) {
-						drawO(MARGIN * 2 + r * (squareSize + LINE_WIDTH), MARGIN * 2 + c * (squareSize + LINE_WIDTH), squareSize - MARGIN*2, squareSize - MARGIN*2, canvas);
-					}
-				}
-			}
-		}
-
-		public int index(float x) {
-			if (x >= MARGIN && x <= MARGIN + squareSize) return 0;
-			if (x >= MARGIN + squareSize + LINE_WIDTH && x <= MARGIN + squareSize * 2 + LINE_WIDTH) return 1;
-			if (x >= MARGIN + squareSize * 2 + LINE_WIDTH * 2 && x <= MARGIN + squareSize * 3 + LINE_WIDTH * 2) return 2;
-			return -1;
-		}
-
-		private void drawX(float x, float y, float w, float h, Canvas canvas) {
-			Paint paint = new Paint();
-			paint.setColor(Color.rgb(255, 200, 200));
-			paint.setStyle(Paint.Style.STROKE);
-			paint.setStrokeWidth(LINE_WIDTH);
-			canvas.drawLine(x, y, x + w, y + h, paint);
-			canvas.drawLine(x + w, y, x, y + h, paint);
-		}
-
-		private void drawO(float x, float y, float w, float h, Canvas canvas) {
-			Paint paint = new Paint();
-			paint.setColor(Color.rgb(200, 255, 200));
-			paint.setStyle(Paint.Style.STROKE);
-			paint.setStrokeWidth(LINE_WIDTH);
-			canvas.drawOval(new RectF(x, y, x + w, y + h), paint);
-		}
-
-		@Override
-		protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec) {
-			int w = MeasureSpec.getSize(widthMeasureSpec);
-			int h = MeasureSpec.getSize(heightMeasureSpec);
-			setMeasuredDimension(Math.min(w, h), Math.min(w, h));
-		}
-
-	}
-
-	private static class TTTState {
-		private int[][] board;
-		private int currentPlayer;
+	public static class TTTState {
+		public int[][] board;
+		public int currentPlayer;
 
 		public TTTState() {
 			board = new int[3][3];

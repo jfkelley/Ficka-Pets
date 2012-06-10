@@ -42,6 +42,11 @@
         </activity>
         
         <activity
+            android:name=".MinigameLauncher"
+            android:label="Minigame Instructions" >
+        </activity>
+        
+        <activity
             android:name=".CatchCoins"
             android:label="@string/catchCoins" >
         </activity>

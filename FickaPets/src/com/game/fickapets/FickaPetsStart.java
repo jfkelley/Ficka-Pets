@@ -205,9 +205,10 @@ public class FickaPetsStart extends Activity {
 		case MINIGAME:
 			AlertDialog pickGameAlert = new AlertDialog.Builder(this)
 				.setTitle("Pick a game")
-				.setItems(Minigame.MINIGAME_NAMES, new DialogInterface.OnClickListener() {
+				.setItems(MinigameLauncher.MINIGAME_NAMES, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(FickaPetsStart.this, Minigame.MINIGAME_CLASSES[which]);
+						Intent intent = new Intent(FickaPetsStart.this, MinigameLauncher.class);
+						intent.putExtra(MinigameLauncher.INTENT_PARAM, which);
 						startActivity(intent);
 					}
 				})

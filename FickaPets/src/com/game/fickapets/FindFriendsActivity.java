@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,23 +24,16 @@ import com.facebook.android.FacebookError;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TableRow.LayoutParams;
 
 public class FindFriendsActivity extends Activity {
 	private static final String GET_MY_DATA = "me.data";
@@ -88,11 +80,17 @@ public class FindFriendsActivity extends Activity {
 	    			fetchData();
 	    		}
 
-	    		public void onFacebookError(FacebookError error) {}
+	    		public void onFacebookError(FacebookError error) {
+	    			showDialog(NetworkErrorDialog.FACEBOOK_SERVER_FAIL);
+	    		}
 
-	    		public void onError(DialogError e) {}
+	    		public void onError(DialogError e) {
+	    			showDialog(NetworkErrorDialog.FACEBOOK_NETWORK_ERROR);
+	    		}
 	        
-	    		public void onCancel() {}
+	    		public void onCancel() {
+	    			showDialog(NetworkErrorDialog.FACEBOOK_NETWORK_ERROR);
+	    		}
 	    	});
 	    } else {
 	    	fetchData();
@@ -142,7 +140,12 @@ public class FindFriendsActivity extends Activity {
     					PersistenceHandler.confirmUserRegistered(FindFriendsActivity.this);
     				} else {
     					registerFailed = true;
-    					showDialog(NetworkErrorDialog.SERVER_FAIL);
+    					Runnable postErrorDialog = new Runnable() {
+    						public void run() {
+    	    					showDialog(NetworkErrorDialog.SERVER_FAIL);
+    						}
+    					};
+    					runOnUiThread(postErrorDialog);
     				}
     			}
     		}).start();

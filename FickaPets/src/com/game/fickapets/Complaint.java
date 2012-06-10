@@ -7,4 +7,8 @@ public class Complaint implements Serializable {
 	
 	public double hoursBeforeComplaint;
 	public String complaint;
+	
+	public Integer getComplaintType() {
+		return complaint.hashCode();
+	}
 }

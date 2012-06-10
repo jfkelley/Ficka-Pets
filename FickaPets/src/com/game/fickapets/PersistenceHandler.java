@@ -44,6 +44,7 @@ public class PersistenceHandler {
 	private static final String INVENTORY_KEY = "inventory";
 	private static final String FACEBOOK_ID_KEY = "facebookId";
 	private static final String IS_REGISTERED_KEY = "userIsRegistered";
+	private static final String COMPLAINT_BANK_KEY = "nextAvailableComplaintId";
 	
 	/* key values for CACHE_FILE */
 	private static final String FILE_QUEUE_KEY = "filesOnDisk";
@@ -235,6 +236,39 @@ public class PersistenceHandler {
 		return registerPrefs.getBoolean(IS_REGISTERED_KEY, false);
 	}
 	
+	/* I think the problem is two threads start sleeping on the same complaint - they both wake 
+	 * up at the same time and issue notifications.   With ids, they'll both have the same id
+	 * when they wake up, only one will make the notification
+	 * complaint ids are issued on a per complaint basis.  complaint types are found
+	 * in Complaint's getType() method. new ids are only issued after all previous ids of that type were sent
+	 */
+	public static long getComplaintId(Context context, Integer complaintType) {
+		SharedPreferences complaintPrefs = context.getSharedPreferences(USER_FILE, 0);
+		return complaintPrefs.getLong(COMPLAINT_BANK_KEY + complaintType.toString(), 0);		
+	}
+	
+	public static synchronized boolean tryConfirmComplaintSent(Context context, Integer complaintType, Long complaintId) {
+		SharedPreferences complaintPrefs = context.getSharedPreferences(USER_FILE, 0);
+		SharedPreferences.Editor editor = complaintPrefs.edit();
+		long lastComplaint = complaintPrefs.getLong(COMPLAINT_BANK_KEY + complaintType.toString(), 0);
+		if (complaintId.longValue() == lastComplaint) {
+			editor.putLong(COMPLAINT_BANK_KEY + complaintType.toString(), lastComplaint+1);
+			editor.commit();
+			return true;
+		}
+		return false;
+	}
+	
+	/*public static boolean complaintAlreadySent(Context context, Integer complaintType, long complaintId) {
+		SharedPreferences complaintPrefs = context.getSharedPreferences(USER_FILE, 0);
+		long nextComplaintId = complaintPrefs.getLong(COMPLAINT_BANK_KEY + complaintType.toString(), 0);
+		if (nextComplaintId > complaintId) {
+			return true;
+		}
+		return false;
+	}*/
+	
+	
 	
 	private static String encodeFileArr(Vector<CacheEntry> files) {
 		StringBuilder sb = new StringBuilder();
@@ -395,5 +429,6 @@ public class PersistenceHandler {
 		}
 	}
 	
+
 	
 }

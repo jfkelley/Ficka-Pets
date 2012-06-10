@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,7 +22,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
-public class CatchCoins extends Minigame implements SensorEventListener {
+public class CatchCoins extends Activity implements SensorEventListener {
+	
+	public static final String NAME = "Coin Catch";
+	public static final String INSTRUCTIONS = "Tilt your phone to move your pet side to side. Catch falling coins, and avoid falling rocks! If three rocks hit you, the game is over.";
 
 	private GameState state;
 	private GameThread thread;
@@ -38,16 +43,6 @@ public class CatchCoins extends Minigame implements SensorEventListener {
 		sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		thread = new GameThread();
-	}
-
-	@Override
-	public String getName() {
-		return getResources().getString(R.string.catchCoins);
-	}
-
-	@Override
-	public String getInstructions() {
-		return "Tilt your phone to move your pet side to side. Catch falling coins, and avoid falling rocks! If three rocks hit you, the game is over.";
 	}
 
 	private class GameState {
@@ -248,6 +243,11 @@ public class CatchCoins extends Minigame implements SensorEventListener {
 					Bitmap bmp = faller.isCoin ? coin : bomb;
 					canvas.drawBitmap(bmp, faller.x, faller.y, paint);
 				}
+				
+				paint.setTextAlign(Align.LEFT);
+				paint.setColor(Color.rgb(180, 0, 0));
+				paint.setTextSize(30.0f);
+				canvas.drawText("Coins: " + User.theUser(CatchCoins.this).getCoins(), 5, 35, paint);
 			}
 
 			@Override

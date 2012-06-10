@@ -3,6 +3,7 @@ package com.game.fickapets;
 
 
 public class Hunger {
+
 	private static final double INCREASE_RATE_AWAKE = (double)15/32;
 	private static final double INCREASE_RATE_ASLEEP = (double)5/16;
 	private static final double MAX_HUNGER = 100;

@@ -32,10 +32,10 @@ public class PetNotifier extends IntentService {
 		return START_STICKY;
 	}
 	
-	private void sendNotification (String title, String message) {
+	private void sendNotification (String title, String message, int icon) {
 		Intent notificationIntent = new Intent(this, FickaPetsStart.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		Notification notification = new Notification(R.drawable.ic_launcher, "", System.currentTimeMillis());
+		Notification notification = new Notification(icon, "", System.currentTimeMillis());
 		notification.setLatestEventInfo(getApplicationContext(), title, message, contentIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notification.defaults |= Notification.DEFAULT_VIBRATE;
@@ -55,8 +55,9 @@ public class PetNotifier extends IntentService {
 		/* looks like android ignores this as old API */
 		setForeground(true);
 		//runInForeground();	
-			
-		Vector<Complaint> complaints = Pet.thePet(this).getComplaints(this);
+		Pet myPet = Pet.thePet(this);
+		Vector<Complaint> complaints = myPet.getComplaints(this);
+		int icon = myPet.getIcon();
 		//ArrayList<Complaint> complaints = (ArrayList<Complaint>) intent.getSerializableExtra("com.game.fickapets.complaints");
 		
 		Collections.sort (complaints, new ComplaintsCompare());
@@ -70,7 +71,7 @@ public class PetNotifier extends IntentService {
 				continue;
 			}
 			if (PersistenceHandler.tryConfirmComplaintSent(this, complaint.getComplaintType(), complaintId)) {
-				sendNotification ("FickaPets", complaint.complaint);
+				sendNotification ("FickaPets", complaint.complaint, icon);
 			}
 			complaints.remove (0);
 		}

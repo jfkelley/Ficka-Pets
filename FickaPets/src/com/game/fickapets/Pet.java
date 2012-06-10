@@ -124,6 +124,11 @@ public class Pet {
 	private static final String PACKAGE_NAME = "com.game.fickapets";
 	private static final String DRAWABLE_DEFTYPE = "drawable";
 	
+	public int getIcon() {
+		String imgStr = "pet_" + type + "_icon";
+		return getImage(lastContext, imgStr);
+	}
+	
 	public int getStateImage(Context context) {
 		String str = "pet_";
 		str += type;

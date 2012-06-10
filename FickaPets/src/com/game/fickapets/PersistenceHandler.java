@@ -76,7 +76,6 @@ public class PersistenceHandler {
 	/* pull all defaults from an xml doc in res/raw */
 	private static Attributes getAttributesFromDefaults (Context context) {
 		Attributes atts = new Attributes ();
-		
 	
 		Element pet = XMLUtils.getDocumentElement(context.getResources().openRawResource(R.raw.pet_defaults));
 		atts.health = Double.valueOf(XMLUtils.getChildElementTextByTagName(pet, "health"));
@@ -92,6 +91,7 @@ public class PersistenceHandler {
 		atts.lastUpdate = Calendar.getInstance(TimeZone.getDefault ()).getTimeInMillis ();
 		return atts;
 	}
+	
 	/* set the pet's values, loaded from SharedPreferences.
 	 * If no pet is saved, returns null instead
 	 */

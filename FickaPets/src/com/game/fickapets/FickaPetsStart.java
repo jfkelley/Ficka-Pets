@@ -1,6 +1,7 @@
 package com.game.fickapets;
 
 import java.util.List;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,13 +11,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 public class FickaPetsStart extends Activity {
 
 	AsyncTask<Pet, String, Void> updateLoop;
-	
+	AsyncTask<Void, Boolean, Void> blinker;
 	
 	private static final int NO_FOOD = 0;
 	
@@ -37,7 +37,6 @@ public class FickaPetsStart extends Activity {
 		setPetStateImage(pet);
 	}
 	
-	/* is there a reason for the background thread? */
     private void setPetStateImage(final Pet pet) {
     	// Use an AsyncTask in case we get called from a different thread.
     	AsyncTask<Object, Object, Integer> task = new AsyncTask<Object, Object, Integer>(){
@@ -45,12 +44,18 @@ public class FickaPetsStart extends Activity {
 				return getPetStateImageId(pet);
 			}
 			protected void onPostExecute(Integer result) {
-				ImageView image = (ImageView) findViewById(R.id.petImageView);
-				image.setImageResource(result);
+				setPetImg(result);
 			}
     	};
     	task.execute();
 	}
+    
+    private void setPetImg(Integer imgId) {
+    	ImageView image = (ImageView) findViewById(R.id.petImageView);
+		image.setImageResource(imgId);
+    }
+    
+    
 
 	/** Called when the activity is first created. */
     /*
@@ -98,9 +103,46 @@ public class FickaPetsStart extends Activity {
 				setPetStateImage(Pet.thePet(FickaPetsStart.this));
 			}
 		});
-		
+		blinker = new BlinkTask().execute();
 		updateLoop = new MainThread(this).execute(Pet.thePet(this));
 	}
+	
+	private class BlinkTask extends AsyncTask<Void, Boolean, Void> {
+		private static final long blinkDuration = 250;
+		
+		private long getLongBetweenBounds(Random randoGenerator, long lowerBound, long upperBound) {
+			float range = upperBound - lowerBound;
+			int distInRange = (int)(randoGenerator.nextFloat() * range);
+			long retVal = lowerBound + distInRange;
+			return retVal;
+		}
+		
+		protected Void doInBackground(Void...voids) {
+			Random rando = new Random();
+			while (!isCancelled()) {
+				long millisBetweenBlink = getLongBetweenBounds(rando, 7, 20) * 1000;
+				try {
+					Thread.sleep(millisBetweenBlink);
+				} catch(InterruptedException ex) {}
+				publishProgress(true);
+				try {
+					Thread.sleep(blinkDuration);
+				} catch(InterruptedException ex) {}
+				publishProgress(false);
+			}
+			return null;
+		}
+		protected void onProgressUpdate(Boolean...bools) {
+			Boolean setBlinkImg = bools[0];
+			if (setBlinkImg) {
+				setPetImg(Pet.thePet(FickaPetsStart.this).getBlinkImg());
+			} else {
+				setPetStateImage(Pet.thePet(FickaPetsStart.this));
+			}
+		}
+		
+	}
+
 
 	/* always called when activity leaves foreground so set up background service here */
 	public void onPause () {
@@ -125,10 +167,11 @@ public class FickaPetsStart extends Activity {
 		}
 	}
 
-	/* Always called when activity gets destroyed, so save pet's state here */
+	@Override
 	public void onDestroy () {
-		System.out.println("destroy start");
 		super.onDestroy();
+		blinker.cancel(true);
+		updateLoop.cancel(true);
 	}
 	
 	public void gamePressed(View view) {

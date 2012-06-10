@@ -58,7 +58,7 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
         String[] strings = new String[4];
 
         
-	    while (true) {
+	    while (!isCancelled()) {
 	        //Vibrator v = (Vibrator) ficka.getSystemService (Context.VIBRATOR_SERVICE);
 	        //v.vibrate (1000);
 	    	Attributes atts = pets[0].getAttributes ();
@@ -71,11 +71,11 @@ public class MainThread extends AsyncTask<Pet, String, Void> {
 	    	strings[3] = new Double(atts.tiredness).toString();
 	    	publishProgress(strings);
 	    	try {
-	    		Thread.sleep(5000);
-	    	} catch (Exception ex) {
-	    		System.out.println("it broke");
-	    	}
+	    		
+	    		Thread.sleep(30000);
+	    	} catch (Exception ex) {}
 	    }
+	    return null;
 	}
 
 }

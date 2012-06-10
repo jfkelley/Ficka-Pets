@@ -129,6 +129,18 @@ public class Pet {
 		return getImage(lastContext, imgStr);
 	}
 	
+	private String getPetImageStrSuffix() {
+		String suffix;
+		if (isHungry()) {
+			suffix = "_hungry";
+		} else if (isFull()) {
+			suffix = "_full";
+		} else {
+			suffix = "_normal";
+		}
+		return suffix;
+	}
+	
 	public int getStateImage(Context context) {
 		String str = "pet_";
 		str += type;
@@ -140,20 +152,17 @@ public class Pet {
 		} else {
 			str += "_awake";
 		}
-		
-		if (isHungry()) {
-			str += "_hungry";
-		} else if (isFull()) {
-			str += "_full";
-		} else {
-			str += "_normal";
-		}
-		
+		str += getPetImageStrSuffix();
 		return getImage(context, str);
 	}
 	
 	public String getDefaultImageName() {
 		return "pet_" + type + "_default";
+	}
+	
+	public int getBlinkImg() {
+		String imgStr = "pet_" + type + "_asleep" + getPetImageStrSuffix();
+		return getImage(lastContext, imgStr);
 	}
 	
 	public int getDefaultImage(Context context) {

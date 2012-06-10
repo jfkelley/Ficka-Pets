@@ -31,7 +31,6 @@
 <fullyQualifiedTypeName name="android.widget.TableLayout"/>
 <fullyQualifiedTypeName name="android.widget.TableRow"/>
 <fullyQualifiedTypeName name="android.widget.TableLayout.LayoutParams"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="android.widget.ScrollView"/>
 <fullyQualifiedTypeName name="android.view.InflateException"/>
 <fullyQualifiedTypeName name="android.widget.ImageView"/>
@@ -43,7 +42,6 @@
 <fullyQualifiedTypeName name="android.app.AlertDialog.Builder"/>
 <fullyQualifiedTypeName name="android.view.ViewGroup.LayoutParams"/>
 <fullyQualifiedTypeName name="org.apache.commons.math3.geometry.Vector"/>
-<fullyQualifiedTypeName name="android.content.SharedPreferences.Editor"/>
 <fullyQualifiedTypeName name="android.widget.TableRow.LayoutParams"/>
 <fullyQualifiedTypeName name="android.widget.LinearLayout.LayoutParams"/>
 <fullyQualifiedTypeName name="android.widget.LinearLayout"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="android.content.DialogInterface.OnClickListener"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.layout"/>
 <fullyQualifiedTypeName name="com.game.fickapets.R.id"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="android.content.SharedPreferences.Editor"/>
 </qualifiedTypeNameHistroy>

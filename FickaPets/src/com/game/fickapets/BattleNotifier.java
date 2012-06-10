@@ -45,7 +45,7 @@ public class BattleNotifier extends IntentService {
 		Intent notificationIntent = new Intent(this, BattleActivity.class);
 		notificationIntent = thisBattle.addStateToIntent(notificationIntent);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		Notification notification = new Notification(R.drawable.ic_launcher, "", System.currentTimeMillis());
+		Notification notification = new Notification(Pet.thePet(this).getIcon(), "", System.currentTimeMillis());
 		notification.setLatestEventInfo(getApplicationContext(), "New Battle Challenge", name + " has challenged your pet to a battle", contentIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notification.defaults |= Notification.DEFAULT_VIBRATE;

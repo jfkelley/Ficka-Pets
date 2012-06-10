@@ -6,14 +6,118 @@
         <name>Apple</name>
         <image>apple</image>
         <price>20</price>
-        <health>5</health>
+        <health>7</health>
     </Item>
     <Item type="food">
         <id>banana</id>
         <prefix> </prefix>
         <name>Bananas</name>
         <image>banana</image>
-        <price>15</price>
-        <health>6</health>
+        <price>18</price>
+        <health>5</health>
+    </Item>
+    <Item type="food">
+        <id>burger</id>
+        <prefix>a </prefix>
+        <name>Cheeseburger</name>
+        <image>burger</image>
+        <price>65</price>
+        <health>26</health>
+    </Item>
+    <Item type="food">
+        <id>carrot</id>
+        <prefix>a </prefix>
+        <name>Carrot</name>
+        <image>carrot</image>
+        <price>18</price>
+        <health>7</health>
+    </Item>
+    <Item type="food">
+        <id>cheese</id>
+        <prefix>a piece of </prefix>
+        <name>Cheese</name>
+        <image>cheese</image>
+        <price>30</price>
+        <health>9</health>
+    </Item>
+    <Item type="food">
+        <id>chicken</id>
+        <prefix>a whole </prefix>
+        <name>Chicken</name>
+        <image>chicken</image>
+        <price>80</price>
+        <health>40</health>
+    </Item>
+    <Item type="food">
+        <id>chocolate</id>
+        <prefix>a bar of </prefix>
+        <name>Chocolate</name>
+        <image>chocolate</image>
+        <price>38</price>
+        <health>13</health>
+    </Item>
+    <Item type="food">
+        <id>coffee</id>
+        <prefix>a cup of </prefix>
+        <name>Coffee</name>
+        <image>coffee</image>
+        <price>12</price>
+        <health>3</health>
+    </Item>
+    <Item type="food">
+        <id>cookie</id>
+        <prefix>a </prefix>
+        <name>Cookie</name>
+        <image>cookie</image>
+        <price>20</price>
+        <health>4</health>
+    </Item>
+    <Item type="food">
+        <id>cupcake</id>
+        <prefix>a </prefix>
+        <name>Cupcake</name>
+        <image>cupcake</image>
+        <price>28</price>
+        <health>7</health>
+    </Item>
+    <Item type="food">
+        <id>fries</id>
+        <prefix> </prefix>
+        <name>French Fries</name>
+        <image>fries</image>
+        <price>50</price>
+        <health>15</health>
+    </Item>
+    <Item type="food">
+        <id>milkshake</id>
+        <prefix>a </prefix>
+        <name>Milkshake</name>
+        <image>milkshake</image>
+        <price>50</price>
+        <health>15</health>
+    </Item>
+    <Item type="food">
+        <id>pizza</id>
+        <prefix>a slice of </prefix>
+        <name>Pizza</name>
+        <image>pizza</image>
+        <price>55</price>
+        <health>22</health>
+    </Item>
+    <Item type="food">
+        <id>strawberry</id>
+        <prefix>a </prefix>
+        <name>Strawberry</name>
+        <image>strawberry</image>
+        <price>10</price>
+        <health>3</health>
+    </Item>
+    <Item type="food">
+        <id>toast</id>
+        <prefix>some </prefix>
+        <name>Toast</name>
+        <image>toast</image>
+        <price>40</price>
+        <health>15</health>
     </Item>
 </Items>

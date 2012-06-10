@@ -147,15 +147,18 @@ public final class R {
         public static final int attackButton=0x7f06001d;
         public static final int awake=0x7f060008;
         public static final int battle=0x7f060017;
+        public static final int battleButton=0x7f060028;
         public static final int battleLabel=0x7f060018;
         public static final int catchCoins=0x7f06000b;
         public static final int choosePetDescription=0x7f06000f;
         public static final int choosePetTitle=0x7f06000e;
         public static final int currentBattles=0x7f060021;
         public static final int feed=0x7f060006;
+        public static final int feedButton=0x7f060027;
         public static final int findFriend=0x7f060025;
         public static final int findFriends=0x7f060019;
         public static final int game=0x7f06000a;
+        public static final int gameButton=0x7f06002a;
         public static final int gameStatus=0x7f06001f;
         public static final int health=0x7f060003;
         public static final int hello=0x7f060000;
@@ -177,7 +180,11 @@ public final class R {
         public static final int reset=0x7f060009;
         public static final int selectPetButton=0x7f060010;
         public static final int shop=0x7f060016;
+        public static final int shopButton=0x7f060029;
         public static final int sleep=0x7f060007;
+        /**  main menu buttons 
+         */
+        public static final int sleepButton=0x7f060026;
         public static final int strength=0x7f060002;
         public static final int ticTacToe=0x7f06000c;
         public static final int tiredness=0x7f060005;

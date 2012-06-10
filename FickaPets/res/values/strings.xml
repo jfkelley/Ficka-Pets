@@ -42,4 +42,11 @@
 	<string name="newBattleButtonText">+ New Battle</string>
 	<string name="period">.</string>
 	<string name="findFriend">Choose a friend to battle</string>
+	
+	<!-- main menu buttons -->
+	<string name="sleepButton">Put pet to sleep</string>
+	<string name="feedButton">Feed your pet</string>
+	<string name="battleButton">Battle your friend\'s pets</string>
+	<string name="shopButton">Buy items for your pet</string>
+	<string name="gameButton">Play a mini-game</string>
 </resources>

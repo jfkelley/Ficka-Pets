@@ -2,63 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:background="#334a53" >
+	android:background="@drawable/main_background"
+	android:orientation="vertical" >
 
-	<FrameLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1" 
-		android:background="#537903">
-		<ImageView
-			android:src="@drawable/main_background"
-			android:layout_gravity="top|fill_horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:scaleType="fitXY" />
-		<ImageView
-			android:id="@+id/petImageView"
-			android:layout_gravity="center"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-	</FrameLayout>
+
+
+	<ImageView
+		android:id="@+id/petImageView"
+		android:layout_gravity="center"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:layout_weight="1"
+		android:contentDescription="@string/myPet" />
 
 	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="65dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0"
 		android:layout_gravity="center_horizontal"
 		android:orientation="horizontal" >
 			<ImageView
 				android:src="@drawable/food_button"
 				android:onClick="feedPressed"
+				android:layout_weight="1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-			android:scaleType="fitXY"  />
+				android:scaleType="fitXY"
+				android:contentDescription="@string/feedButton"  />
 			<ImageView
 				android:id="@+id/sleepButton"
 				android:src="@drawable/sleep_button"
 				android:onClick="sleepPressed"
+				android:layout_weight="1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-			android:scaleType="fitXY"  />
+				android:scaleType="fitXY"
+			  	android:contentDescription="@string/sleepButton" />
 			<ImageView
 				android:src="@drawable/shop_button"
 				android:onClick="shopPressed"
+				android:layout_weight="1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-			android:scaleType="fitXY"  />
+				android:scaleType="fitXY"
+			  	android:contentDescription="@string/shopButton" />
 			<ImageView
 				android:src="@drawable/games_button"
 				android:onClick="gamePressed"
+				android:layout_weight="1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-			android:scaleType="fitXY"  />
+			  	android:scaleType="fitXY" 
+			  	android:contentDescription="@string/gameButton" />
 			<ImageView
 				android:src="@drawable/battle_button"
 				android:onClick="battlePressed"
+				android:layout_weight="1"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-			android:scaleType="fitXY"  />
+				android:scaleType="fitXY"
+				android:contentDescription="@string/battleButton"  />
 	</LinearLayout>
 
 </LinearLayout>
